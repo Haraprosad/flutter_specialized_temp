@@ -4,11 +4,13 @@ abstract class ThemeEvent extends Equatable {
   const ThemeEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class ToggleLightTheme extends ThemeEvent {}
+class InitializeTheme extends ThemeEvent {
+  const InitializeTheme();
+}
 
-class ToggleDarkTheme extends ThemeEvent {}
-
-class ToggleCustomTheme extends ThemeEvent {}
+class ToggleTheme extends ThemeEvent {
+  const ToggleTheme();
+}

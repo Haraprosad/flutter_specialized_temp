@@ -21,6 +21,13 @@ dependencies:
   flutter_bloc: ^8.1.6
   equatable: ^2.0.5
   bloc_test: ^9.1.7
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.3
+  get_it: ^8.0.2
+  injectable: ^2.5.0
+  dio: ^5.7.0
+  connectivity_plus: ^6.1.0
+  internet_connection_checker: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +35,9 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
   device_preview: ^1.2.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.13
+  injectable_generator: ^2.6.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

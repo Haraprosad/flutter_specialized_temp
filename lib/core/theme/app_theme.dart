@@ -3,96 +3,120 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  //************** -: Light Theme Start:- ********************** */
-  // Define light text theme
-  static final TextTheme lightTextTheme = TextTheme(
-    displayLarge: TextStyle(
-        fontSize: 57.sp, fontWeight: FontWeight.bold, color: Colors.black),
-    displayMedium: TextStyle(
-        fontSize: 45.sp, fontWeight: FontWeight.bold, color: Colors.black),
-    displaySmall: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.bold),
-    headlineLarge: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
-    headlineMedium: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600),
-    headlineSmall: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
-    titleLarge: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
-    titleMedium: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
-    titleSmall: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400),
-    bodyLarge: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal),
-    bodyMedium: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.normal),
-    bodySmall: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.normal),
-    labelLarge: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-    labelMedium: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-    labelSmall: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
+  AppTheme._();
+
+  static final TextTheme _baseTextTheme = TextTheme(
+    displayLarge: TextStyle(fontSize: 57.sp, height: 1.12, letterSpacing: -0.25),
+    displayMedium: TextStyle(fontSize: 45.sp, height: 1.16, letterSpacing: 0),
+    displaySmall: TextStyle(fontSize: 36.sp, height: 1.22, letterSpacing: 0),
+    headlineLarge: TextStyle(fontSize: 32.sp, height: 1.25, letterSpacing: 0),
+    headlineMedium: TextStyle(fontSize: 28.sp, height: 1.29, letterSpacing: 0),
+    headlineSmall: TextStyle(fontSize: 24.sp, height: 1.33, letterSpacing: 0),
+    titleLarge: TextStyle(fontSize: 22.sp, height: 1.27, letterSpacing: 0),
+    titleMedium: TextStyle(fontSize: 16.sp, height: 1.5, letterSpacing: 0.15),
+    titleSmall: TextStyle(fontSize: 14.sp, height: 1.43, letterSpacing: 0.1),
+    bodyLarge: TextStyle(fontSize: 16.sp, height: 1.5, letterSpacing: 0.15),
+    bodyMedium: TextStyle(fontSize: 14.sp, height: 1.43, letterSpacing: 0.25),
+    bodySmall: TextStyle(fontSize: 12.sp, height: 1.33, letterSpacing: 0.4),
+    labelLarge: TextStyle(fontSize: 14.sp, height: 1.43, letterSpacing: 0.1),
+    labelMedium: TextStyle(fontSize: 12.sp, height: 1.33, letterSpacing: 0.5),
+    labelSmall: TextStyle(fontSize: 11.sp, height: 1.45, letterSpacing: 0.5),
   );
 
-  // Define light theme
-  static final ThemeData lightTheme = ThemeData(
-    useMaterial3: true,
-    textTheme: lightTextTheme,
-    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.lightThemeSeed),
-    primaryColor: AppColors.primaryLight, //override primary color explicitly
-    buttonTheme: ButtonThemeData(buttonColor: Colors.blue),
+  static ThemeData lightTheme = _createTheme(
+    brightness: Brightness.light,
+    seedColor: AppColors.lightThemeSeed,
+    textTheme: _baseTextTheme,
+    backgroundColor: AppColors.backgroundLight,
+    surfaceColor: AppColors.surfaceLight,
   );
 
-  //************** -: Light Theme End:- ********************** */
-
-  // Define dark text theme
-  static final TextTheme darkTextTheme = lightTextTheme.copyWith(
-    displayLarge: TextStyle(
-        fontSize: 57.sp, fontWeight: FontWeight.bold, color: Colors.white),
-    displayMedium: TextStyle(
-        fontSize: 45.sp, fontWeight: FontWeight.bold, color: Colors.white),
+  static ThemeData darkTheme = _createTheme(
+    brightness: Brightness.dark,
+    seedColor: AppColors.darkThemeSeed,
+    textTheme: _baseTextTheme,
+    backgroundColor: AppColors.backgroundDark,
+    surfaceColor: AppColors.surfaceDark,
   );
 
-  //Define another text theme
-  //todo: add more text themes as needed
+  static ThemeData _createTheme({
+    required Brightness brightness,
+    required Color seedColor,
+    required TextTheme textTheme,
+    required Color backgroundColor,
+    required Color surfaceColor,
+  }) {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: seedColor,
+      brightness: brightness,
+    );
 
-  static final ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    textTheme: darkTextTheme,
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-    primaryColor: Colors.deepPurple,
-    scaffoldBackgroundColor: Colors.black,
-    buttonTheme: const ButtonThemeData(buttonColor: Colors.deepPurple),
-  );
-
-  static final ThemeData customTheme = ThemeData(
-    textTheme: lightTextTheme.copyWith(
-      headlineLarge: TextStyle(
-          fontSize: 32.sp, fontWeight: FontWeight.bold, color: Colors.orange),
-    ),
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-    primaryColor: Colors.orange,
-    scaffoldBackgroundColor: Colors.orange.shade50,
-    buttonTheme: ButtonThemeData(buttonColor: Colors.orange),
-  );
-
-  // Define button theme
-  static ButtonThemeData _buttonTheme() {
-    return ButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      buttonColor: AppColors.primaryLight, // Use primary color for buttons
-      textTheme: ButtonTextTheme.primary,
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      colorScheme: colorScheme,
+      textTheme: textTheme,
+      scaffoldBackgroundColor: backgroundColor,
+      
+      // Component themes
+      cardTheme: _buildCardTheme(colorScheme),
+      elevatedButtonTheme: _buildElevatedButtonTheme(colorScheme),
+      outlinedButtonTheme: _buildOutlinedButtonTheme(colorScheme),
+      textButtonTheme: _buildTextButtonTheme(colorScheme),
+      inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
+      
+      // Add more component themes as needed
     );
   }
 
-  // Define card theme
-  static CardTheme _cardTheme() {
+  static CardTheme _buildCardTheme(ColorScheme colorScheme) {
     return CardTheme(
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      color: colorScheme.surface,
     );
   }
 
-  // Define input decoration theme (for TextFields)
-  static InputDecorationTheme _inputDecorationTheme() {
+  static ElevatedButtonThemeData _buildElevatedButtonTheme(ColorScheme colorScheme) {
+    return ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+  }
+
+  static OutlinedButtonThemeData _buildOutlinedButtonTheme(ColorScheme colorScheme) {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+  }
+
+  static TextButtonThemeData _buildTextButtonTheme(ColorScheme colorScheme) {
+    return TextButtonThemeData(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      ),
+    );
+  }
+
+  static InputDecorationTheme _buildInputDecorationTheme(ColorScheme colorScheme) {
     return InputDecorationTheme(
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
       ),
-      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      filled: true,
+      fillColor: colorScheme.surface,
     );
   }
 }
