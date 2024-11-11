@@ -8,7 +8,7 @@ import 'package:injectable/injectable.dart';
 part 'theme_event.dart';
 part 'theme_state.dart';
 
-@injectable
+@singleton
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final AppStorage _storage;
   

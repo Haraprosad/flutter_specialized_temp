@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_specialized_temp/core/theme/bloc/theme_bloc.dart';
 
-class MockAppStorage extends Mock implements AppStorage {}
-class MockPreferencesManager extends Mock implements PreferencesManager {}
+import 'theme_bloc_test.mocks.dart';
 
+@GenerateMocks([AppStorage, PreferencesManager])
 void main() {
   late ThemeBloc themeBloc;
   late MockAppStorage mockAppStorage;

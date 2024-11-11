@@ -17,6 +17,7 @@ abstract class RegisterModule {
   @lazySingleton
   Connectivity get connectivity => Connectivity();
 
+  //Storage Part
   @preResolve  // Important because SharedPreferences.getInstance() is async
   Future<SharedPreferences> get sharedPreferences => 
       SharedPreferences.getInstance();
