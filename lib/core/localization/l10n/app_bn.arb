@@ -1,3 +1,22 @@
 {
-    "flutter_template":"ফ্ল্যাটার টেমপ্লেট"
+    "flutter_template":"ফ্ল্যাটার টেমপ্লেট",
+    "error_no_internet": "কোন ইন্টারনেট সংযোগ নেই",
+    "error_connection_timeout": "সংযোগ সময়সীমা শেষ",
+    "error_server_error": "সার্ভার ত্রুটি ঘটেছে",
+    "error_unauthorized": "অননুমোদিত প্রবেশ",
+    "error_forbidden": "প্রবেশ নিষিদ্ধ",
+    "error_not_found": "রিসোর্স পাওয়া যায়নি",
+    "error_bad_request": "ত্রুটিপূর্ণ অনুরোধ",
+
+    "error_connection_timeout": "সংযোগ সময়সীমা শেষ। দয়া করে আপনার ইন্টারনেট সংযোগ চেক করুন।",
+    "error_send_timeout": "তথ্য প্রেরণে সময়সীমা শেষ। দয়া করে আবার চেষ্টা করুন।",
+    "error_receive_timeout": "তথ্য গ্রহণে সময়সীমা শেষ। দয়া করে আবার চেষ্টা করুন।",
+    "error_connection_error": "সংযোগ ত্রুটি। দয়া করে আপনার ইন্টারনেট সংযোগ চেক করুন।",
+    "error_cancel": "অনুরোধ বাতিল করা হয়েছে।",
+    "error_bad_certificate": "অবৈধ সার্টিফিকেট। দয়া করে আপনার নিরাপত্তা সেটিংস চেক করুন।",
+    "error_unknown": "একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।",
+
+    "error_pre_call": "এপিআই কলের আগে ত্রুটি", 
+    "error_parsing": "প্রতিক্রিয়া ডেটা পার্স করার সময় ত্রুটি" 
+
 }

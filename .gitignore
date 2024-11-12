@@ -43,6 +43,10 @@ app.*.map.json
 *.freezed.dart
 injection.config.dart
 
+.env.development
+.env.production
+.env.staging
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile

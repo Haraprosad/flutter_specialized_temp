@@ -14,7 +14,7 @@ import 'package:flutter_specialized_temp/core/utils/extensions/widget_extension.
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await configureDependencies();
   runApp(const MyApp());
 }
 

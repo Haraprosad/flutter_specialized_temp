@@ -5,4 +5,4 @@ import 'injection.config.dart';
 final GetIt sl = GetIt.instance;
 
 @InjectableInit(generateForDir: ['lib','test'])
-void configureDependencies() => sl.init();
+Future<void> configureDependencies() async => sl.init();

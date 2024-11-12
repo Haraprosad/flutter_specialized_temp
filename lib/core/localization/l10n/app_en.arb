@@ -1,3 +1,21 @@
 {
-    "flutter_template":"Flutter Template"
+    "flutter_template":"Flutter Template",
+    "error_no_internet": "No internet connection available",
+    "error_connection_timeout": "Connection timed out",
+    "error_server_error": "Server error occurred",
+    "error_unauthorized": "Unauthorized access",
+    "error_forbidden": "Access forbidden",
+    "error_not_found": "Resource not found",
+    "error_bad_request": "Bad Request",
+
+    "error_connection_timeout": "Connection timeout. Please check your internet connection.",
+    "error_send_timeout": "Send timeout error. Please try again.",
+    "error_receive_timeout": "Receive timeout error. Please try again.",
+    "error_connection_error": "Connection error. Please check your internet connection.",
+    "error_cancel": "Request cancelled.",
+    "error_bad_certificate": "Invalid certificate. Please check your security settings.",
+    "error_unknown": "An unexpected error occurred.",
+
+    "error_pre_call": "Error before API call",  
+    "error_parsing": "Error parsing the response data"
 }
