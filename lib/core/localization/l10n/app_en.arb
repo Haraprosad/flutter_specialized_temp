@@ -17,5 +17,9 @@
     "error_unknown": "An unexpected error occurred.",
 
     "error_pre_call": "Error before API call",  
-    "error_parsing": "Error parsing the response data"
+    "error_parsing": "Error parsing the response data",
+
+    "try_again": "Try Again"
+
+
 }

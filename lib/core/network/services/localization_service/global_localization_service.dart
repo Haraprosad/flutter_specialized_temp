@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_specialized_temp/core/localization/extension/loc.dart';
 import 'package:flutter_specialized_temp/core/network/constants/error_messages_key.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
-import 'package:injectable/injectable.dart';
 
 /// Global localization service to retrieve translated messages.
-@LazySingleton(as: LocalizationService)
 class GlobalLocalizationService implements LocalizationService {
   final BuildContext context;
 

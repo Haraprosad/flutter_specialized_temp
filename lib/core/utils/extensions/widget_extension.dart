@@ -7,8 +7,8 @@ extension WidgetExtensions on Widget {
   Padding get p16 => Padding(padding: EdgeInsets.all(16.w), child: this);
 
   // Responsive margin extension
-  Padding get m8 => Padding(padding: EdgeInsets.all(8.w), child: this);
-  Padding get m16 => Padding(padding: EdgeInsets.all(16.w), child: this);
+  Container get m8 => Container(margin: EdgeInsets.all(8.w), child: this);
+  Container get m16 => Container(margin: EdgeInsets.all(16.w), child: this);
 
   // Symmetric padding for horizontal and vertical
   Padding get horizontalPadding16 => Padding(padding: EdgeInsets.symmetric(horizontal: 16.w), child: this);

@@ -7,16 +7,15 @@ import 'package:flutter_specialized_temp/core/network/services/connection_manage
 import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/connectivity_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/error_interceptor.dart';
-import 'package:flutter_specialized_temp/core/reporters/error_reporter.dart';
+
 
 /// Singleton service for configuring and providing a Dio HTTP client instance.
 @lazySingleton
 class DioClient {
   final ConnectionManager _connectionManager;
-  final ErrorReporter _errorReporter;
   late final Dio _dio;
 
-  DioClient(this._connectionManager, this._errorReporter) {
+  DioClient(this._connectionManager) {
     _dio = _createDioClient();
   }
 
@@ -38,7 +37,7 @@ class DioClient {
     // Add interceptors for connectivity, error logging, and optional logging in debug mode.
     dio.interceptors.addAll([
       ConnectivityInterceptor(_connectionManager),
-      ErrorInterceptor(_errorReporter),
+      ErrorInterceptor(),
       if (!kReleaseMode)
         LogInterceptor(
           requestBody: true,

@@ -8,20 +8,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
-import 'package:flutter_specialized_temp/core/reporters/error_reporter.dart';
+
 
 import 'base_bloc_test.mocks.dart';
 
-@GenerateMocks([ConnectionManager, ErrorReporter])
+@GenerateMocks([ConnectionManager])
 void main() {
   late DioClient dioClient;
   late MockConnectionManager mockConnectionManager;
-  late MockErrorReporter mockErrorReporter;
+
 
   setUp(() {
     mockConnectionManager = MockConnectionManager();
-    mockErrorReporter = MockErrorReporter();
-    dioClient = DioClient(mockConnectionManager, mockErrorReporter);
+
+    dioClient = DioClient(mockConnectionManager);
   });
 
   group('DioClient Tests', () {
