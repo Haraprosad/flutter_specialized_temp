@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_specialized_temp/core/router/navigator_keys.dart';
 import 'package:flutter_specialized_temp/core/router/route_names.dart';
 import 'package:flutter_specialized_temp/core/router/route_paths.dart';
@@ -11,11 +12,15 @@ import 'package:flutter_specialized_temp/features/home/presentation/pages/home_s
 import 'package:flutter_specialized_temp/features/home/presentation/pages/notifications_screen.dart';
 import 'package:flutter_specialized_temp/features/profile/presentation/pages/edit_profile_screen.dart';
 import 'package:flutter_specialized_temp/features/profile/presentation/pages/profile_screen.dart';
+import 'package:flutter_specialized_temp/features/tasks/presentation/bloc/task_bloc.dart';
+import 'package:flutter_specialized_temp/features/tasks/presentation/bloc/task_event.dart';
 import 'package:flutter_specialized_temp/features/tasks/presentation/pages/sub_tasks_screen.dart';
 import 'package:flutter_specialized_temp/features/tasks/presentation/pages/task_details_screen.dart';
 import 'package:flutter_specialized_temp/features/tasks/presentation/pages/tasks_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+
+import '../di/injection.dart';
 
 @singleton
 class AppRoutes {
@@ -57,32 +62,41 @@ class AppRoutes {
               ],
             ),
 
-            // Tasks Stack with Nested Navigation
-            GoRoute(
-              path: RoutePaths.tasks,
-              name: RouteNames.tasks,
-              builder: (context, state) => const TasksScreen(),
-              routes: [
-                GoRoute(
-                  path: RoutePaths.taskDetails,
-                  name: RouteNames.taskDetails,
-                  builder: (context, state) {
-                    final taskId = state.pathParameters['taskId']!;
-                    return TaskDetailsScreen(taskId: taskId);
-                  },
-                  routes: [
-                    GoRoute(
-                      path: RoutePaths.subTasks,
-                      name: RouteNames.subTasks,
-                      builder: (context, state) {
-                        final taskId = state.pathParameters['taskId']!;
-                        return SubTasksScreen(taskId: taskId);
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            ShellRoute(
+                builder: (context, state, child) {
+                  return BlocProvider(
+                    create: (_) => sl<TaskBloc>(),
+                    child: child,
+                  );
+                },
+                routes: [
+                  // Tasks Stack with Nested Navigation
+                  GoRoute(
+                    path: RoutePaths.tasks,
+                    name: RouteNames.tasks,
+                    builder: (context, state) => const TasksScreen(),
+                    routes: [
+                      GoRoute(
+                        path: RoutePaths.taskDetails,
+                        name: RouteNames.taskDetails,
+                        builder: (context, state) {
+                          final taskId = state.pathParameters['taskId']!;
+                          return TaskDetailsScreen(taskId: taskId);
+                        },
+                        routes: [
+                          GoRoute(
+                            path: RoutePaths.subTasks,
+                            name: RouteNames.subTasks,
+                            builder: (context, state) {
+                              final taskId = state.pathParameters['taskId']!;
+                              return SubTasksScreen(taskId: taskId);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ]),
 
             // Profile Stack with Tabs
             GoRoute(
@@ -96,7 +110,8 @@ class AppRoutes {
                   pageBuilder: (context, state) {
                     return CustomTransitionPage(
                       child: const EditProfileScreen(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
                         return FadeTransition(opacity: animation, child: child);
                       },
                     );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_specialized_temp/core/di/injection.dart';
@@ -111,6 +112,7 @@ class AppView extends StatelessWidget {
               themeMode: themeState.themeMode,
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
+              builder: EasyLoading.init(),
             );
           },
         );
