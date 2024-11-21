@@ -20,6 +20,10 @@ class _PostsPageState extends State<PostsPage> {
     context.read<PostsBloc>().add(PostsFetched());
   }
 
+  Future<void> _onRefresh() async {
+    context.read<PostsBloc>().add(PostsFetched());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +42,10 @@ class _PostsPageState extends State<PostsPage> {
             );
           }
 
-          return const PostList();
+          return RefreshIndicator(
+            onRefresh: _onRefresh,
+            child: const PostList(),
+          );
         },
       ),
     );

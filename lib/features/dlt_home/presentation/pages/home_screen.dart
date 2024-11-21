@@ -14,19 +14,42 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home', style: context.headlineMedium),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () => context.goNamed(RouteNames.notifications),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Home', style: context.headlineMedium),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: () => context.goNamed(RouteNames.notifications),
+            ),
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Dummy List'),
+              Tab(text: 'Posts'),
+            ],
           ),
-        ],
-      ),
-      body: BlocProvider(
-        create: (context) => sl<PostsBloc>(),
-        child: const PostsPage(),
+        ),
+        body: TabBarView(
+          children: [
+            ListView(
+              children: const [
+                ListTile(
+                  title: Text('Dummy Item 1'),
+                ),
+                ListTile(
+                  title: Text('Dummy Item 2'),
+                ),
+              ],
+            ),
+            BlocProvider(
+              create: (context) => sl<PostsBloc>(),
+              child: const PostsPage(),
+            ),
+          ],
+        ),
       ),
     );
   }

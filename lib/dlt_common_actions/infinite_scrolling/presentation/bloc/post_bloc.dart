@@ -38,6 +38,8 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
   ) async {
     if (state.hasReachedMax) return;
 
+    emit(state.copyWith(isPaginationLoading: true));
+
     await handleApiCall(
       apiCall: () => _getPostsUseCase(
         start: state.posts.length,
@@ -47,10 +49,11 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
         emit(state.copyWith(
           posts: [...state.posts, ...posts],
           hasReachedMax: posts.length < _postLimit,
+          isPaginationLoading: false,
         ));
       },
       onError: (failure) {
-        emit(state.copyWith(hasReachedMax: true, failure: failure));
+        emit(state.copyWith(hasReachedMax: true, failure: failure,isPaginationLoading: false));
       },
       emit: emit,
       showLoader: false,
