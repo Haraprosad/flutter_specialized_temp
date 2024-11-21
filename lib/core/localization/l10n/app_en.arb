@@ -19,7 +19,8 @@
     "error_pre_call": "Error before API call",  
     "error_parsing": "Error parsing the response data",
 
-    "try_again": "Try Again"
+    "try_again": "Try Again",
+    "home": "Home"
 
 
 }
