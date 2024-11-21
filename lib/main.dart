@@ -11,6 +11,7 @@ import 'package:flutter_specialized_temp/core/localization/bloc/locale_bloc.dart
 import 'package:flutter_specialized_temp/core/localization/extension/loc.dart';
 import 'package:flutter_specialized_temp/core/localization/localization_actions.dart';
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
 import 'package:flutter_specialized_temp/core/observers/bloc_observer.dart';
 import 'package:flutter_specialized_temp/core/router/app_router.dart';
 import 'package:flutter_specialized_temp/core/theme/app_theme.dart';
@@ -19,7 +20,7 @@ import 'package:flutter_specialized_temp/core/theme/text_theme_ext.dart';
 import 'package:flutter_specialized_temp/core/utils/extensions/sizedbox_extension.dart';
 import 'package:flutter_specialized_temp/core/utils/extensions/widget_extension.dart';
 import 'package:flutter_specialized_temp/core/widgets/flutter_error_screen.dart';
-import 'package:flutter_specialized_temp/features/auth/presentation/bloc/bloc/auth_bloc.dart';
+import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 
 void main() async {
   runZonedGuarded(() async {
@@ -112,7 +113,13 @@ class AppView extends StatelessWidget {
               themeMode: themeState.themeMode,
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
-              builder: EasyLoading.init(),
+              builder: (context, child) {
+                //For Non Ui localizations service
+                if (AppLocalizations.of(context) != null) {
+                  sl<LocalizationService>().setLocalizations(AppLocalizations.of(context)!);
+                }
+                return EasyLoading.init()(context, child);
+              },
             );
           },
         );

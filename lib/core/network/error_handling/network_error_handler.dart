@@ -5,8 +5,10 @@ import 'package:flutter_specialized_temp/core/network/constants/error_messages_k
 import 'package:flutter_specialized_temp/core/network/error_handling/models/custom_exception.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/models/api_call_failure_model.dart';
+import 'package:injectable/injectable.dart';
 
 /// Class that handles network errors and provides localized error messages.
+@lazySingleton
 class NetworkErrorHandler {
   final LocalizationService _localizationService;
 

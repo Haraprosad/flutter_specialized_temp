@@ -5,18 +5,18 @@ import 'package:flutter_specialized_temp/core/router/route_names.dart';
 import 'package:flutter_specialized_temp/core/router/route_paths.dart';
 import 'package:flutter_specialized_temp/core/widgets/scaffold_with_bottom_nav.dart';
 
-import 'package:flutter_specialized_temp/features/auth/presentation/pages/login_screen.dart';
-import 'package:flutter_specialized_temp/features/auth/presentation/pages/register_screen.dart';
-import 'package:flutter_specialized_temp/features/auth/presentation/pages/splash_screen.dart';
-import 'package:flutter_specialized_temp/features/home/presentation/pages/home_screen.dart';
-import 'package:flutter_specialized_temp/features/home/presentation/pages/notifications_screen.dart';
-import 'package:flutter_specialized_temp/features/profile/presentation/pages/edit_profile_screen.dart';
-import 'package:flutter_specialized_temp/features/profile/presentation/pages/profile_screen.dart';
-import 'package:flutter_specialized_temp/features/tasks/presentation/bloc/task_bloc.dart';
-import 'package:flutter_specialized_temp/features/tasks/presentation/bloc/task_event.dart';
-import 'package:flutter_specialized_temp/features/tasks/presentation/pages/sub_tasks_screen.dart';
-import 'package:flutter_specialized_temp/features/tasks/presentation/pages/task_details_screen.dart';
-import 'package:flutter_specialized_temp/features/tasks/presentation/pages/tasks_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_auth/presentation/pages/login_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_auth/presentation/pages/register_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_auth/presentation/pages/splash_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_home/presentation/pages/home_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_home/presentation/pages/notifications_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_profile/presentation/pages/edit_profile_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_profile/presentation/pages/profile_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_tasks/presentation/bloc/task_bloc.dart';
+import 'package:flutter_specialized_temp/features/dlt_tasks/presentation/bloc/task_event.dart';
+import 'package:flutter_specialized_temp/features/dlt_tasks/presentation/pages/sub_tasks_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_tasks/presentation/pages/task_details_screen.dart';
+import 'package:flutter_specialized_temp/features/dlt_tasks/presentation/pages/tasks_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
@@ -49,6 +49,7 @@ class AppRoutes {
           },
           routes: [
             // Home Stack
+
             GoRoute(
               path: RoutePaths.home,
               name: RouteNames.home,

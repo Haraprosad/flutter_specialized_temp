@@ -5,7 +5,7 @@ import 'package:flutter_specialized_temp/core/router/go_router_refresh_stream.da
 import 'package:flutter_specialized_temp/core/router/navigator_keys.dart';
 import 'package:flutter_specialized_temp/core/router/route_paths.dart';
 import 'package:flutter_specialized_temp/core/widgets/error_screen.dart';
-import 'package:flutter_specialized_temp/features/auth/presentation/bloc/bloc/auth_bloc.dart';
+import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 

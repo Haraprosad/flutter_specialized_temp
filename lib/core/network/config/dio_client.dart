@@ -24,7 +24,7 @@ class DioClient {
   /// Creates and configures Dio client with interceptors and base options.
   Dio _createDioClient() {
     final dio = Dio(BaseOptions(
-      baseUrl: const String.fromEnvironment('API_BASE_URL'),
+      baseUrl: "https://jsonplaceholder.typicode.com/",
       connectTimeout: NetworkConstants.connectionTimeout,
       receiveTimeout: NetworkConstants.receiveTimeout,
       sendTimeout: NetworkConstants.sendTimeout,

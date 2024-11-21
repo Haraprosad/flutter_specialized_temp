@@ -1,37 +1,40 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_specialized_temp/core/localization/extension/loc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_specialized_temp/core/network/constants/error_messages_key.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
+import 'package:injectable/injectable.dart';
 
-/// Global localization service to retrieve translated messages.
+@LazySingleton(as: LocalizationService)
 class GlobalLocalizationService implements LocalizationService {
-  final BuildContext context;
+  AppLocalizations? _localizations;
 
-  GlobalLocalizationService(this.context);
+  void setLocalizations(AppLocalizations localizations) {
+    _localizations = localizations;
+  }
 
-  /// Returns translated messages for the provided [messageKey].
   @override
   String translate(String messageKey) {
+    if (_localizations == null) {
+      return messageKey; // fallback if localizations not set
+    }
     return _getLocalizedValue(messageKey);
   }
 
-  /// Internal method to get the localized value based on [messageKey].
   String _getLocalizedValue(String messageKey) {
     switch (messageKey) {
       case ErrorMessagesKey.noInternet:
-        return context.loc.error_no_internet;
+        return _localizations!.error_no_internet;
       case ErrorMessagesKey.connectionTimeout:
-        return context.loc.error_connection_timeout;
+        return _localizations!.error_connection_timeout;
       case ErrorMessagesKey.serverError:
-        return context.loc.error_server_error;
+        return _localizations!.error_server_error;
       case ErrorMessagesKey.unauthorized:
-        return context.loc.error_unauthorized;
+        return _localizations!.error_unauthorized;
       case ErrorMessagesKey.forbidden:
-        return context.loc.error_forbidden;
+        return _localizations!.error_forbidden;
       case ErrorMessagesKey.notFound:
-        return context.loc.error_not_found;
+        return _localizations!.error_not_found;
       default:
-        return context.loc.error_unknown;
+        return _localizations!.error_unknown;
     }
   }
 }

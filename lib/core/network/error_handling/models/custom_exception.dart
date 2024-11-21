@@ -5,7 +5,7 @@ class CustomException implements Exception {
   final dynamic originalError; 
 
 
-  CustomException(this.type, {this.originalError});
+  CustomException({required this.type, this.originalError});
 
   @override
   String toString() => 'CustomException: $type - $originalError'; // Helpful for debugging
