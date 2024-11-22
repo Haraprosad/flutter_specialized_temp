@@ -1,6 +1,7 @@
 // dio_client.dart
 
 import 'package:dio/dio.dart';
+import 'package:flutter_specialized_temp/flavors/env_config.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
@@ -23,8 +24,9 @@ class DioClient {
 
   /// Creates and configures Dio client with interceptors and base options.
   Dio _createDioClient() {
+    final EnvConfig envConfig = EnvConfig.instance;
     final dio = Dio(BaseOptions(
-      baseUrl: "https://jsonplaceholder.typicode.com/",
+      baseUrl: envConfig.baseUrl,
       connectTimeout: NetworkConstants.connectionTimeout,
       receiveTimeout: NetworkConstants.receiveTimeout,
       sendTimeout: NetworkConstants.sendTimeout,

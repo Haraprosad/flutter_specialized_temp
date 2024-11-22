@@ -22,7 +22,7 @@ import 'package:flutter_specialized_temp/core/utils/extensions/widget_extension.
 import 'package:flutter_specialized_temp/core/widgets/flutter_error_screen.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 
-void main() async {
+Future<void> runMainApp() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await configureDependencies();

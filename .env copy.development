@@ -1,1 +1,2 @@
-BASE_URL=development-url
+# API configuration
+BASE_URL=https://jsonplaceholder.typicode.com/
