@@ -3,7 +3,6 @@ import 'package:flutter_specialized_temp/core/network/config/dio_client.dart';
 import 'package:flutter_specialized_temp/core/network/enums/custom_error_type.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/models/custom_exception.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/data/models/post_model.dart';
-import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/domain/repository/posts_repository.dart';
 import 'package:injectable/injectable.dart';
 
 

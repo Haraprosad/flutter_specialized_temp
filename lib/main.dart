@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,61 +7,15 @@ import 'package:flutter_specialized_temp/core/di/injection.dart';
 import 'package:flutter_specialized_temp/core/localization/bloc/locale_bloc.dart';
 import 'package:flutter_specialized_temp/core/localization/extension/loc.dart';
 import 'package:flutter_specialized_temp/core/localization/localization_actions.dart';
-import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
-import 'package:flutter_specialized_temp/core/observers/bloc_observer.dart';
 import 'package:flutter_specialized_temp/core/router/app_router.dart';
 import 'package:flutter_specialized_temp/core/theme/app_theme.dart';
 import 'package:flutter_specialized_temp/core/theme/bloc/theme_bloc.dart';
 import 'package:flutter_specialized_temp/core/theme/text_theme_ext.dart';
 import 'package:flutter_specialized_temp/core/utils/extensions/sizedbox_extension.dart';
 import 'package:flutter_specialized_temp/core/utils/extensions/widget_extension.dart';
-import 'package:flutter_specialized_temp/core/widgets/flutter_error_screen.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 
-Future<void> runMainApp() async {
-  runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await configureDependencies();
-
-    // Bloc observer
-    Bloc.observer = AppBlocObserver();
-
-    runApp(const MyApp());
-  }, (exception, stackTrace) async {
-    AppLogger.f(
-      message: "runZonedGuarded caught error",
-      error: exception,
-      stackTrace: stackTrace,
-    );
-  });
-
-  // Handle Flutter framework errors
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-
-    AppLogger.f(
-      message: "Flutter error: ${details.exception}",
-      error: details.exception,
-      stackTrace: details.stack,
-    );
-  };
-
-  // Handle platform/OS errors
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    AppLogger.e(
-      message: "Platform error: $error",
-      error: error,
-      stackTrace: stack,
-    );
-    return true;
-  };
-
-  // Flutter error screen show when error caught by Flutter framework
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return const FlutterErrorScreen();
-  };
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -12,7 +12,7 @@ abstract class RegisterModule {
 
   @lazySingleton
   InternetConnectionChecker get connectionChecker =>
-      InternetConnectionChecker();
+      InternetConnectionChecker.instance;
 
   @lazySingleton
   Connectivity get connectivity => Connectivity();

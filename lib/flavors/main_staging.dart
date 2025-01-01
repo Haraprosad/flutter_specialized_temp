@@ -1,17 +1,11 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_specialized_temp/core/constants/env_constants.dart';
-import '../main.dart';
-import 'env_config.dart';
-import 'environment.dart';
+import 'package:flutter_specialized_temp/flavors/app_initializer.dart';
+import 'package:flutter_specialized_temp/flavors/environment.dart';
 
-void main() async{
-  await dotenv.load(fileName: EnvConstants.envStaging);
-  
-  EnvConfig.instantiate(
-    appName: 'Staging App', 
-    baseUrl: dotenv.env[EnvConstants.envKeyBaseUrl]!, 
-    env: Env.STAGING  
+void main() async {
+  await initializeApp(
+    EnvConstants.envStaging,
+    'Staging App',
+    Env.STAGING,
   );
-
-  await runMainApp();
 }

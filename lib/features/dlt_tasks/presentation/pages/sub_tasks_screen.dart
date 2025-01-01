@@ -6,7 +6,7 @@ import 'package:flutter_specialized_temp/core/utils/app_spacing.dart';
 class SubTasksScreen extends StatelessWidget {
   final String taskId;
 
-  const SubTasksScreen({Key? key, required this.taskId}) : super(key: key);
+  const SubTasksScreen({super.key, required this.taskId});
 
   @override
   Widget build(BuildContext context) {

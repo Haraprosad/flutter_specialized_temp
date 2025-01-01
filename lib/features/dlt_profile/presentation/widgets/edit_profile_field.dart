@@ -4,7 +4,7 @@ class EditProfileField extends StatelessWidget {
   final String label;
   final String initialValue;
 
-  const EditProfileField({
+  const EditProfileField({super.key, 
     required this.label,
     required this.initialValue,
   });

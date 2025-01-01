@@ -6,7 +6,7 @@ import 'package:flutter_specialized_temp/core/utils/app_spacing.dart';
 import 'package:flutter_specialized_temp/features/dlt_profile/presentation/widgets/edit_profile_field.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +56,10 @@ class EditProfileScreen extends StatelessWidget {
             SizedBox(height: AppSpacing.largeH),
             ElevatedButton(
               onPressed: () {},
-              child: Text('Save Changes'),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 48.h),
               ),
+              child: Text('Save Changes'),
             ),
           ],
         ),

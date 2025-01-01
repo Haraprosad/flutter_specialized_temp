@@ -11,7 +11,7 @@ abstract class BaseApiRepository {
       final result = await apiCall();
       return ApiSuccess(result);
     } catch (error, stackTrace) {
-      final failure = await _errorHandler.handleError(error, stackTrace);
+      final failure = _errorHandler.handleError(error, stackTrace);
       return ApiFailure(failure);
     }
   }

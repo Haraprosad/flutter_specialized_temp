@@ -11,7 +11,7 @@ class ConnectionManager {
   ConnectionManager._internal();
 
   final InternetConnectionChecker _connectionChecker =
-      InternetConnectionChecker();
+      InternetConnectionChecker.instance;
 
   Future<bool> checkInternetConnection() async {
     var isDeviceConnected = false;

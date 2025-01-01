@@ -8,7 +8,7 @@ import 'package:flutter_specialized_temp/features/dlt_tasks/presentation/bloc/ta
 class TaskDetailsScreen extends StatelessWidget {
   final String taskId;
 
-  const TaskDetailsScreen({Key? key, required this.taskId}) : super(key: key);
+  const TaskDetailsScreen({super.key, required this.taskId});
 
   @override
   Widget build(BuildContext context) {

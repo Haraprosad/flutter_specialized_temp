@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 class TaskItem extends StatelessWidget {
   final TaskEntity task;
 
-  const TaskItem({Key? key, required this.task}) : super(key: key);
+  const TaskItem({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {

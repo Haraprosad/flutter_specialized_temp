@@ -3,7 +3,6 @@ import 'package:flutter_specialized_temp/core/network/config/dio_client.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/connectivity_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/error_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
-import 'package:flutter_specialized_temp/core/network/error_handling/models/custom_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';

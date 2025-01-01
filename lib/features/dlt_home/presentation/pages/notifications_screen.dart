@@ -4,7 +4,7 @@ import 'package:flutter_specialized_temp/core/theme/text_theme_ext.dart';
 import 'package:flutter_specialized_temp/core/utils/app_spacing.dart';
 
 class NotificationsScreen extends StatelessWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

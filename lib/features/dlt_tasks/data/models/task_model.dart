@@ -2,18 +2,12 @@ import 'package:flutter_specialized_temp/features/dlt_tasks/domain/entities/task
 
 class TaskModel extends TaskEntity {
   TaskModel({
-    required String id,
-    required String title,
-    required String description,
-    required bool isCompleted,
-    required DateTime createdAt,
-  }) : super(
-          id: id,
-          title: title,
-          description: description,
-          isCompleted: isCompleted,
-          createdAt: createdAt,
-        );
+    required super.id,
+    required super.title,
+    required super.description,
+    required super.isCompleted,
+    required super.createdAt,
+  });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(

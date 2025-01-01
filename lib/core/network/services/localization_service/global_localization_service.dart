@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 class GlobalLocalizationService implements LocalizationService {
   AppLocalizations? _localizations;
 
+  @override
   void setLocalizations(AppLocalizations localizations) {
     _localizations = localizations;
   }

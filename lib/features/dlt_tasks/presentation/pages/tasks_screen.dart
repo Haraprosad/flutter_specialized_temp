@@ -11,7 +11,7 @@ import 'package:flutter_specialized_temp/features/dlt_tasks/presentation/widgets
 import '../../../../core/di/injection.dart';
 
 class TasksScreen extends StatelessWidget {
-  const TasksScreen({Key? key}) : super(key: key);
+  const TasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
