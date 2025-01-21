@@ -19,10 +19,6 @@ class AppThemeColorsConfig {
       textSecondary: const Color(0xFF757575),
       warning: _warning,
       alert: _alert,
-      chatOutgoingBubble: const Color(0xFFE3F2FD), // Light blue
-      chatAiBubble: const Color(0xFFF3E5F5), // Light purple
-      chatHumanBubble: const Color(0xFFFFFFFF), // White
-      chatTimestamp: const Color(0xFF9E9E9E), // Medium grey
     ),
     AppThemeType.dark: ThemeColors(
       primary: const Color(0xFF338DFF),
@@ -34,10 +30,8 @@ class AppThemeColorsConfig {
       textSecondary: const Color(0xFFB0B0B0),
       warning: _warning,
       alert: _alert,
-      chatOutgoingBubble: const Color(0xFF1E3A5F), // Dark blue
-      chatAiBubble: const Color(0xFF2C1B3A), // Dark purple
-      chatHumanBubble: const Color(0xFF2D2D2D), // Dark grey
-      chatTimestamp: const Color(0xFF757575), // Light grey
+      // chatOutgoingBubble: const Color(0xFF1E3A5F), // Dark blue
+      // chatAiBubble: const Color(0xFF2C1B3A), // Dark purple
     ),
   };
 }

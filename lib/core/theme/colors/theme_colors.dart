@@ -11,10 +11,6 @@ class ThemeColors {
   final Color textSecondary;
   final Color warning;
   final Color alert;
-  final Color chatOutgoingBubble;
-  final Color chatAiBubble;
-  final Color chatHumanBubble;
-  final Color chatTimestamp;
 
   const ThemeColors({
     required this.primary,
@@ -26,9 +22,5 @@ class ThemeColors {
     required this.textSecondary,
     required this.warning,
     required this.alert,
-    required this.chatOutgoingBubble,
-    required this.chatAiBubble,
-    required this.chatHumanBubble,
-    required this.chatTimestamp,
   });
 }

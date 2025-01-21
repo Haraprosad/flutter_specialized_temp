@@ -5,7 +5,6 @@ import 'package:flutter_specialized_temp/core/theme/colors/app_theme_colors_conf
 import 'package:flutter_specialized_temp/core/theme/colors/theme_colors.dart';
 import 'package:flutter_specialized_temp/core/theme/constants/theme_constants.dart';
 import 'package:flutter_specialized_temp/core/theme/typography/text_theme.dart';
-import '../chat_theme.dart';
 import '../styles/button_styles.dart';
 
 class AppTheme {
@@ -118,46 +117,46 @@ class AppTheme {
         filled: true,
         fillColor: colors.surface,
       ),
-      extensions: [
-        _buildChatTheme(colors, createTextTheme(colors)),
-      ],
+      // extensions: [
+      //   _buildChatTheme(colors, createTextTheme(colors)),
+      // ],
     );
   }
 
-  static ChatTheme _buildChatTheme(ThemeColors colors, TextTheme textTheme) {
-    return ChatTheme(
-      outgoingBubbleColor: colors.chatOutgoingBubble,
-      outgoingTextColor: colors.textPrimary,
-      humanReplyBubbleColor: colors.chatHumanBubble,
-      humanReplyTextColor: colors.textPrimary,
-      aiReplyBubbleColor: colors.chatAiBubble,
-      aiReplyTextColor: colors.textPrimary,
-      timestampTextStyle: textTheme.labelSmall!.copyWith(
-        color: colors.chatTimestamp,
-      ),
-      bubbleBorderRadius:
-          BorderRadius.circular(ThemeConstants.defaultBorderRadius),
-      messageTextStyle: textTheme.bodyMedium!,
-      chatInputDecoration: InputDecoration(
-        hintText: 'Type a message',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(
-              color: colors.textSecondary.withAlpha(128)), // 0.5 * 255 ≈ 128
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(
-              color: colors.textSecondary.withAlpha(51)), // 0.2 * 255 ≈ 51
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: colors.primary),
-        ),
-        contentPadding: _textButtonPadding,
-        fillColor: colors.surface,
-        filled: true,
-      ),
-    );
-  }
+  // static ChatTheme _buildChatTheme(ThemeColors colors, TextTheme textTheme) {
+  //   return ChatTheme(
+  //     outgoingBubbleColor: colors.chatOutgoingBubble,
+  //     outgoingTextColor: colors.textPrimary,
+  //     humanReplyBubbleColor: colors.chatHumanBubble,
+  //     humanReplyTextColor: colors.textPrimary,
+  //     aiReplyBubbleColor: colors.chatAiBubble,
+  //     aiReplyTextColor: colors.textPrimary,
+  //     timestampTextStyle: textTheme.labelSmall!.copyWith(
+  //       color: colors.chatTimestamp,
+  //     ),
+  //     bubbleBorderRadius:
+  //         BorderRadius.circular(ThemeConstants.defaultBorderRadius),
+  //     messageTextStyle: textTheme.bodyMedium!,
+  //     chatInputDecoration: InputDecoration(
+  //       hintText: 'Type a message',
+  //       border: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(24),
+  //         borderSide: BorderSide(
+  //             color: colors.textSecondary.withAlpha(128)), // 0.5 * 255 ≈ 128
+  //       ),
+  //       enabledBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(24),
+  //         borderSide: BorderSide(
+  //             color: colors.textSecondary.withAlpha(51)), // 0.2 * 255 ≈ 51
+  //       ),
+  //       focusedBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(24),
+  //         borderSide: BorderSide(color: colors.primary),
+  //       ),
+  //       contentPadding: _textButtonPadding,
+  //       fillColor: colors.surface,
+  //       filled: true,
+  //     ),
+  //   );
+  // }
 }
