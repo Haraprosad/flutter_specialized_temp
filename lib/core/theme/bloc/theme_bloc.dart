@@ -11,7 +11,7 @@ part 'theme_state.dart';
 @singleton
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final AppStorage _storage;
-  
+
   ThemeBloc(this._storage) : super(const ThemeState.initial()) {
     on<InitializeTheme>(_onInitializeTheme);
     on<ToggleTheme>(_onToggleTheme);

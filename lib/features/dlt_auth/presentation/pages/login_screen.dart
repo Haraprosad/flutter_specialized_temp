@@ -30,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      sl<AuthBloc>().add(LoginRequested(email: _emailController.text, password: _passwordController.text));
+      sl<AuthBloc>().add(LoginRequested(
+          email: _emailController.text, password: _passwordController.text));
       print('Email: ${_emailController.text}');
       print('Password: ${_passwordController.text}');
     }
@@ -39,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -58,16 +58,16 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 'Welcome Back!',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
                 'Sign in to continue',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.grey[600],
-                ),
+                      color: Colors.grey[600],
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),

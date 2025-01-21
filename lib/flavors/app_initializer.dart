@@ -13,22 +13,28 @@ import 'env_config.dart';
 import 'environment.dart';
 
 Future<void> initializeApp(String envFileName, String appName, Env env) async {
-
   await runZonedGuarded(() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: envFileName);
+    WidgetsFlutterBinding.ensureInitialized();
+    await dotenv.load(fileName: envFileName);
 
-  EnvConfig.instantiate(
-    appName: appName,
-    baseUrl: dotenv.env[EnvConstants.envKeyBaseUrl]!,
-    env: env,
-  );
+    EnvConfig.instantiate(
+      appName: appName,
+      baseUrl: dotenv.env[EnvConstants.envKeyBaseUrl]!,
+      env: env,
+    );
     await configureDependencies();
 
     // Bloc observer
     Bloc.observer = AppBlocObserver();
 
     runApp(const MyApp());
+
+//************Device Preview -1 start**************** */
+    // runApp(DevicePreview(
+    //   enabled: !kReleaseMode,
+    //   builder: (context) => MyApp(), // Wrap your app
+    // ));
+//************Device Preview -1 end****************** */
   }, (exception, stackTrace) async {
     AppLogger.f(
       message: "runZonedGuarded caught error",

@@ -9,13 +9,12 @@ import 'package:flutter_specialized_temp/core/localization/extension/loc.dart';
 import 'package:flutter_specialized_temp/core/localization/localization_actions.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
 import 'package:flutter_specialized_temp/core/router/app_router.dart';
-import 'package:flutter_specialized_temp/core/theme/app_theme.dart';
+import 'package:flutter_specialized_temp/core/theme/base/app_theme.dart';
 import 'package:flutter_specialized_temp/core/theme/bloc/theme_bloc.dart';
-import 'package:flutter_specialized_temp/core/theme/text_theme_ext.dart';
+import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
 import 'package:flutter_specialized_temp/core/utils/extensions/sizedbox_extension.dart';
 import 'package:flutter_specialized_temp/core/utils/extensions/widget_extension.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812),
+      designSize: const Size(411, 869),
       minTextAdapt: true,
       builder: (_, child) {
         return MultiBlocProvider(
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
               create: (context) => sl<LocaleBloc>(),
             ),
             BlocProvider<AuthBloc>(
-              create: (context)=>sl<AuthBloc>(),
+              create: (context) => sl<AuthBloc>(),
             ),
           ],
           child: const AppView(),
@@ -62,12 +61,27 @@ class AppView extends StatelessWidget {
               title: 'Flutter Demo',
               locale: localeState.locale,
               themeMode: themeState.themeMode,
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
+              theme: AppTheme.lightTheme(),
+              darkTheme: AppTheme.darkTheme(),
               builder: (context, child) {
+                // Get theme colors
+                final theme = Theme.of(context);
+                final primaryColor = theme.colorScheme.primary;
+                final backgroundColor = theme.colorScheme.surface;
+                final textColor = theme.colorScheme.primary;
+
+                // Configure EasyLoading with theme colors
+                EasyLoading.instance
+                  ..backgroundColor = backgroundColor
+                  ..indicatorColor = primaryColor
+                  ..textColor = textColor
+                  ..progressColor = primaryColor
+                  ..userInteractions = false
+                  ..loadingStyle = EasyLoadingStyle.custom;
                 //For Non Ui localizations service
                 if (AppLocalizations.of(context) != null) {
-                  sl<LocalizationService>().setLocalizations(AppLocalizations.of(context)!);
+                  sl<LocalizationService>()
+                      .setLocalizations(AppLocalizations.of(context)!);
                 }
                 return EasyLoading.init()(context, child);
               },
@@ -79,8 +93,8 @@ class AppView extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class MyChatsPage extends StatelessWidget {
+  const MyChatsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +121,8 @@ class MyHomePage extends StatelessWidget {
 }
 
 class ThemeToggleButton extends StatelessWidget {
+  const ThemeToggleButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
@@ -124,6 +140,8 @@ class ThemeToggleButton extends StatelessWidget {
 }
 
 class LocaleToggleButton extends StatelessWidget {
+  const LocaleToggleButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(

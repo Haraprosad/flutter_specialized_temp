@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_specialized_temp/core/theme/color_scheme_ext.dart';
-import 'package:flutter_specialized_temp/core/theme/text_theme_ext.dart';
+import 'package:flutter_specialized_temp/core/theme/colors/color_scheme_ext.dart';
+import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
 import 'package:flutter_specialized_temp/core/utils/app_spacing.dart';
 import 'package:flutter_specialized_temp/features/dlt_profile/presentation/widgets/edit_profile_field.dart';
 
