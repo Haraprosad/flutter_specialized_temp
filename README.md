@@ -15,7 +15,7 @@ A **production-ready Flutter template** built with enterprise-grade architecture
 
 ## 📚 Documentation
 
-### 🎭 **[Flavor Management Guide](FLAVOR.md)**
+### 🎭 **[Flavor Management Guide](lib/flavors/README.md)**
 **Comprehensive professional guide for using the flavor management system:**
 - Professional setup and configuration
 - Development workflows and best practices
