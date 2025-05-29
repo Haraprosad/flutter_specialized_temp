@@ -3,35 +3,33 @@ import 'package:flutter_specialized_temp/core/theme/base/app_theme_type.dart';
 import 'package:flutter_specialized_temp/core/theme/colors/theme_colors.dart';
 
 class AppThemeColorsConfig {
-  // Status Colors (same for both themes)
-  static const Color _warning = Color(0xFFFFC107);
-  static const Color _alert = Color(0xFFFF9800);
+  // Status Colors (refined for better UX)
+  static const Color _warning = Color(0xFFFFB020);
+  static const Color _alert = Color(0xFFFF4757);
 
   // Theme color schemes
   static final Map<AppThemeType, ThemeColors> themeColors = {
     AppThemeType.light: ThemeColors(
-      primary: const Color(0xFF0066CC),
-      secondary: const Color(0xFFD93025),
-      success: const Color(0xFF2E7D32),
-      background: const Color(0xFFFFFFFF),
-      surface: const Color(0xFFF5F5F5),
-      textPrimary: const Color(0xFF212121),
-      textSecondary: const Color(0xFF757575),
+      primary: const Color(0xFF2563EB), // Professional blue
+      secondary: const Color(0xFF7C3AED), // Premium purple
+      success: const Color(0xFF10B981), // Modern green
+      background: const Color(0xFFFAFAFA), // Soft white
+      surface: const Color(0xFFFFFFFF), // Pure white
+      textPrimary: const Color(0xFF1F2937), // Rich dark gray
+      textSecondary: const Color(0xFF6B7280), // Medium gray
       warning: _warning,
       alert: _alert,
     ),
     AppThemeType.dark: ThemeColors(
-      primary: const Color(0xFF338DFF),
-      secondary: const Color(0xFFFF4545),
-      success: const Color(0xFF4CAF50),
-      background: const Color(0xFF121212),
-      surface: const Color(0xFF1E1E1E),
-      textPrimary: const Color(0xFFE1E1E1),
-      textSecondary: const Color(0xFFB0B0B0),
+      primary: const Color(0xFF3B82F6), // Vibrant blue
+      secondary: const Color(0xFF8B5CF6), // Bright purple
+      success: const Color(0xFF34D399), // Bright green
+      background: const Color(0xFF0F172A), // Deep navy
+      surface: const Color(0xFF1E293B), // Slate gray
+      textPrimary: const Color(0xFFF8FAFC), // Pure white
+      textSecondary: const Color(0xFFCBD5E1), // Light gray
       warning: _warning,
       alert: _alert,
-      // chatOutgoingBubble: const Color(0xFF1E3A5F), // Dark blue
-      // chatAiBubble: const Color(0xFF2C1B3A), // Dark purple
     ),
   };
 }

@@ -8,17 +8,18 @@ import '../constants/theme_constants.dart';
 class ButtonStyles {
   static ButtonStyle elevatedButtonStyle(ThemeColors colors) {
     return ElevatedButton.styleFrom(
-      elevation: 4,
+      backgroundColor: colors.primary,
+      foregroundColor: colors.surface,
+      elevation: 8,
+      shadowColor: colors.primary.withOpacity(0.3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+      ),
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
       textStyle: TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.w600,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-      ),
-      backgroundColor: colors.primary,
-      foregroundColor: colors.background,
     );
   }
 
