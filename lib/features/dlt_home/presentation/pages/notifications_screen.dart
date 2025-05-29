@@ -13,9 +13,9 @@ class NotificationsScreen extends StatelessWidget {
         title: Text('Notifications', style: context.headlineMedium),
       ),
       body: ListView.separated(
-        padding: EdgeInsets.all(AppSpacing.mediumW),
+        padding: EdgeInsets.all(AppSpacing.xl),
         itemCount: 5,
-        separatorBuilder: (_, __) => Divider(height: AppSpacing.smallH),
+        separatorBuilder: (_, __) => Divider(height: AppSpacing.sm),
         itemBuilder: (context, index) {
           return ListTile(
             leading: Icon(Icons.notifications,

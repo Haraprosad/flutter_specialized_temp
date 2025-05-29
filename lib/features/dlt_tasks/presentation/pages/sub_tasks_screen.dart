@@ -14,7 +14,7 @@ class SubTasksScreen extends StatelessWidget {
         title: Text('Sub Tasks', style: context.headlineMedium),
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(AppSpacing.mediumW),
+        padding: EdgeInsets.all(AppSpacing.md),
         itemCount: 5,
         itemBuilder: (context, index) {
           return CheckboxListTile(

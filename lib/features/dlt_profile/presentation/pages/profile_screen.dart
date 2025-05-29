@@ -26,10 +26,10 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AppSpacing.mediumW),
+        padding: EdgeInsets.all(AppSpacing.md),
         child: Column(
           children: [
-            SizedBox(height: AppSpacing.largeH),
+            SizedBox(height: AppSpacing.lgV),
             CircleAvatar(
               radius: 50.r,
               backgroundColor: context.colorScheme.primary,
@@ -37,10 +37,10 @@ class ProfileScreen extends StatelessWidget {
                 color: context.colorScheme.onPrimary,
               )),
             ),
-            SizedBox(height: AppSpacing.mediumH),
+            SizedBox(height: AppSpacing.mdV),
             Text('John Doe', style: context.headlineSmall),
             Text('john.doe@example.com', style: context.bodyLarge),
-            SizedBox(height: AppSpacing.largeH),
+            SizedBox(height: AppSpacing.lgV),
             ProfileMenuItem(
               icon: Icons.settings,
               title: 'Settings',

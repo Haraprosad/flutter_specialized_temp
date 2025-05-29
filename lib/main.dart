@@ -22,8 +22,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(411, 869),
+      designSize: const Size(375,
+          812), // Updated to iPhone X/11/12 standard size for better compatibility
       minTextAdapt: true,
+      splitScreenMode: true, // Better support for tablets and foldables
       builder: (_, child) {
         return MultiBlocProvider(
           providers: [

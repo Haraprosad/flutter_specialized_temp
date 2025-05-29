@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_specialized_temp/core/theme/base/app_theme_type.dart';
 import 'package:flutter_specialized_temp/core/theme/colors/app_theme_colors_config.dart';
 import 'package:flutter_specialized_temp/core/theme/colors/theme_colors.dart';
+import 'package:flutter_specialized_temp/core/theme/constants/app_sizes.dart';
 import 'package:flutter_specialized_temp/core/theme/constants/theme_constants.dart';
 import 'package:flutter_specialized_temp/core/theme/typography/text_theme.dart';
 import '../styles/button_styles.dart';
@@ -64,12 +65,12 @@ class AppTheme {
         elevation: 1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.horizontal(
-              right: Radius.circular(ThemeConstants.drawerBorderRadius)),
+              right: Radius.circular(AppSizes.radiusMd)),
         ),
       ),
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ThemeConstants.cardBorderRadius),
+          borderRadius: BorderRadius.circular(AppSizes.radiusMd),
         ),
         contentPadding: _textButtonPadding,
       ),
@@ -83,7 +84,7 @@ class AppTheme {
       cardTheme: CardTheme(
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ThemeConstants.cardBorderRadius),
+          borderRadius: BorderRadius.circular(AppSizes.radiusMd),
         ),
         color: colors.surface,
       ),
@@ -99,18 +100,18 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius:
-              BorderRadius.circular(ThemeConstants.defaultBorderRadius),
+              BorderRadius.circular(AppSizes.radiusMd),
           borderSide: BorderSide(color: colors.textSecondary),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius:
-              BorderRadius.circular(ThemeConstants.defaultBorderRadius),
+              BorderRadius.circular(AppSizes.radiusMd),
           borderSide: BorderSide(
               color: colors.textSecondary.withAlpha(51)), // 0.2 * 255 ≈ 51
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius:
-              BorderRadius.circular(ThemeConstants.defaultBorderRadius),
+              BorderRadius.circular(AppSizes.radiusMd),
           borderSide: BorderSide(color: colors.primary),
         ),
         contentPadding: _buttonPadding(),

@@ -15,10 +15,10 @@ class EditProfileScreen extends StatelessWidget {
         title: Text('Edit Profile', style: context.headlineMedium),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AppSpacing.mediumW),
+        padding: AppSpacing.mdPadding,
         child: Column(
           children: [
-            SizedBox(height: AppSpacing.largeH),
+            SizedBox(height: AppSpacing.lgV),
             Stack(
               alignment: Alignment.bottomRight,
               children: [
@@ -38,22 +38,22 @@ class EditProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: AppSpacing.largeH),
+            SizedBox(height: AppSpacing.lgV),
             EditProfileField(
               label: 'Name',
               initialValue: 'John Doe',
             ),
-            SizedBox(height: AppSpacing.mediumH),
+            SizedBox(height: AppSpacing.mdV),
             EditProfileField(
               label: 'Email',
               initialValue: 'john.doe@example.com',
             ),
-            SizedBox(height: AppSpacing.mediumH),
+            SizedBox(height: AppSpacing.mdV),
             EditProfileField(
               label: 'Phone',
               initialValue: '+1 234 567 890',
             ),
-            SizedBox(height: AppSpacing.largeH),
+            SizedBox(height: AppSpacing.lgV),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(

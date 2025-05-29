@@ -29,9 +29,9 @@ class TasksScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is TasksLoaded) {
             return ListView.separated(
-              padding: EdgeInsets.all(AppSpacing.mediumW),
+              padding: EdgeInsets.all(AppSpacing.md),
               itemCount: state.tasks.length,
-              separatorBuilder: (context, index) => SizedBox(height: AppSpacing.smallH),
+              separatorBuilder: (context, index) => SizedBox(height: AppSpacing.smV),
               itemBuilder: (context, index) {
                 final task = state.tasks[index];
                 return TaskItem(task: task);

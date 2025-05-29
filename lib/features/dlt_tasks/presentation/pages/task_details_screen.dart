@@ -23,7 +23,7 @@ class TaskDetailsScreen extends StatelessWidget {
               ),
             ),
             body: Padding(
-              padding: EdgeInsets.all(AppSpacing.mediumW),
+              padding: EdgeInsets.all(AppSpacing.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

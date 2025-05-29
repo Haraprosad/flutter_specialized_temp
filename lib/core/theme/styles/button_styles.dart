@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_specialized_temp/core/theme/colors/theme_colors.dart';
+import 'package:flutter_specialized_temp/core/theme/constants/app_sizes.dart';
+import 'package:flutter_specialized_temp/core/utils/app_spacing.dart';
 import '../constants/theme_constants.dart';
 
 class ButtonStyles {
@@ -13,7 +15,7 @@ class ButtonStyles {
         fontWeight: FontWeight.w600,
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ThemeConstants.defaultBorderRadius),
+        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
       ),
       backgroundColor: colors.primary,
       foregroundColor: colors.background,
@@ -24,7 +26,7 @@ class ButtonStyles {
     return OutlinedButton.styleFrom(
       padding: EdgeInsets.all(10.w),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ThemeConstants.defaultBorderRadius),
+        borderRadius: BorderRadius.circular(AppSizes.radiusSm),
       ),
       side: BorderSide(color: colors.primary),
       foregroundColor: colors.primary,
@@ -33,7 +35,7 @@ class ButtonStyles {
 
   static ButtonStyle textButtonStyle(ThemeColors colors) {
     return TextButton.styleFrom(
-      padding: ThemeConstants.textButtonPadding,
+      padding: AppSpacing.smPadding,
       foregroundColor: colors.primary,
     );
   }
@@ -44,7 +46,7 @@ class ButtonStyles {
       backgroundColor: colors.surface,
       foregroundColor: colors.primary,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ThemeConstants.defaultBorderRadius),
+        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
       ),
     );
   }
