@@ -27,6 +27,17 @@ A **production-ready Flutter template** built with enterprise-grade architecture
 
 *This guide covers everything you need to know to use the flavor management system professionally and efficiently.*
 
+### 📱 **[Responsive Design Guide](RESPONSIVE_DESIGN.md)**
+**Complete responsive design standards and best practices:**
+- ScreenUtil setup and configuration
+- Responsive units usage (`.sp`, `.w`, `.h`, `.r`)
+- Edge case handling and overflow prevention
+- Device testing with Device Preview
+- Production-ready UI guidelines
+- Testing checklist for all screen sizes
+
+*Essential guide for maintaining pixel-perfect, responsive UI across all devices.*
+
 ### 📖 **[Auto-Generated API Documentation](doc/api/index.html)**
 Complete API documentation generated with `dart doc` - includes all classes, methods, and detailed code documentation.
 
@@ -79,6 +90,15 @@ lib/
 ```bash
 # Development
 flutter run -t lib/flavors/main_development.dart
+
+# Staging
+flutter run -t lib/flavors/main_staging.dart
+
+# Production
+flutter run -t lib/flavors/main_production.dart
+
+# Device Preview (Responsive Testing)
+flutter run -t lib/flavors/main_preview.dart
 
 # Testing
 flutter test
