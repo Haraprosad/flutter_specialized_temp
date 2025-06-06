@@ -39,6 +39,18 @@ A **production-ready Flutter template** built with enterprise-grade architecture
 
 *Essential guide for implementing scalable navigation in complex Flutter applications.*
 
+### 🏗️ **[Dependency Injection Guide](docs/DependencyInjection.md)**
+**Complete dependency injection system with GetIt and Injectable:**
+- Understanding DI concepts and benefits
+- Step-by-step setup with get_it and injectable
+- Annotation usage (@injectable, @singleton, @lazySingleton)
+- Testing strategies with dependency injection
+- Service layer patterns and best practices
+- Environment-specific dependency registration
+- Common patterns and real-world examples
+
+*Master dependency injection for building maintainable, testable, and scalable Flutter applications.*
+
 ### 📱 **[Responsive Design Guide](RESPONSIVE_DESIGN.md)**
 **Complete responsive design standards and best practices:**
 - ScreenUtil setup and configuration
