@@ -4,6 +4,7 @@ import 'package:flutter_specialized_temp/core/router/app_routes.dart';
 import 'package:flutter_specialized_temp/core/router/go_router_refresh_stream.dart';
 import 'package:flutter_specialized_temp/core/router/navigator_keys.dart';
 import 'package:flutter_specialized_temp/core/router/route_paths.dart';
+import 'package:flutter_specialized_temp/core/router/route_guards.dart';
 import 'package:flutter_specialized_temp/core/widgets/error_screen.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,44 +24,13 @@ class AppRouter {
     initialLocation: RoutePaths.splash,
     debugLogDiagnostics: true,
     routes: _appRoutes.routes,
-    redirect: _guardRoute,
+    redirect: (context, state) => RouteGuards.authGuard(context, state),
     refreshListenable: GoRouterRefreshStream(_authBloc.stream),
-    errorBuilder: (context, state) => const ErrorScreen(),
+    errorBuilder: (context, state) => ErrorScreen(
+      errorMessage: state.error.toString(),
+    ),
     observers: [
       AppRouterObserver(),
     ],
   );
-
-  String? _guardRoute(BuildContext context, GoRouterState state) {
-
-    bool isLoggedIn = false;
-
-    if(_authBloc.state is AuthAuthenticated){
-      isLoggedIn = true;
-    }
-
-    final isSplash = state.matchedLocation == RoutePaths.splash;
-    final isLoginRoute = state.matchedLocation == RoutePaths.login;
-    final isRegisterRoute = state.matchedLocation == RoutePaths.register;
-
-    AppLogger.d(
-        message:
-            "GuardRoute has been called :::::: IsLoggedIn: $isLoggedIn,  IsSplash: $isSplash, IsLoginRoute: $isLoginRoute, IsRegisterRoute: $isRegisterRoute");
-
-    // Handle initializing state
-
-
-    // Handle authentication
-    if (!isLoggedIn && !isSplash) {
-      if (isLoginRoute || isRegisterRoute) return null;
-      return RoutePaths.login;
-    }
-
-    // Redirect logged in users from auth screens
-    if (isLoggedIn && (isLoginRoute || isRegisterRoute || isSplash)) {
-      return RoutePaths.home;
-    }
-
-    return null;
-  }
 }

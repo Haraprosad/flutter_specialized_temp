@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({super.key});
+  final String errorMessage;
+  const ErrorScreen({super.key, required this.errorMessage});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.error,
-        title: const Text(
-          'Oops! Something went wrong',
+        title: Text(
+          errorMessage,
           style: TextStyle(color: Colors.white),
         ),
       ),

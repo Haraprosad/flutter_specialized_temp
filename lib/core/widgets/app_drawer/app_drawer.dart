@@ -68,7 +68,9 @@ class AppDrawer extends StatelessWidget {
           DrawerMenuItem(
             icon: Icons.logout,
             title: 'Logout',
-            onTap: () {
+            onTap: () async {
+              // Clear local storage before logout
+              await sl<AppStorage>().clearAllData();
               sl<AuthBloc>().add(const LogoutRequested());
             },
           ),

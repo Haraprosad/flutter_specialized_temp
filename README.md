@@ -27,6 +27,18 @@ A **production-ready Flutter template** built with enterprise-grade architecture
 
 *This guide covers everything you need to know to use the flavor management system professionally and efficiently.*
 
+### 🛣️ **[Route Management Guide](RouteManagement.md)**
+**Complete routing system documentation with GoRouter:**
+- Declarative routing with deep linking support
+- Authentication guards and route validation
+- Nested navigation and shell routes
+- Custom transitions and animations
+- Complex scenarios (trading apps, social media)
+- Best practices and performance optimization
+- Testing strategies for navigation flows
+
+*Essential guide for implementing scalable navigation in complex Flutter applications.*
+
 ### 📱 **[Responsive Design Guide](RESPONSIVE_DESIGN.md)**
 **Complete responsive design standards and best practices:**
 - ScreenUtil setup and configuration

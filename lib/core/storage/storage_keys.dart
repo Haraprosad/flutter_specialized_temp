@@ -16,4 +16,9 @@ class StorageKeys {
   static const String userId = 'userId';
   static const String userPin = 'userPin';
   static const String biometricEnabled = 'biometricEnabled';
+
+  static const String isAuthenticated = 'isAuthenticated';
+  static const String userRole = 'userRole';
+  static const String userName = 'userName';
+  static const String userEmail = 'userEmail';
 }
