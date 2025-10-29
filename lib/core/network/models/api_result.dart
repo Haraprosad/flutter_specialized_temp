@@ -1,17 +1,20 @@
 import 'package:flutter_specialized_temp/core/network/error_handling/models/api_call_failure_model.dart';
 
-/// Represents the result of an API call, either success or failure.
+/// Wraps API responses in a type-safe way - it's either success or failure.
+///
+/// Using sealed classes means Dart forces us to handle both cases,
+/// so we can't forget to check for errors.
 sealed class ApiResult<T> {
   const ApiResult();
 }
 
-/// Represents a successful API call result.
+/// The API call worked and we got data back
 final class ApiSuccess<T> extends ApiResult<T> {
   final T data;
   const ApiSuccess(this.data);
 }
 
-/// Represents a failed API call result.
+/// The API call failed for some reason - network error, server error, etc.
 final class ApiFailure<T> extends ApiResult<T> {
   final ApiCallFailureModel failure;
   const ApiFailure(this.failure);

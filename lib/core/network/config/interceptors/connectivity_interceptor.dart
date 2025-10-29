@@ -12,7 +12,9 @@ class ConnectivityInterceptor extends Interceptor {
 
   @override
   Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Check internet connectivity
     final isConnected = await connectionManager.checkInternetConnection();
     if (!isConnected) {

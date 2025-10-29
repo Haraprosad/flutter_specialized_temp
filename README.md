@@ -15,7 +15,36 @@ A **production-ready Flutter template** built with enterprise-grade architecture
 
 ## 📚 Documentation
 
-### 🎭 **[Flavor Management Guide](lib/flavors/README.md)**
+### � **[API Integration Guide](docs/API_INTEGRATION_GUIDE.md)** ⭐ NEW
+**Complete million-user API architecture and network layer documentation:**
+- Clean Architecture implementation (Domain, Data, Presentation layers)
+- BLoC pattern with reactive state management
+- 7 real-world scenarios with step-by-step implementations
+  - Initial Load, Cache Hit, Network Error, Infinite Scroll
+  - Optimistic Updates, Parallel Loading, Debouncing
+- Network layer with interceptors (connectivity, retry, error handling)
+- Multi-tier caching strategy with background refresh
+- Debouncing utilities (80-92% API call reduction)
+- Production best practices (memory leaks, API spam prevention)
+- Network-aware UI patterns (zero code duplication)
+- Performance optimization checklist
+- Class engagement matrix showing architecture interactions
+
+*Master building scalable, production-ready APIs that handle millions of concurrent users with exceptional performance.*
+
+### 🛠️ **[App Services Guide](docs/APP_SERVICES_GUIDE.md)** ⭐ NEW
+**App-level services and cross-cutting concerns documentation:**
+- Memory Management Service (automatic optimization for million-user scale)
+- Automatic memory pressure monitoring (80% warning, 90% critical)
+- Cache and image cache optimization
+- App lifecycle management
+- Background cleanup strategies
+- Performance metrics tracking
+- Production deployment checklist
+
+*Learn how to implement enterprise-grade app services that ensure stability and performance at scale.*
+
+### �🎭 **[Flavor Management Guide](lib/flavors/README.md)**
 **Comprehensive professional guide for using the flavor management system:**
 - Professional setup and configuration
 - Development workflows and best practices

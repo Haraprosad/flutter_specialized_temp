@@ -1,16 +1,19 @@
 // dio_client.dart
-
 import 'package:dio/dio.dart';
-import 'package:flutter_specialized_temp/flavors/env_config.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
 import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/connectivity_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/error_interceptor.dart';
+import 'package:flutter_specialized_temp/core/network/config/interceptors/retry_interceptor.dart';
+import 'package:flutter_specialized_temp/flavors/env_config.dart';
 
-
-/// Singleton service for configuring and providing a Dio HTTP client instance.
+/// Central HTTP client setup using Dio.
+///
+/// This configures a single Dio instance with all the interceptors we need
+/// for error handling, retries, and connectivity checks. Gets injected
+/// wherever we need to make API calls.
 @lazySingleton
 class DioClient {
   final ConnectionManager _connectionManager;
@@ -22,30 +25,37 @@ class DioClient {
 
   Dio get client => _dio;
 
-  /// Creates and configures Dio client with interceptors and base options.
+  /// Builds the Dio client with base URL, timeouts, and all our interceptors
   Dio _createDioClient() {
     final EnvConfig envConfig = EnvConfig.instance;
-    final dio = Dio(BaseOptions(
-      baseUrl: envConfig.baseUrl,
-      connectTimeout: NetworkConstants.connectionTimeout,
-      receiveTimeout: NetworkConstants.receiveTimeout,
-      sendTimeout: NetworkConstants.sendTimeout,
-      headers: {
-        'Content-Type': NetworkConstants.contentType,
-        'Accept': NetworkConstants.accept,
-      },
-    ));
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: envConfig.baseUrl,
+        connectTimeout: NetworkConstants.connectionTimeout,
+        receiveTimeout: NetworkConstants.receiveTimeout,
+        sendTimeout: NetworkConstants.sendTimeout,
+        headers: {
+          'Content-Type': NetworkConstants.contentType,
+          'Accept': NetworkConstants.accept,
+        },
+      ),
+    );
 
-    // Add interceptors for connectivity, error logging, and optional logging in debug mode.
+    // Chain interceptors for retry logic and error handling
+    // Note: ConnectivityInterceptor is disabled since we use reactive monitoring instead
     dio.interceptors.addAll([
-      ConnectivityInterceptor(_connectionManager),
+      // ConnectivityInterceptor(_connectionManager), // Not needed - using reactive monitoring instead
+      RetryInterceptor(
+        connectionManager:
+            _connectionManager, // Provides instant offline detection
+      ), // Automatic retry with exponential backoff
       ErrorInterceptor(),
-      if (!kReleaseMode)
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-          logPrint: (o) => debugPrint('DIO: $o'),
-        ),
+      // if (!kReleaseMode)
+      //   LogInterceptor(
+      //     requestBody: true,
+      //     responseBody: true,
+      //     logPrint: (o) => debugPrint('DIO: $o'),
+      //   ),
     ]);
 
     return dio;

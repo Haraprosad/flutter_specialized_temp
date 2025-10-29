@@ -10,15 +10,9 @@ abstract class BaseBlocState {
   /// Contains any error details related to network requests.
   final ApiCallFailureModel? failure;
 
-  const BaseBlocState({
-    this.isLoading = false,
-    this.failure,
-  });
+  const BaseBlocState({this.isLoading = false, this.failure});
 
   /// Returns a copy of the state with updated properties.
   /// Useful for creating modified versions of the state.
-  BaseBlocState copyWith({
-    bool? isLoading,
-    ApiCallFailureModel? failure,
-  });
+  BaseBlocState copyWith({bool? isLoading, ApiCallFailureModel? failure});
 }

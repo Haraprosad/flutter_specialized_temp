@@ -2,10 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/enums/custom_error_type.dart';
 
-
 /// Interceptor that logs errors using an ErrorReporter.
 class ErrorInterceptor extends Interceptor {
-
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.error != CustomErrorType.noInternet) {
