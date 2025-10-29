@@ -4,7 +4,6 @@ import 'package:flutter_specialized_temp/core/theme/base/app_theme_type.dart';
 import 'package:flutter_specialized_temp/core/theme/colors/app_theme_colors_config.dart';
 import 'package:flutter_specialized_temp/core/theme/colors/theme_colors.dart';
 import 'package:flutter_specialized_temp/core/theme/constants/app_sizes.dart';
-import 'package:flutter_specialized_temp/core/theme/constants/theme_constants.dart';
 import 'package:flutter_specialized_temp/core/theme/typography/text_theme.dart';
 import '../styles/button_styles.dart';
 
@@ -74,14 +73,14 @@ class AppTheme {
         ),
         contentPadding: _textButtonPadding,
       ),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         labelColor: colors.primary,
         unselectedLabelColor: colors.textSecondary,
         indicatorColor: colors.primary,
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusMd),
