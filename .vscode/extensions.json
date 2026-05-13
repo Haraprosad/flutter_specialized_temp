@@ -1,0 +1,25 @@
+{
+  "recommendations": [
+    // Core Flutter / Dart
+    "Dart-Code.dart-code",
+    "Dart-Code.flutter",
+
+    // BLoC pattern support
+    "FelixAngelov.bloc",
+
+    // Quality-of-life
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "aaron-bond.better-comments",
+
+    // Git
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+
+    // YAML / pubspec
+    "redhat.vscode-yaml",
+
+    // Mason bricks
+    "BrickhubOrg.masonry"
+  ]
+}

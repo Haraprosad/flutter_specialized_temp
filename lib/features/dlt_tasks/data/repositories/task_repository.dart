@@ -3,7 +3,7 @@ import 'package:flutter_specialized_temp/features/dlt_tasks/domain/entities/task
 import 'package:flutter_specialized_temp/features/dlt_tasks/domain/repositories/task_repository.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: TaskRepository)
+@LazySingleton(as: TaskRepository)
 class TaskRepositoryImpl implements TaskRepository {
   final TaskLocalDataSource localDataSource;
 
@@ -11,12 +11,14 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<List<TaskEntity>> getTasks() async {
-    return await localDataSource.getTasks();
+    final models = await localDataSource.getTasks();
+    return models.map((model) => model.toEntity()).toList();
   }
 
   @override
   Future<TaskEntity> getTaskById(String id) async {
-    return await localDataSource.getTaskById(id);
+    final model = await localDataSource.getTaskById(id);
+    return model.toEntity();
   }
 
   // Implement other repository methods...

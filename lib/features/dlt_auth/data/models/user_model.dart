@@ -1,0 +1,33 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_specialized_temp/features/dlt_auth/domain/entities/user_entity.dart';
+
+part 'user_model.freezed.dart';
+part 'user_model.g.dart';
+
+@freezed
+class UserModel with _$UserModel {
+  const factory UserModel({
+    required String id,
+    required String email,
+    String? name,
+    String? phone,
+    String? role,
+    required String accessToken,
+    required String refreshToken,
+  }) = _UserModel;
+
+  const UserModel._();
+
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
+  UserEntity toEntity() => UserEntity(
+        id: id,
+        email: email,
+        name: name,
+        phone: phone,
+        role: role,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      );
+}

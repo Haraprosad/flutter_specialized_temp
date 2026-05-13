@@ -14,13 +14,8 @@ import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 /// Performance win: 0ms vs 200-500ms per request if we checked every time
 @lazySingleton
 class ConnectionManager {
-  static final ConnectionManager _instance = ConnectionManager._internal();
-  factory ConnectionManager() => _instance;
-  ConnectionManager._internal();
-
-  final InternetConnectionChecker _connectionChecker =
-      InternetConnectionChecker.instance;
-  final Connectivity _connectivity = Connectivity();
+  final InternetConnectionChecker _connectionChecker;
+  final Connectivity _connectivity;
 
   // Broadcasts connection changes to anyone listening
   final _connectivityController = StreamController<bool>.broadcast();
@@ -32,16 +27,19 @@ class ConnectionManager {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   StreamSubscription<InternetConnectionStatus>? _connectionStatusSubscription;
 
+  ConnectionManager(
+    this._connectionChecker,
+    this._connectivity,
+  );
+
   /// Subscribe to get notified whenever connection status changes
   Stream<bool> get connectivityStream => _connectivityController.stream;
 
   /// Get current status instantly - no async needed!
   bool get isConnected => _isConnected;
 
-  /// Old way to check connection - kept for backwards compatibility.
-  ///
-  /// Note: This is slower since it checks every time. Better to use
-  /// the `isConnected` getter which returns the cached state instantly.
+  /// Check internet connection on demand.
+  /// Prefer using [isConnected] for instant cached state.
   Future<bool> checkInternetConnection() async {
     var isDeviceConnected = false;
     final connectivityResult = await _connectivity.checkConnectivity();
@@ -57,17 +55,15 @@ class ConnectionManager {
 
   /// Starts background monitoring - call this once when app launches
   void startMonitoring() {
-    AppLogger.i(message: '🌐 Starting connectivity monitoring...');
+    AppLogger.i(message: 'Starting connectivity monitoring...');
 
-    // Watch for network type changes (WiFi -> Mobile, etc)
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen((
       results,
     ) {
-      AppLogger.d(message: '📡 Connectivity changed: $results');
+      AppLogger.d(message: 'Connectivity changed: $results');
       _checkAndUpdateConnectionStatus();
     });
 
-    // Watch for actual internet reachability changes
     _connectionStatusSubscription = _connectionChecker.onStatusChange.listen((
       status,
     ) {
@@ -75,14 +71,12 @@ class ConnectionManager {
       _updateConnectionStatus(isConnected);
     });
 
-    // Check what the status is right now
     _checkAndUpdateConnectionStatus();
   }
 
   /// Stop monitoring connectivity
-  /// Call this when disposing or app is closing
   void stopMonitoring() {
-    AppLogger.i(message: '🌐 Stopping connectivity monitoring...');
+    AppLogger.i(message: 'Stopping connectivity monitoring...');
     _connectivitySubscription?.cancel();
     _connectionStatusSubscription?.cancel();
   }
@@ -100,9 +94,9 @@ class ConnectionManager {
       _connectivityController.add(_isConnected);
 
       if (isConnected) {
-        AppLogger.i(message: '✅ Internet connection restored');
+        AppLogger.i(message: 'Internet connection restored');
       } else {
-        AppLogger.w(message: '❌ Internet connection lost');
+        AppLogger.w(message: 'Internet connection lost');
       }
     }
   }

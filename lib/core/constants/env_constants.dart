@@ -101,12 +101,23 @@ class EnvConstants {
   static const String envKeyAnalyticsEnabled = "ANALYTICS_ENABLED";
 
   /// Key for enabling/disabling crash reporting in environment files.
-  /// 
+  ///
   /// This is the standard key used to control crash reporting.
-  /// 
+  ///
   /// Example usage in .env files:
   /// ```env
   /// CRASH_REPORTING=true
   /// ```
   static const String envKeyCrashReporting = "CRASH_REPORTING";
+
+  /// Key for the Sentry DSN (Data Source Name) in environment files.
+  ///
+  /// Set to the project-specific DSN from your Sentry dashboard.
+  /// Leave empty in development to disable Sentry reporting.
+  ///
+  /// Example usage in .env files:
+  /// ```env
+  /// SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0
+  /// ```
+  static const String envKeySentryDsn = "SENTRY_DSN";
 }

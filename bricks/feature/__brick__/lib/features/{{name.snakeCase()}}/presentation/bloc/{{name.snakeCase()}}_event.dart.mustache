@@ -1,0 +1,21 @@
+import 'package:equatable/equatable.dart';
+
+abstract class {{name.pascalCase()}}Event extends Equatable {
+  const {{name.pascalCase()}}Event();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class Get{{name.pascalCase()}}sRequested extends {{name.pascalCase()}}Event {
+  const Get{{name.pascalCase()}}sRequested();
+}
+
+class Get{{name.pascalCase()}}ByIdRequested extends {{name.pascalCase()}}Event {
+  const Get{{name.pascalCase()}}ByIdRequested(this.id);
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}

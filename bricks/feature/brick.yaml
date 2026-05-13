@@ -1,0 +1,17 @@
+name: feature
+description: Generate a complete Clean Architecture feature module (entity, repository, use case, model, data source, BLoC, screen).
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0-dev.52 <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: Feature name in lowercase (e.g. tasks, profile, orders)
+    prompt: "Feature name (snake_case, singular):"
+
+  package_name:
+    type: string
+    description: Flutter package name from pubspec.yaml
+    prompt: "Package name (from pubspec.yaml):"
+    default: flutter_specialized_temp

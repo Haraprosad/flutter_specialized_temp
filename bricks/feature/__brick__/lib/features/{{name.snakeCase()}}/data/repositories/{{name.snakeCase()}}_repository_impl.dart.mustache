@@ -1,0 +1,36 @@
+import 'package:injectable/injectable.dart';
+import 'package:{{package_name}}/core/exceptions/app_exceptions.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/data/datasources/{{name.snakeCase()}}_remote_datasource.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/domain/entities/{{name.snakeCase()}}_entity.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/domain/repositories/{{name.snakeCase()}}_repository.dart';
+
+@LazySingleton(as: {{name.pascalCase()}}Repository)
+class {{name.pascalCase()}}RepositoryImpl implements {{name.pascalCase()}}Repository {
+  {{name.pascalCase()}}RepositoryImpl(this._remoteDataSource);
+
+  final {{name.pascalCase()}}RemoteDataSource _remoteDataSource;
+
+  @override
+  Future<List<{{name.pascalCase()}}Entity>> get{{name.pascalCase()}}s() async {
+    try {
+      final models = await _remoteDataSource.get{{name.pascalCase()}}s();
+      return models.map((m) => m.toEntity()).toList();
+    } on AppException {
+      rethrow;
+    } catch (e, st) {
+      throw NetworkException(e.toString(), e, st);
+    }
+  }
+
+  @override
+  Future<{{name.pascalCase()}}Entity> get{{name.pascalCase()}}ById(String id) async {
+    try {
+      final model = await _remoteDataSource.get{{name.pascalCase()}}ById(id);
+      return model.toEntity();
+    } on AppException {
+      rethrow;
+    } catch (e, st) {
+      throw NetworkException(e.toString(), e, st);
+    }
+  }
+}

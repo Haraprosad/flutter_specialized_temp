@@ -1,0 +1,29 @@
+import 'package:injectable/injectable.dart';
+import 'package:{{package_name}}/core/network/config/dio_client.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_model.dart';
+
+abstract class {{name.pascalCase()}}RemoteDataSource {
+  Future<List<{{name.pascalCase()}}Model>> get{{name.pascalCase()}}s();
+  Future<{{name.pascalCase()}}Model> get{{name.pascalCase()}}ById(String id);
+}
+
+@LazySingleton(as: {{name.pascalCase()}}RemoteDataSource)
+class {{name.pascalCase()}}RemoteDataSourceImpl implements {{name.pascalCase()}}RemoteDataSource {
+  {{name.pascalCase()}}RemoteDataSourceImpl(this._client);
+
+  final DioClient _client;
+
+  @override
+  Future<List<{{name.pascalCase()}}Model>> get{{name.pascalCase()}}s() async {
+    final response = await _client.get('/{{name.snakeCase()}}s');
+    return (response.data as List)
+        .map((json) => {{name.pascalCase()}}Model.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<{{name.pascalCase()}}Model> get{{name.pascalCase()}}ById(String id) async {
+    final response = await _client.get('/{{name.snakeCase()}}s/$id');
+    return {{name.pascalCase()}}Model.fromJson(response.data as Map<String, dynamic>);
+  }
+}

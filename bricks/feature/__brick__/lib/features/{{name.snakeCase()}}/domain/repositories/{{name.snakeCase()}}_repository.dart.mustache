@@ -1,0 +1,6 @@
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/domain/entities/{{name.snakeCase()}}_entity.dart';
+
+abstract class {{name.pascalCase()}}Repository {
+  Future<List<{{name.pascalCase()}}Entity>> get{{name.pascalCase()}}s();
+  Future<{{name.pascalCase()}}Entity> get{{name.pascalCase()}}ById(String id);
+}

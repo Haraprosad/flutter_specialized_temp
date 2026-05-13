@@ -1,4 +1,0 @@
-enum AppThemeType {
-  light,
-  dark,
-}

@@ -1,0 +1,12 @@
+import 'package:injectable/injectable.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/domain/entities/{{name.snakeCase()}}_entity.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/domain/repositories/{{name.snakeCase()}}_repository.dart';
+
+@injectable
+class Get{{name.pascalCase()}}s {
+  Get{{name.pascalCase()}}s(this._repository);
+
+  final {{name.pascalCase()}}Repository _repository;
+
+  Future<List<{{name.pascalCase()}}Entity>> call() => _repository.get{{name.pascalCase()}}s();
+}

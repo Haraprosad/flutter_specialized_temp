@@ -1,0 +1,43 @@
+{
+  // ── Dart / Flutter ────────────────────────────────────────────────────────
+  "dart.lineLength": 120,
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.debugExternalPackageLibraries": false,
+  "dart.debugSdkLibraries": false,
+  "dart.openDevTools": "never",
+
+  // ── Editor (global) ───────────────────────────────────────────────────────
+  "editor.rulers": [120],
+  "editor.formatOnSave": true,
+  "editor.inlayHints.enabled": "on",
+
+  // ── Dart-specific editor overrides ────────────────────────────────────────
+  "[dart]": {
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.formatOnSave": true,
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+
+  // ── File associations ─────────────────────────────────────────────────────
+  "files.associations": {
+    "*.dart": "dart"
+  },
+
+  // ── Search / Explorer exclusions (generated + build artifacts) ───────────
+  "search.exclude": {
+    "**/*.g.dart": true,
+    "**/*.freezed.dart": true,
+    "**/injection.config.dart": true,
+    "**/.dart_tool/**": true,
+    "**/build/**": true
+  },
+  "files.watcherExclude": {
+    "**/.dart_tool/**": true,
+    "**/build/**": true
+  }
+}

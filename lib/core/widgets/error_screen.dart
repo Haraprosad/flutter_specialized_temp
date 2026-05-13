@@ -21,10 +21,14 @@ class ErrorScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 80,
-                color: Theme.of(context).colorScheme.error,
+              Semantics(
+                label: 'Error icon',
+                excludeSemantics: true,
+                child: Icon(
+                  Icons.error_outline,
+                  size: 80,
+                  color: Theme.of(context).colorScheme.error,
+                ),
               ),
               const SizedBox(height: 24),
               Text(
@@ -40,25 +44,29 @@ class ErrorScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 32),
-              ElevatedButton.icon(
-                onPressed: () {
-                  context.go('/'); // Navigate to home page
-                },
-                icon: const Icon(Icons.home),
-                label: const Text('Go to Home'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
+              Semantics(
+                button: true,
+                label: 'Go to Home',
+                child: ElevatedButton.icon(
+                  onPressed: () => context.go('/'),
+                  icon: const Icon(Icons.home),
+                  label: const Text('Go to Home'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  context.pop(); // Go back to previous page
-                },
-                child: const Text('Go Back'),
+              Semantics(
+                button: true,
+                label: 'Go Back',
+                child: TextButton(
+                  onPressed: () => context.pop(),
+                  child: const Text('Go Back'),
+                ),
               ),
             ],
           ),

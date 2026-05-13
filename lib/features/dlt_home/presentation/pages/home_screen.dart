@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_specialized_temp/core/di/injection.dart';
 import 'package:flutter_specialized_temp/core/localization/extension/loc.dart';
 import 'package:flutter_specialized_temp/core/router/route_names.dart';
-import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 import 'package:flutter_specialized_temp/core/widgets/app_drawer/app_drawer.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/presentation/bloc/post_bloc.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/presentation/pages/posts_page.dart';

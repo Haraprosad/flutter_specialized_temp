@@ -1,28 +1,41 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
+include: package:very_good_analysis/analysis_options.6.0.0.yaml
 
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
-include: package:flutter_lints/flutter.yaml
+analyzer:
+  exclude:
+    # Generated code — never lint these
+    - '**/*.g.dart'
+    - '**/*.freezed.dart'
+    - 'lib/core/di/injection.config.dart'
+    - 'lib/l10n/**'
+    - 'lib/generated/**'
+  errors:
+    # Annotation libraries emit this on generated files; safe to silence.
+    invalid_annotation_target: ignore
 
 linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # ── Rules disabled project-wide ───────────────────────────────────────────
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    # Docs are required only in the domain layer. Enable per-file via:
+    #   // ignore_for_file: public_member_api_docs
+    # on non-domain files, or flip this to true and add ignores elsewhere.
+    public_member_api_docs: false
+
+    # Project line-length standard is 120 chars (configured in .editorconfig).
+    lines_longer_than_80_chars: false
+
+    # Generated code uses double quotes; keeping this off avoids false positives
+    # from barrel imports that re-export generated symbols.
+    prefer_single_quotes: false
+
+    # ── Rules enforced on top of very_good_analysis defaults ─────────────────
+    always_use_package_imports: true
+    avoid_print: true
+    avoid_dynamic_calls: true
+    prefer_const_constructors: true
+    prefer_const_constructors_in_immutables: true
+    prefer_const_declarations: true
+    require_trailing_commas: true
+    unnecessary_await_in_return: true
+    use_super_parameters: true
+    use_named_constants: true

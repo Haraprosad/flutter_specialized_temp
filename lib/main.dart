@@ -9,11 +9,8 @@ import 'package:flutter_specialized_temp/core/localization/l10n/app_localization
 import 'package:flutter_specialized_temp/core/localization/localization_actions.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
 import 'package:flutter_specialized_temp/core/router/app_router.dart';
-import 'package:flutter_specialized_temp/core/theme/base/app_theme.dart';
-import 'package:flutter_specialized_temp/core/theme/bloc/theme_bloc.dart';
-import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
-import 'package:flutter_specialized_temp/core/utils/extensions/sizedbox_extension.dart';
-import 'package:flutter_specialized_temp/core/utils/extensions/widget_extension.dart';
+import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 
 class MyApp extends StatelessWidget {
@@ -109,11 +106,14 @@ class MyChatsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ThemeToggleButton(),
-            const SizedBox().smallHGap,
-            Text(
-              context.loc.flutter_template,
-              style: context.displayMedium,
-            ).p16,
+            AppSpacing.smHeight,
+            Padding(
+              padding: AppSpacing.mdPadding,
+              child: Text(
+                context.loc.flutter_template,
+                style: context.displayMedium,
+              ),
+            ),
           ],
         ),
       ),

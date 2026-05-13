@@ -1,10 +1,13 @@
 // register_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_specialized_temp/core/theme/constants/app_sizes.dart';
-import 'package:flutter_specialized_temp/core/theme/constants/app_spacing.dart';
-import 'package:flutter_specialized_temp/core/theme/extensions/theme_extensions.dart';
-import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_specialized_temp/core/router/route_names.dart';
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
+
+
+
+import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -36,13 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _handleRegister() {
-    if (_formKey.currentState!.validate() && _acceptTerms) {
-      // TODO: Implement your registration logic here
-      print('Full Name: ${_fullNameController.text}');
-      print('Email: ${_emailController.text}');
-      print('Phone: ${_phoneController.text}');
-      print('Password: ${_passwordController.text}');
-    } else if (!_acceptTerms) {
+    if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -52,25 +49,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: context.colors.alert,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
           ),
         ),
       );
+      return;
+    }
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+            RegisterRequested(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+              name: _fullNameController.text.trim(),
+              phone: _phoneController.text.trim(),
+            ),
+          );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      appBar: AppBar(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          context.goNamed(RouteNames.home);
+        } else if (state is AuthError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.colors.background,
+        appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
             color: context.colors.textPrimary,
-            size: AppSizes.iconLg,
+            size: AppDimensions.iconLg,
           ),
           onPressed: () => context.pop(),
         ),
@@ -87,6 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -114,7 +133,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildRegistrationForm() {
-    return context.cardContainer(
+    return Container(
+      decoration: AppCardStyles.elevated(context.colors),
       child: Padding(
         padding: AppSpacing.lgPadding,
         child: Form(
@@ -161,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         prefixIcon: Icon(
           Icons.person_outline,
           color: context.colors.textSecondary,
-          size: AppSizes.iconMd,
+          size: AppDimensions.iconMd,
         ),
       ),
       validator: (value) {
@@ -193,7 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         prefixIcon: Icon(
           Icons.email_outlined,
           color: context.colors.textSecondary,
-          size: AppSizes.iconMd,
+          size: AppDimensions.iconMd,
         ),
       ),
       validator: (value) {
@@ -229,7 +249,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         prefixIcon: Icon(
           Icons.phone_outlined,
           color: context.colors.textSecondary,
-          size: AppSizes.iconMd,
+          size: AppDimensions.iconMd,
         ),
       ),
       validator: (value) {
@@ -261,7 +281,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         prefixIcon: Icon(
           Icons.lock_outline,
           color: context.colors.textSecondary,
-          size: AppSizes.iconMd,
+          size: AppDimensions.iconMd,
         ),
         suffixIcon: IconButton(
           icon: Icon(
@@ -269,7 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
             color: context.colors.textSecondary,
-            size: AppSizes.iconMd,
+            size: AppDimensions.iconMd,
           ),
           onPressed: () {
             setState(() {
@@ -313,7 +333,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         prefixIcon: Icon(
           Icons.lock_outline,
           color: context.colors.textSecondary,
-          size: AppSizes.iconMd,
+          size: AppDimensions.iconMd,
         ),
         suffixIcon: IconButton(
           icon: Icon(
@@ -321,7 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
             color: context.colors.textSecondary,
-            size: AppSizes.iconMd,
+            size: AppDimensions.iconMd,
           ),
           onPressed: () {
             setState(() {
@@ -397,7 +417,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildRegisterButton() {
     return SizedBox(
-      height: AppSizes.buttonLarge,
+      height: AppDimensions.buttonLarge,
       child: ElevatedButton(
         onPressed: _handleRegister,
         child: Text(

@@ -1,0 +1,44 @@
+import 'package:equatable/equatable.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/domain/entities/{{name.snakeCase()}}_entity.dart';
+
+abstract class {{name.pascalCase()}}State extends Equatable {
+  const {{name.pascalCase()}}State();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class {{name.pascalCase()}}Initial extends {{name.pascalCase()}}State {
+  const {{name.pascalCase()}}Initial();
+}
+
+class {{name.pascalCase()}}Loading extends {{name.pascalCase()}}State {
+  const {{name.pascalCase()}}Loading();
+}
+
+class {{name.pascalCase()}}sLoaded extends {{name.pascalCase()}}State {
+  const {{name.pascalCase()}}sLoaded(this.items);
+
+  final List<{{name.pascalCase()}}Entity> items;
+
+  @override
+  List<Object?> get props => [items];
+}
+
+class {{name.pascalCase()}}Loaded extends {{name.pascalCase()}}State {
+  const {{name.pascalCase()}}Loaded(this.item);
+
+  final {{name.pascalCase()}}Entity item;
+
+  @override
+  List<Object?> get props => [item];
+}
+
+class {{name.pascalCase()}}Error extends {{name.pascalCase()}}State {
+  const {{name.pascalCase()}}Error(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => [message];
+}

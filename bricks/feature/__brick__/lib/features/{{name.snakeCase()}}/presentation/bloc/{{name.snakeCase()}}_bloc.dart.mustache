@@ -1,0 +1,29 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:{{package_name}}/core/logger/app_logger.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/domain/usecases/get_{{name.snakeCase()}}s.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/presentation/bloc/{{name.snakeCase()}}_event.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/presentation/bloc/{{name.snakeCase()}}_state.dart';
+
+@injectable
+class {{name.pascalCase()}}Bloc extends Bloc<{{name.pascalCase()}}Event, {{name.pascalCase()}}State> {
+  {{name.pascalCase()}}Bloc(this._get{{name.pascalCase()}}s) : super(const {{name.pascalCase()}}Initial()) {
+    on<Get{{name.pascalCase()}}sRequested>(_onGet{{name.pascalCase()}}sRequested);
+  }
+
+  final Get{{name.pascalCase()}}s _get{{name.pascalCase()}}s;
+
+  Future<void> _onGet{{name.pascalCase()}}sRequested(
+    Get{{name.pascalCase()}}sRequested event,
+    Emitter<{{name.pascalCase()}}State> emit,
+  ) async {
+    emit(const {{name.pascalCase()}}Loading());
+    try {
+      final items = await _get{{name.pascalCase()}}s();
+      emit({{name.pascalCase()}}sLoaded(items));
+    } catch (e, st) {
+      AppLogger.e(message: 'Failed to load {{name.pascalCase()}}s', error: e, stackTrace: st);
+      emit({{name.pascalCase()}}Error(e.toString()));
+    }
+  }
+}

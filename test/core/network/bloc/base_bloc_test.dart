@@ -1,26 +1,28 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_specialized_temp/core/network/config/dio_client.dart';
-import 'package:flutter_specialized_temp/core/network/config/interceptors/connectivity_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/error_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:mockito/annotations.dart';
+import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
+import 'package:flutter_specialized_temp/core/storage/secure_storage_manager.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
-
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 
 import 'base_bloc_test.mocks.dart';
 
-@GenerateMocks([ConnectionManager])
+@GenerateMocks([ConnectionManager, SecureStorageManager, AppStorage])
 void main() {
   late DioClient dioClient;
   late MockConnectionManager mockConnectionManager;
-
+  late MockSecureStorageManager mockSecureStorage;
+  late MockAppStorage mockAppStorage;
 
   setUp(() {
     mockConnectionManager = MockConnectionManager();
+    mockSecureStorage = MockSecureStorageManager();
+    mockAppStorage = MockAppStorage();
 
-    dioClient = DioClient(mockConnectionManager);
+    dioClient = DioClient(mockConnectionManager, mockSecureStorage, mockAppStorage);
   });
 
   group('DioClient Tests', () {
@@ -50,39 +52,10 @@ void main() {
       expect(dio.options.headers['Accept'], NetworkConstants.accept);
     });
 
-    test('should have connectivity interceptor', () {
-      final dio = dioClient.client;
-
-      expect(dio.interceptors.any((i) => i is ConnectivityInterceptor), true);
-    });
-
     test('should have error interceptor', () {
       final dio = dioClient.client;
 
       expect(dio.interceptors.any((i) => i is ErrorInterceptor), true);
     });
-
-    test('should handle connection error through interceptor', () async {
-      // Arrange
-
-      when(mockConnectionManager.checkInternetConnection())
-          .thenAnswer((_) async => false);
-
-      final dio = dioClient.client;
-
-      // Act & Assert
-      await expectLater(
-        dio.get('/test'),
-        throwsA(isA<DioException>().having(
-          (e) => e.type,
-          'error type',
-          DioExceptionType.connectionError,
-        )),
-      );
-
-      // Verify
-
-      verify(mockConnectionManager.checkInternetConnection()).called(1);
-    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

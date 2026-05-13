@@ -1,33 +1,40 @@
-// dio_client.dart
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
 import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
-import 'package:flutter_specialized_temp/core/network/config/interceptors/connectivity_interceptor.dart';
+import 'package:flutter_specialized_temp/core/network/config/interceptors/auth_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/error_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/retry_interceptor.dart';
+import 'package:flutter_specialized_temp/core/network/config/interceptors/token_refresh_interceptor.dart';
+import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
+import 'package:flutter_specialized_temp/core/storage/secure_storage_manager.dart';
 import 'package:flutter_specialized_temp/flavors/env_config.dart';
 
 /// Central HTTP client setup using Dio.
 ///
-/// This configures a single Dio instance with all the interceptors we need
-/// for error handling, retries, and connectivity checks. Gets injected
-/// wherever we need to make API calls.
+/// Interceptor chain (in execution order for requests, same order for errors):
+///   1. RetryInterceptor     — retries on timeouts and 5xx
+///   2. AuthInterceptor      — injects Authorization: Bearer <token>
+///   3. TokenRefreshInterceptor — handles 401 by refreshing the token and retrying
+///   4. ErrorInterceptor     — logs all remaining errors
+///   5. LogInterceptor       — full request/response logging (debug only)
 @lazySingleton
 class DioClient {
   final ConnectionManager _connectionManager;
+  final SecureStorageManager _secureStorage;
+  final AppStorage _appStorage;
+
   late final Dio _dio;
 
-  DioClient(this._connectionManager) {
+  DioClient(this._connectionManager, this._secureStorage, this._appStorage) {
     _dio = _createDioClient();
   }
 
   Dio get client => _dio;
 
-  /// Builds the Dio client with base URL, timeouts, and all our interceptors
   Dio _createDioClient() {
-    final EnvConfig envConfig = EnvConfig.instance;
+    final envConfig = EnvConfig.instance;
     final dio = Dio(
       BaseOptions(
         baseUrl: envConfig.baseUrl,
@@ -41,22 +48,29 @@ class DioClient {
       ),
     );
 
-    // Chain interceptors for retry logic and error handling
-    // Note: ConnectivityInterceptor is disabled since we use reactive monitoring instead
+    final retryInterceptor = RetryInterceptor(
+      connectionManager: _connectionManager,
+    );
+    final tokenRefreshInterceptor = TokenRefreshInterceptor(
+      appStorage: _appStorage,
+    );
+
     dio.interceptors.addAll([
-      // ConnectivityInterceptor(_connectionManager), // Not needed - using reactive monitoring instead
-      RetryInterceptor(
-        connectionManager:
-            _connectionManager, // Provides instant offline detection
-      ), // Automatic retry with exponential backoff
+      retryInterceptor,
+      AuthInterceptor(_secureStorage),
+      tokenRefreshInterceptor,
       ErrorInterceptor(),
-      // if (!kReleaseMode)
-      //   LogInterceptor(
-      //     requestBody: true,
-      //     responseBody: true,
-      //     logPrint: (o) => debugPrint('DIO: $o'),
-      //   ),
+      if (!kReleaseMode)
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          logPrint: (o) => debugPrint('DIO: $o'),
+        ),
     ]);
+
+    // Wire Dio back into interceptors that need to replay requests.
+    retryInterceptor.setDio(dio);
+    tokenRefreshInterceptor.setDio(dio);
 
     return dio;
   }

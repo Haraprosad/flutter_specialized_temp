@@ -5,9 +5,9 @@ import 'package:flutter_specialized_temp/core/di/injection.dart';
 import 'package:flutter_specialized_temp/core/localization/locale_constants.dart';
 import 'package:flutter_specialized_temp/core/localization/localization_actions.dart';
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
-import 'package:flutter_specialized_temp/core/theme/bloc/theme_bloc.dart';
-import 'package:flutter_specialized_temp/core/theme/colors/color_scheme_ext.dart';
-import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
+import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
+
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 import 'package:flutter_specialized_temp/core/widgets/app_drawer/drawer_menu_item.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_specialized_temp/core/theme/colors/color_scheme_ext.dart';
-import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
+
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 
 class DrawerMenuItem extends StatelessWidget {
   final IconData icon;

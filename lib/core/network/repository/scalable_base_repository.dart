@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_specialized_temp/core/network/error_handling/models/api_call_failure_model.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/network_error_handler.dart';
 import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
 import 'package:flutter_specialized_temp/core/network/cache/scalable_cache_manager.dart';
@@ -269,9 +270,7 @@ abstract class ScalableBaseRepository {
     return cacheKey.split('_').take(2).join('_');
   }
 
-  dynamic _createCircuitBreakerFailure() {
-    // Return appropriate failure model based on your error handling structure
-    // This is a placeholder - implement based on your ApiCallFailureModel
+  ApiCallFailureModel _createCircuitBreakerFailure() {
     return _errorHandler.handleError(
       Exception('Circuit breaker is open'),
       StackTrace.current,

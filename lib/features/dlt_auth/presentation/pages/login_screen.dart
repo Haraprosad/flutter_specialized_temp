@@ -1,21 +1,19 @@
 // login_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_specialized_temp/core/router/app_router.dart';
 import 'package:flutter_specialized_temp/core/router/route_names.dart';
-import 'package:flutter_specialized_temp/core/theme/constants/app_sizes.dart';
-import 'package:flutter_specialized_temp/core/theme/constants/app_spacing.dart';
-import 'package:flutter_specialized_temp/core/theme/extensions/theme_extensions.dart';
-import 'package:flutter_specialized_temp/core/theme/typography/text_theme_ext.dart';
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
+
+
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/di/injection.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -34,29 +32,40 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      sl<AuthBloc>().add(LoginRequested(
-          email: _emailController.text, password: _passwordController.text));
-      print('Email: ${_emailController.text}');
-      print('Password: ${_passwordController.text}');
+      context.read<AuthBloc>().add(LoginRequested(
+            email: _emailController.text,
+            password: _passwordController.text,
+          ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppSpacing.mdPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppSpacing.smHeight,
-              _buildHeader(),
-              AppSpacing.mdHeight,
-              _buildLoginForm(),
-            ],
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          context.goNamed(RouteNames.home);
+        } else if (state is AuthError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.colors.background,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: AppSpacing.mdPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppSpacing.smHeight,
+                _buildHeader(),
+                AppSpacing.mdHeight,
+                _buildLoginForm(),
+              ],
+            ),
           ),
         ),
       ),
@@ -75,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: Icon(
             Icons.lock_outlined,
-            size: AppSizes.iconXxl * 1.5,
+            size: AppDimensions.iconXxl * 1.5,
             color: context.colors.primary,
           ),
         ),
@@ -102,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginForm() {
-    return context.cardContainer(
+    return Container(
+      decoration: AppCardStyles.elevated(context.colors),
       child: Padding(
         padding: AppSpacing.lgPadding,
         child: Form(
@@ -147,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
         prefixIcon: Icon(
           Icons.email_outlined,
           color: context.colors.textSecondary,
-          size: AppSizes.iconMd,
+          size: AppDimensions.iconMd,
         ),
       ),
       validator: (value) {
@@ -179,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
         prefixIcon: Icon(
           Icons.lock_outline,
           color: context.colors.textSecondary,
-          size: AppSizes.iconMd,
+          size: AppDimensions.iconMd,
         ),
         suffixIcon: IconButton(
           icon: Icon(
@@ -187,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
             color: context.colors.textSecondary,
-            size: AppSizes.iconMd,
+            size: AppDimensions.iconMd,
           ),
           onPressed: () {
             setState(() {
@@ -255,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildLoginButton() {
     return SizedBox(
-      height: AppSizes.buttonLarge,
+      height: AppDimensions.buttonLarge,
       child: ElevatedButton(
         onPressed: _handleLogin,
         child: Text(
@@ -339,12 +349,12 @@ class _LoginScreenState extends State<LoginScreen> {
               color: context.colors.textSecondary.withOpacity(0.3),
             ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
             ),
           ),
           icon: Icon(
             icon,
-            size: AppSizes.iconLg,
+            size: AppDimensions.iconLg,
             color: context.colors.textSecondary,
           ),
         ),

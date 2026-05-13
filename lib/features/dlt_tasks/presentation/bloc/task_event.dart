@@ -1,7 +1,21 @@
-abstract class TaskEvent {}
+import 'package:equatable/equatable.dart';
 
-class GetTasksEvent extends TaskEvent {}
+abstract class TaskEvent extends Equatable {
+  const TaskEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetTasksEvent extends TaskEvent {
+  const GetTasksEvent();
+}
+
 class GetTaskDetailsEvent extends TaskEvent {
   final String taskId;
-  GetTaskDetailsEvent(this.taskId);
+
+  const GetTaskDetailsEvent(this.taskId);
+
+  @override
+  List<Object?> get props => [taskId];
 }

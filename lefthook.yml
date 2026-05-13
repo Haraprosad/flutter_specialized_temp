@@ -1,0 +1,34 @@
+pre-commit:
+  parallel: false
+  commands:
+    format:
+      name: Dart Format
+      glob: "*.dart"
+      run: dart format --set-exit-if-changed {staged_files}
+      stage_fixed: true
+
+    analyze:
+      name: Flutter Analyze
+      glob: "*.dart"
+      run: flutter analyze --fatal-infos --fatal-warnings
+
+pre-push:
+  parallel: false
+  commands:
+    test:
+      name: Unit Tests
+      run: flutter test
+
+# ──────────────────────────────────────────────────────────────
+# Setup (one-time, run after cloning):
+#
+#   dart pub global activate lefthook
+#   lefthook install
+#
+# Or via Homebrew:
+#   brew install lefthook
+#   lefthook install
+#
+# Skip hooks for a single commit (emergency only):
+#   git commit --no-verify -m "..."
+# ──────────────────────────────────────────────────────────────

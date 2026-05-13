@@ -5,7 +5,7 @@ import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_specialized_temp/core/theme/bloc/theme_bloc.dart';
+import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
 
 import 'theme_bloc_test.mocks.dart';
 

@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/presentation/bloc/{{name.snakeCase()}}_bloc.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/presentation/bloc/{{name.snakeCase()}}_event.dart';
+import 'package:{{package_name}}/features/{{name.snakeCase()}}/presentation/bloc/{{name.snakeCase()}}_state.dart';
+
+class {{name.pascalCase()}}Screen extends StatelessWidget {
+  const {{name.pascalCase()}}Screen({super.key});
+
+  static const routeName = '/{{name.snakeCase()}}s';
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          context.read<{{name.pascalCase()}}Bloc>()..add(const Get{{name.pascalCase()}}sRequested()),
+      child: const _{{name.pascalCase()}}View(),
+    );
+  }
+}
+
+class _{{name.pascalCase()}}View extends StatelessWidget {
+  const _{{name.pascalCase()}}View();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('{{name.pascalCase()}}s'),
+      ),
+      body: BlocBuilder<{{name.pascalCase()}}Bloc, {{name.pascalCase()}}State>(
+        builder: (context, state) {
+          return switch (state) {
+            {{name.pascalCase()}}Loading() => const Center(child: CircularProgressIndicator()),
+            {{name.pascalCase()}}sLoaded(:final items) => ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(items[index].id),
+                ),
+              ),
+            {{name.pascalCase()}}Error(:final message) => Center(child: Text(message)),
+            _ => const SizedBox.shrink(),
+          };
+        },
+      ),
+    );
+  }
+}
