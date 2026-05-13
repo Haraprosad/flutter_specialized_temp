@@ -152,7 +152,7 @@ part 'order_model.freezed.dart';
 part 'order_model.g.dart';
 
 @freezed
-class OrderModel with _$OrderModel {
+abstract class OrderModel with _$OrderModel {
   const factory OrderModel({
     // --- Every field uses JsonParseUtils for type safety ---
     // Backend might send null, wrong type, or missing key.
@@ -1148,7 +1148,7 @@ For every new feature, verify:
 
 - [ ] Domain layer created: entity, repository interface, use case(s)
 - [ ] Entity extends `Equatable` with all fields in `props`
-- [ ] Model uses `@freezed` with `JsonParseUtils` on every `@JsonKey`
+- [ ] Model uses `@freezed` (abstract class) with `JsonParseUtils` on every `@JsonKey`
 - [ ] Model has `@Default` on every non-nullable field
 - [ ] Model has `toEntity()` conversion
 - [ ] DataSource annotated with `@lazySingleton`

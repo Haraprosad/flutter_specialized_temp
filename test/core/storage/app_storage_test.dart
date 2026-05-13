@@ -8,7 +8,7 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
 // Generate the mock classes
-@GenerateMocks([SecureStorageManager, PreferencesManager])
+@GenerateNiceMocks([MockSpec<SecureStorageManager>(), MockSpec<PreferencesManager>()])
 import 'app_storage_test.mocks.dart';
 
 void main() {

@@ -99,7 +99,7 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
       );
 
       final posts = (response.data as List)
-          .map((json) => PostModel.fromJson(json))
+          .map((json) => PostModel.fromJson(json as Map<String, dynamic>))
           .toList();
 
       // Cache the result with optimized TTL

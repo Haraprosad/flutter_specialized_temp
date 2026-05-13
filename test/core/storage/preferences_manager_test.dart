@@ -8,7 +8,7 @@ import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
 
 import 'preferences_manager_test.mocks.dart';
 
-@GenerateMocks([SharedPreferences])
+@GenerateNiceMocks([MockSpec<SharedPreferences>()])
 void main() {
   late PreferencesManager preferencesManager;
   late MockSharedPreferences mockPrefs;

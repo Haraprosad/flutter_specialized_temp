@@ -4,12 +4,12 @@ import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockito/mockito.dart';
 import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
 
 import 'theme_bloc_test.mocks.dart';
 
-@GenerateMocks([AppStorage, PreferencesManager])
+@GenerateNiceMocks([MockSpec<AppStorage>(), MockSpec<PreferencesManager>()])
 void main() {
   late ThemeBloc themeBloc;
   late MockAppStorage mockAppStorage;
@@ -18,7 +18,7 @@ void main() {
   setUp(() {
     mockAppStorage = MockAppStorage();
     mockPreferencesManager = MockPreferencesManager();
-    when(() => mockAppStorage.preferences).thenReturn(mockPreferencesManager);
+    when(mockAppStorage.preferences).thenReturn(mockPreferencesManager);
     themeBloc = ThemeBloc(mockAppStorage);
   });
 
@@ -40,8 +40,7 @@ void main() {
       blocTest<ThemeBloc, ThemeState>(
         'emits light theme state when stored preference is false',
         setUp: () {
-          when(() => mockPreferencesManager.getDarkMode())
-              .thenReturn(false);
+          when(mockPreferencesManager.getDarkMode()).thenReturn(false);
         },
         build: () => ThemeBloc(mockAppStorage),
         act: (bloc) => bloc.add(const InitializeTheme()),
@@ -52,15 +51,14 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockPreferencesManager.getDarkMode()).called(1);
+          verify(mockPreferencesManager.getDarkMode()).called(1);
         },
       );
 
       blocTest<ThemeBloc, ThemeState>(
         'emits dark theme state when stored preference is true',
         setUp: () {
-          when(() => mockPreferencesManager.getDarkMode())
-              .thenReturn(true);
+          when(mockPreferencesManager.getDarkMode()).thenReturn(true);
         },
         build: () => ThemeBloc(mockAppStorage),
         act: (bloc) => bloc.add(const InitializeTheme()),
@@ -71,7 +69,7 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockPreferencesManager.getDarkMode()).called(1);
+          verify(mockPreferencesManager.getDarkMode()).called(1);
         },
       );
     });
@@ -80,7 +78,7 @@ void main() {
       blocTest<ThemeBloc, ThemeState>(
         'toggles from light to dark theme',
         setUp: () {
-          when(() => mockPreferencesManager.setDarkMode(any()))
+          when(mockPreferencesManager.setDarkMode(true))
               .thenAnswer((_) async {});
         },
         build: () => ThemeBloc(mockAppStorage),
@@ -96,14 +94,14 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockPreferencesManager.setDarkMode(true)).called(1);
+          verify(mockPreferencesManager.setDarkMode(true)).called(1);
         },
       );
 
       blocTest<ThemeBloc, ThemeState>(
         'toggles from dark to light theme',
         setUp: () {
-          when(() => mockPreferencesManager.setDarkMode(any()))
+          when(mockPreferencesManager.setDarkMode(false))
               .thenAnswer((_) async {});
         },
         build: () => ThemeBloc(mockAppStorage),
@@ -119,21 +117,21 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockPreferencesManager.setDarkMode(false)).called(1);
+          verify(mockPreferencesManager.setDarkMode(false)).called(1);
         },
       );
 
       blocTest<ThemeBloc, ThemeState>(
         'handles storage errors gracefully',
         setUp: () {
-          when(() => mockPreferencesManager.setDarkMode(any()))
+          when(mockPreferencesManager.setDarkMode(true))
               .thenThrow(Exception('Storage error'));
         },
         build: () => ThemeBloc(mockAppStorage),
         act: (bloc) => bloc.add(const ToggleTheme()),
         errors: () => [isA<Exception>()],
         verify: (_) {
-          verify(() => mockPreferencesManager.setDarkMode(any())).called(1);
+          verify(mockPreferencesManager.setDarkMode(true)).called(1);
         },
       );
     });

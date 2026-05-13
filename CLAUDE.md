@@ -11,7 +11,7 @@
 |------------------|--------------------------------------------|
 | App Name         | _FILL_IN_                                  |
 | Package Name     | _FILL_IN_ (e.g. `com.company.appname`)     |
-| Flutter Version  | 3.x stable                                 |
+| Flutter Version  | 3.41+ stable (Dart 3.11+)                  |
 | Template         | flutter_specialized_temp (Clean Arch + BLoC + Injectable + GoRouter + Drift) |
 | Current Version  | 1.0.0+1                                    |
 | Current Phase    | DESIGN_SYSTEM_SETUP / FEATURE_DEV / RELEASE (pick one) |

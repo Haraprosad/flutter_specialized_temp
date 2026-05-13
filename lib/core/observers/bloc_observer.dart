@@ -3,19 +3,19 @@ import '../logger/app_logger.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
-  void onCreate(BlocBase bloc) {
+  void onCreate(BlocBase<dynamic> bloc) {
     super.onCreate(bloc);
     AppLogger.d(message: 'BlocObserver: onCreate -- ${bloc.runtimeType}');
   }
 
   @override
-  void onEvent(Bloc bloc, Object? event) {
+  void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
     super.onEvent(bloc, event);
     AppLogger.d(message: 'BlocObserver: onEvent -- ${bloc.runtimeType}, $event');
   }
 
   @override
-  void onChange(BlocBase bloc, Change change) {
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
     AppLogger.d(
       message: '''BlocObserver: onChange -- ${bloc.runtimeType}
@@ -25,7 +25,7 @@ class AppBlocObserver extends BlocObserver {
   }
 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
+  void onTransition(Bloc<dynamic, dynamic> bloc, Transition<dynamic, dynamic> transition) {
     super.onTransition(bloc, transition);
     AppLogger.d(
       message: '''BlocObserver: onTransition -- ${bloc.runtimeType}
@@ -36,7 +36,7 @@ class AppBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
     AppLogger.e(
       message: 'BlocObserver: onError -- ${bloc.runtimeType}',
       error: error,

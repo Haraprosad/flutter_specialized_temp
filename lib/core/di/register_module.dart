@@ -25,8 +25,7 @@ abstract class RegisterModule {
   @lazySingleton
   FlutterSecureStorage get secureStorage => const FlutterSecureStorage(
         aOptions: AndroidOptions(
-          encryptedSharedPreferences: true,
-          sharedPreferencesName: 'securePrefs',
+          storageNamespace: 'securePrefs',
           preferencesKeyPrefix: 'secure_',
         ),
         iOptions: IOSOptions(

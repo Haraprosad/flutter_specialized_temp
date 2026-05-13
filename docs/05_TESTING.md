@@ -53,21 +53,37 @@ test/
 
 ## Mock Setup
 
-All mocks live in `test/helpers/mocks.dart` using `mocktail`:
+The project uses **mockito** with `@GenerateNiceMocks` for generating mock classes. Nice mocks return sensible default values for unstubbed methods, reducing boilerplate.
+
+Per-test file mock generation:
 
 ```dart
-// test/helpers/mocks.dart
-import 'package:mocktail/mocktail.dart';
+// At the top of your test file:
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
-class MockOrderRepository extends Mock implements OrderRepository {}
-class MockGetOrdersUseCase extends Mock implements GetOrdersUseCase {}
-class MockOrdersRemoteDatasource extends Mock implements OrdersRemoteDatasource {}
-class MockOrdersBloc extends Mock implements OrdersBloc<OrdersEvent, OrdersState> {}
+import 'your_test_file.mocks.dart';
+
+@GenerateNiceMocks([
+  MockSpec<OrderRepository>(),
+  MockSpec<GetOrdersUseCase>(),
+  MockSpec<OrdersRemoteDatasource>(),
+  MockSpec<OrdersBloc>(),
+])
+void main() { ... }
 ```
 
-Register fallback values for complex types (once, in a shared setup):
+After adding or changing `@GenerateNiceMocks`, run:
+
+```bash
+./scripts/codegen.sh
+```
+
+Register fallback values for complex types only if using mocktail alongside mockito (rare):
 
 ```dart
+// Only needed if mixing mocktail mocks with mockito-generated mocks.
+// Prefer using @GenerateNiceMocks exclusively to avoid this.
 setUpAll(() {
   registerFallbackValue(FetchOrders());
   registerFallbackValue(OrdersInitial());

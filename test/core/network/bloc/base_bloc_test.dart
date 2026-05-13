@@ -5,12 +5,14 @@ import 'package:flutter_specialized_temp/core/network/constants/network_constant
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:flutter_specialized_temp/core/storage/secure_storage_manager.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
+import 'package:flutter_specialized_temp/flavors/env_config.dart';
+import 'package:flutter_specialized_temp/flavors/environment.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 
 import 'base_bloc_test.mocks.dart';
 
-@GenerateMocks([ConnectionManager, SecureStorageManager, AppStorage])
+@GenerateNiceMocks([MockSpec<ConnectionManager>(), MockSpec<SecureStorageManager>(), MockSpec<AppStorage>()])
 void main() {
   late DioClient dioClient;
   late MockConnectionManager mockConnectionManager;
@@ -18,6 +20,11 @@ void main() {
   late MockAppStorage mockAppStorage;
 
   setUp(() {
+    EnvConfig.instantiate(
+      appName: 'Test App',
+      baseUrl: 'https://test.api.com',
+      env: Env.DEVELOPMENT,
+    );
     mockConnectionManager = MockConnectionManager();
     mockSecureStorage = MockSecureStorageManager();
     mockAppStorage = MockAppStorage();
@@ -31,7 +38,7 @@ void main() {
 
       expect(dio, isNotNull);
       expect(dio, isA<Dio>());
-      expect(dio.options.baseUrl, const String.fromEnvironment('API_BASE_URL'));
+      expect(dio.options.baseUrl, 'https://test.api.com');
     });
 
     test('should set correct timeout values', () {

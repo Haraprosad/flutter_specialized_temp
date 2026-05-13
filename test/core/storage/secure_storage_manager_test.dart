@@ -8,7 +8,7 @@ import 'package:mockito/mockito.dart';
 
 import 'secure_storage_manager_test.mocks.dart';
 
-@GenerateMocks([FlutterSecureStorage])
+@GenerateNiceMocks([MockSpec<FlutterSecureStorage>()])
 void main() {
   late SecureStorageManager storageManager;
   late MockFlutterSecureStorage mockStorage;

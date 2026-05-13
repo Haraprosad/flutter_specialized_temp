@@ -8,8 +8,8 @@ Everything you need to go from this template to **your own app** and run it for 
 
 | Tool | Version |
 |---|---|
-| Flutter SDK | 3.x (stable channel) |
-| Dart SDK | 3.x (bundled with Flutter) |
+| Flutter SDK | 3.41+ (stable channel) |
+| Dart SDK | 3.11+ (bundled with Flutter) |
 | Xcode | 15+ (for iOS) |
 | Android Studio | Latest (for Android) |
 | Mason CLI | `dart pub global activate mason_cli` (optional, for feature scaffolding) |

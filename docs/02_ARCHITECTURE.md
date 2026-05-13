@@ -228,9 +228,9 @@ UI (Page)
 | `features/dlt_auth/domain/usecases/login_usecase.dart` | `@injectable`. One method: `call(LoginParams)`. Calls `AuthRepository.login()`. |
 | `features/dlt_auth/domain/usecases/register_usecase.dart` | `@injectable`. `call(RegisterParams)`. |
 | `features/dlt_auth/domain/usecases/logout_usecase.dart` | `@injectable`. `call()`. Clears tokens and state. |
-| `features/dlt_auth/data/models/user_model.dart` | `@freezed`. `fromJson` / `toJson` + `toEntity()`. |
-| `features/dlt_auth/data/models/login_request_model.dart` | `@freezed`. Request body for login. |
-| `features/dlt_auth/data/models/register_request_model.dart` | `@freezed`. Request body for registration. |
+| `features/dlt_auth/data/models/user_model.dart` | `@freezed` (abstract class). `fromJson` / `toJson` + `toEntity()`. |
+| `features/dlt_auth/data/models/login_request_model.dart` | `@freezed` (abstract class). Request body for login. |
+| `features/dlt_auth/data/models/register_request_model.dart` | `@freezed` (abstract class). Request body for registration. |
 | `features/dlt_auth/data/datasources/auth_remote_datasource.dart` | `@LazySingleton`. Dio calls: `login()`, `register()`, `refreshToken()`. |
 | `features/dlt_auth/data/datasources/auth_local_datasource.dart` | `@LazySingleton`. Token storage via `SecureStorageManager`. |
 | `features/dlt_auth/data/repositories/auth_repository_impl.dart` | `@LazySingleton(as: AuthRepository)`. Orchestrates remote + local data sources. |
