@@ -19,7 +19,7 @@ Everything you need to go from this template to **your own app** and run it for 
 ## Step 1 — Clone and Install
 
 ```bash
-git clone <your-repo-url> my_app
+git clone <template-repo-url> my_app
 cd my_app
 
 flutter pub get
@@ -28,7 +28,42 @@ flutter pub get
 
 ---
 
-## Step 2 — Configure Environments
+## Step 2 — Detach from the Template Repo
+
+This template ships with its own `.git` history. Before pushing to your own repository you must replace it with a fresh git history.
+
+```bash
+# Remove the template's git history
+rm -rf .git
+
+# Start a clean repo for your app
+git init
+git add .
+git commit -m "chore: init from flutter_specialized_temp"
+
+# Point to your new remote and push
+git remote add origin <your-new-repo-url>
+git push -u origin main
+```
+
+### Exclude template development artifacts from your app's repo
+
+The following files and folders exist only to help build and maintain the template itself. They carry no runtime value for apps built on top of it. Add them to your app's `.gitignore` so they are never committed:
+
+```gitignore
+# Template development artifacts — not needed in your app's repo
+docs/
+CLAUDE.md
+WORKFLOW.md
+.claude/
+mason.yaml
+```
+
+> **Why?** `docs/` contains the template guide you are reading now. `CLAUDE.md` and `WORKFLOW.md` are AI-assistant memory files. `.claude/` holds agent personas and skill files. `mason.yaml` is the template scaffolding config. None of these belong in a production app repo.
+
+---
+
+## Step 3 — Configure Environments
 
 The template uses three environments. Each has its own entry point and `.env` file.
 
@@ -54,7 +89,7 @@ Edit each file and fill in:
 
 ---
 
-## Step 3 — Change App Name
+## Step 4 — Change App Name
 
 ### Android
 
@@ -75,11 +110,11 @@ Edit `ios/Runner/Info.plist`:
 
 ### All Platforms (Recommended)
 
-Use the `flutter_launcher_icons` approach (see Step 5) — it handles naming alongside icons.
+Use the `flutter_launcher_icons` approach (see Step 6) — it handles naming alongside icons.
 
 ---
 
-## Step 4 — Change Package Name / Bundle ID
+## Step 5 — Change Package Name / Bundle ID
 
 ### Android
 
@@ -119,7 +154,7 @@ Also update the bundle ID in Xcode: Runner → Signing & Capabilities → Bundle
 
 ---
 
-## Step 5 — Set App Icon
+## Step 6 — Set App Icon
 
 1. Add `flutter_launcher_icons` to `pubspec.yaml` under `dev_dependencies`:
    ```yaml
@@ -148,7 +183,7 @@ Also update the bundle ID in Xcode: Runner → Signing & Capabilities → Bundle
 
 ---
 
-## Step 6 — Set Splash Screen
+## Step 7 — Set Splash Screen
 
 1. Add `flutter_native_splash` to `dev_dependencies`:
    ```yaml
@@ -172,7 +207,7 @@ Also update the bundle ID in Xcode: Runner → Signing & Capabilities → Bundle
 
 ---
 
-## Step 7 — Update Import Paths (Optional)
+## Step 8 — Update Import Paths (Optional)
 
 If you change the project name in `pubspec.yaml` (the `name:` field), all imports will change:
 ```dart
@@ -190,7 +225,7 @@ To rename:
 
 ---
 
-## Step 8 — Run the App
+## Step 9 — Run the App
 
 ### Development
 ```bash
@@ -222,7 +257,7 @@ The project includes ready-to-use launch configurations in `.vscode/launch.json`
 
 ---
 
-## Step 9 — Verify Everything Works
+## Step 10 — Verify Everything Works
 
 1. App launches with the home screen
 2. Theme toggle works (light/dark)
