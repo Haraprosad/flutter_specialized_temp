@@ -1,6 +1,6 @@
+import 'package:flutter_specialized_temp/core/exceptions/app_exceptions.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/domain/entities/user_entity.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/domain/usecases/register_usecase.dart';
-import 'package:flutter_specialized_temp/core/exceptions/app_exceptions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -25,49 +25,44 @@ void main() {
   });
 
   group('RegisterUseCase', () {
-    test('returns UserEntity from repository on successful registration',
-        () async {
-      when(
-        () => mockRepository.register(
+    test(
+      'returns UserEntity from repository on successful registration',
+      () async {
+        when(
+          () => mockRepository.register(
+            email: 'new@example.com',
+            password: 'Password1!',
+            name: 'New User',
+            phone: '+1234567890',
+          ),
+        ).thenAnswer((_) async => tUser);
+
+        final result = await useCase(
           email: 'new@example.com',
           password: 'Password1!',
           name: 'New User',
           phone: '+1234567890',
-        ),
-      ).thenAnswer((_) async => tUser);
+        );
 
-      final result = await useCase(
-        email: 'new@example.com',
-        password: 'Password1!',
-        name: 'New User',
-        phone: '+1234567890',
-      );
-
-      expect(result, equals(tUser));
-      verify(
-        () => mockRepository.register(
-          email: 'new@example.com',
-          password: 'Password1!',
-          name: 'New User',
-          phone: '+1234567890',
-        ),
-      ).called(1);
-    });
+        expect(result, equals(tUser));
+        verify(
+          () => mockRepository.register(
+            email: 'new@example.com',
+            password: 'Password1!',
+            name: 'New User',
+            phone: '+1234567890',
+          ),
+        ).called(1);
+      },
+    );
 
     test('registers without optional name and phone fields', () async {
       when(
-        () => mockRepository.register(
-          email: 'min@example.com',
-          password: 'pass',
-          name: null,
-          phone: null,
-        ),
+        () =>
+            mockRepository.register(email: 'min@example.com', password: 'pass'),
       ).thenAnswer((_) async => tUser);
 
-      final result = await useCase(
-        email: 'min@example.com',
-        password: 'pass',
-      );
+      final result = await useCase(email: 'min@example.com', password: 'pass');
 
       expect(result, isA<UserEntity>());
     });

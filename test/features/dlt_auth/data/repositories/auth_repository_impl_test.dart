@@ -67,10 +67,7 @@ void main() {
         when(() => mockRemote.login(any())).thenThrow(Exception('Auth error'));
 
         expect(
-          () => repository.login(
-            email: 'test@example.com',
-            password: 'wrong',
-          ),
+          () => repository.login(email: 'test@example.com', password: 'wrong'),
           throwsA(isA<Exception>()),
         );
         verifyNever(() => mockLocal.saveUser(any()));
@@ -79,8 +76,9 @@ void main() {
 
     group('register', () {
       test('calls remote data source and saves user locally', () async {
-        when(() => mockRemote.register(any()))
-            .thenAnswer((_) async => tUserModel);
+        when(
+          () => mockRemote.register(any()),
+        ).thenAnswer((_) async => tUserModel);
         when(() => mockLocal.saveUser(any())).thenAnswer((_) async {});
 
         final result = await repository.register(
@@ -118,8 +116,9 @@ void main() {
 
     group('getCurrentUser', () {
       test('returns UserEntity when cached user exists', () async {
-        when(() => mockLocal.getCachedUser())
-            .thenAnswer((_) async => tUserModel);
+        when(
+          () => mockLocal.getCachedUser(),
+        ).thenAnswer((_) async => tUserModel);
 
         final result = await repository.getCurrentUser();
 

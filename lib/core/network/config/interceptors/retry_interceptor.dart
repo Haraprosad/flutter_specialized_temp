@@ -20,6 +20,12 @@ import 'package:flutter_specialized_temp/core/network/services/connection_manage
 /// - Uses cached connectivity state (instant check, 0ms overhead)
 /// - Fails fast when offline (no wasted retry attempts)
 class RetryInterceptor extends Interceptor {
+  RetryInterceptor({
+    this.maxRetries = NetworkConstants.maxRetries,
+    this.initialDelay = NetworkConstants.initialRetryDelay,
+    this.backoffMultiplier = NetworkConstants.retryBackoffMultiplier,
+    this.connectionManager,
+  });
   final int maxRetries;
   final Duration initialDelay;
   final double backoffMultiplier;
@@ -27,16 +33,10 @@ class RetryInterceptor extends Interceptor {
 
   Dio? _dio;
 
-  RetryInterceptor({
-    this.maxRetries = NetworkConstants.maxRetries,
-    this.initialDelay = NetworkConstants.initialRetryDelay,
-    this.backoffMultiplier = NetworkConstants.retryBackoffMultiplier,
-    this.connectionManager,
-  });
-
   /// Set the Dio instance after construction to avoid circular dependency.
   /// Called by DioClient after the Dio instance is fully built.
-  void setDio(Dio dio) => _dio = dio;
+  Dio get dio => _dio ?? Dio();
+  set dio(Dio value) => _dio = value;
 
   @override
   Future<void> onError(
@@ -67,7 +67,7 @@ class RetryInterceptor extends Interceptor {
           'Retrying (${retryCount + 1}/$maxRetries) after ${delay.inSeconds}s: ${err.requestOptions.path}',
     );
 
-    await Future.delayed(delay);
+    await Future<void>.delayed(delay);
 
     final newRetryCount = retryCount + 1;
     err.requestOptions.extra['retryCount'] = newRetryCount;
@@ -80,7 +80,7 @@ class RetryInterceptor extends Interceptor {
       }
 
       // Reuse the same Dio instance to preserve base URL, headers, and interceptor chain
-      final response = await dio.fetch(err.requestOptions);
+      final response = await dio.fetch<dynamic>(err.requestOptions);
       return handler.resolve(response);
     } on DioException catch (e) {
       AppLogger.w(

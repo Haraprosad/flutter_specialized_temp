@@ -20,7 +20,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       accessToken: user.accessToken,
       refreshToken: user.refreshToken,
     );
-    await _storage.preferences.setIsAuthenticated(true);
+    await _storage.preferences.setIsAuthenticated(isAuthenticated: true);
     await _storage.preferences.setUserEmail(user.email);
     await _storage.preferences.setUserId(user.id);
     if (user.role != null) {

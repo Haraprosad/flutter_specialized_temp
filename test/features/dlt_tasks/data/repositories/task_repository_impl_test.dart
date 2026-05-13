@@ -37,8 +37,9 @@ void main() {
   group('TaskRepositoryImpl', () {
     group('getTasks', () {
       test('returns list of TaskEntity from data source', () async {
-        when(() => mockDataSource.getTasks())
-            .thenAnswer((_) async => tTaskModels);
+        when(
+          () => mockDataSource.getTasks(),
+        ).thenAnswer((_) async => tTaskModels);
 
         final result = await repository.getTasks();
 
@@ -56,8 +57,9 @@ void main() {
       });
 
       test('propagates exception from data source', () async {
-        when(() => mockDataSource.getTasks())
-            .thenThrow(Exception('Storage failure'));
+        when(
+          () => mockDataSource.getTasks(),
+        ).thenThrow(Exception('Storage failure'));
 
         expect(() => repository.getTasks(), throwsA(isA<Exception>()));
       });
@@ -65,8 +67,9 @@ void main() {
 
     group('getTaskById', () {
       test('returns a single TaskEntity for a valid id', () async {
-        when(() => mockDataSource.getTaskById('1'))
-            .thenAnswer((_) async => tTaskModels.first);
+        when(
+          () => mockDataSource.getTaskById('1'),
+        ).thenAnswer((_) async => tTaskModels.first);
 
         final result = await repository.getTaskById('1');
 
@@ -76,13 +79,11 @@ void main() {
       });
 
       test('propagates StateError when task id not found', () async {
-        when(() => mockDataSource.getTaskById('999'))
-            .thenThrow(StateError('No element'));
+        when(
+          () => mockDataSource.getTaskById('999'),
+        ).thenThrow(StateError('No element'));
 
-        expect(
-          () => repository.getTaskById('999'),
-          throwsA(isA<StateError>()),
-        );
+        expect(() => repository.getTaskById('999'), throwsA(isA<StateError>()));
       });
     });
   });

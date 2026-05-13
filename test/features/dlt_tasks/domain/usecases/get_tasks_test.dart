@@ -51,7 +51,9 @@ void main() {
     });
 
     test('propagates exception when repository throws', () async {
-      when(() => mockRepository.getTasks()).thenThrow(Exception('Network error'));
+      when(
+        () => mockRepository.getTasks(),
+      ).thenThrow(Exception('Network error'));
 
       expect(() => useCase(), throwsA(isA<Exception>()));
     });

@@ -2,11 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_specialized_temp/core/router/route_names.dart';
 import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
-
-
-
+import 'package:flutter_specialized_temp/core/router/route_names.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +11,7 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -57,13 +54,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
     if (_formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
-            RegisterRequested(
-              email: _emailController.text.trim(),
-              password: _passwordController.text,
-              name: _fullNameController.text.trim(),
-              phone: _phoneController.text.trim(),
-            ),
-          );
+        RegisterRequested(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          name: _fullNameController.text.trim(),
+          phone: _phoneController.text.trim(),
+        ),
+      );
     }
   }
 
@@ -74,38 +71,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (state is AuthAuthenticated) {
           context.goNamed(RouteNames.home);
         } else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       child: Scaffold(
         backgroundColor: context.colors.background,
         appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: context.colors.textPrimary,
-            size: AppDimensions.iconLg,
-          ),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppSpacing.lgPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildHeader(),
-              AppSpacing.xlHeight,
-              _buildRegistrationForm(),
-            ],
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: context.colors.textPrimary,
+              size: AppDimensions.iconLg,
+            ),
+            onPressed: () => context.pop(),
           ),
         ),
-      ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: AppSpacing.lgPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildHeader(),
+                AppSpacing.xlHeight,
+                _buildRegistrationForm(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -176,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         hintText: 'Enter your full name',
         hintStyle: context.bodyMedium?.copyWith(
-          color: context.colors.textSecondary.withOpacity(0.7),
+          color: context.colors.textSecondary.withValues(alpha: 0.7),
         ),
         prefixIcon: Icon(
           Icons.person_outline,
@@ -208,7 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         hintText: 'Enter your email',
         hintStyle: context.bodyMedium?.copyWith(
-          color: context.colors.textSecondary.withOpacity(0.7),
+          color: context.colors.textSecondary.withValues(alpha: 0.7),
         ),
         prefixIcon: Icon(
           Icons.email_outlined,
@@ -244,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         hintText: 'Enter your phone number',
         hintStyle: context.bodyMedium?.copyWith(
-          color: context.colors.textSecondary.withOpacity(0.7),
+          color: context.colors.textSecondary.withValues(alpha: 0.7),
         ),
         prefixIcon: Icon(
           Icons.phone_outlined,
@@ -276,7 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         hintText: 'Enter your password',
         hintStyle: context.bodyMedium?.copyWith(
-          color: context.colors.textSecondary.withOpacity(0.7),
+          color: context.colors.textSecondary.withValues(alpha: 0.7),
         ),
         prefixIcon: Icon(
           Icons.lock_outline,
@@ -305,10 +302,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (value.length < 8) {
           return 'Password must be at least 8 characters';
         }
-        if (!value.contains(RegExp(r'[A-Z]'))) {
+        if (!value.contains(RegExp('[A-Z]'))) {
           return 'Password must contain at least one uppercase letter';
         }
-        if (!value.contains(RegExp(r'[0-9]'))) {
+        if (!value.contains(RegExp('[0-9]'))) {
           return 'Password must contain at least one number';
         }
         return null;
@@ -328,7 +325,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         hintText: 'Confirm your password',
         hintStyle: context.bodyMedium?.copyWith(
-          color: context.colors.textSecondary.withOpacity(0.7),
+          color: context.colors.textSecondary.withValues(alpha: 0.7),
         ),
         prefixIcon: Icon(
           Icons.lock_outline,

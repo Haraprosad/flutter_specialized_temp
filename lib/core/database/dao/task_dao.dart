@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_specialized_temp/core/database/app_database.dart';
 import 'package:flutter_specialized_temp/core/database/tables/tasks_table.dart';
+import 'package:flutter_specialized_temp/core/network/services/auto_sync_service.dart'
+    show AutoSyncService;
 
 part 'task_dao.g.dart';
 
@@ -19,8 +21,7 @@ class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
 
   /// Watches all tasks; emits a new list whenever the table changes.
   Stream<List<Task>> watchAllTasks() =>
-      (select(tasks)..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
-          .watch();
+      (select(tasks)..orderBy([(t) => OrderingTerm.desc(t.createdAt)])).watch();
 
   /// Returns a single task by [id], or null if not found.
   Future<Task?> getTaskById(String id) =>
@@ -40,14 +41,16 @@ class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
       batch((b) => b.insertAllOnConflictUpdate(tasks, companions));
 
   /// Marks a task as dirty so [AutoSyncService] picks it up on reconnect.
-  Future<void> markDirty(String id) => (update(tasks)
-        ..where((t) => t.id.equals(id)))
-      .write(const TasksCompanion(isDirty: Value(true)));
+  Future<void> markDirty(String id) =>
+      (update(tasks)..where((t) => t.id.equals(id))).write(
+        const TasksCompanion(isDirty: Value(true)),
+      );
 
   /// Clears dirty flag after a successful server sync.
-  Future<void> markSynced(String id) => (update(tasks)
-        ..where((t) => t.id.equals(id)))
-      .write(const TasksCompanion(isDirty: Value(false)));
+  Future<void> markSynced(String id) =>
+      (update(tasks)..where((t) => t.id.equals(id))).write(
+        const TasksCompanion(isDirty: Value(false)),
+      );
 
   /// Deletes a single task locally. Caller is responsible for queueing a
   /// server-delete mutation before calling this.

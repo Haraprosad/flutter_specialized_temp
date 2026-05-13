@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_specialized_temp/core/router/route_names.dart';
-
 import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
-
+import 'package:flutter_specialized_temp/core/di/injection.dart';
+import 'package:flutter_specialized_temp/core/router/route_names.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:flutter_specialized_temp/features/dlt_profile/presentation/widgets/profile_menu_item.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/di/injection.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -33,9 +30,12 @@ class ProfileScreen extends StatelessWidget {
             CircleAvatar(
               radius: 50.r,
               backgroundColor: context.colorScheme.primary,
-              child: Text('JD', style: context.headlineLarge?.copyWith(
-                color: context.colorScheme.onPrimary,
-              )),
+              child: Text(
+                'JD',
+                style: context.headlineLarge?.copyWith(
+                  color: context.colorScheme.onPrimary,
+                ),
+              ),
             ),
             SizedBox(height: AppSpacing.mdV),
             Text('John Doe', style: context.headlineSmall),

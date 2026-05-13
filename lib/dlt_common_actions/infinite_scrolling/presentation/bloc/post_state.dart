@@ -5,12 +5,6 @@ import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/d
 
 /// Performance metrics for monitoring and optimization
 class PerformanceMetrics extends Equatable {
-  final int loadTime; // milliseconds
-  final int itemCount;
-  final DateTime timestamp;
-  final bool fromCache;
-  final double? scrollPosition;
-
   const PerformanceMetrics({
     required this.loadTime,
     required this.itemCount,
@@ -18,13 +12,37 @@ class PerformanceMetrics extends Equatable {
     this.fromCache = false,
     this.scrollPosition,
   });
+  final int loadTime; // milliseconds
+  final int itemCount;
+  final DateTime timestamp;
+  final bool fromCache;
+  final double? scrollPosition;
 
   @override
-  List<Object?> get props =>
-      [loadTime, itemCount, timestamp, fromCache, scrollPosition];
+  List<Object?> get props => [
+    loadTime,
+    itemCount,
+    timestamp,
+    fromCache,
+    scrollPosition,
+  ];
 }
 
 final class PostsState extends Equatable implements BaseBlocState {
+  /// Constructor with default values and optional parameters
+  const PostsState({
+    this.posts = const <Post>[],
+    this.hasReachedMax = false,
+    this.isLoading = false,
+    this.isPaginationLoading = false,
+    this.isBackgroundRefreshing = false,
+    this.failure,
+    this.lastFetchTime,
+    this.performanceMetrics,
+    this.currentPage = 0,
+    this.isFromCache = false,
+  });
+
   /// List of posts retrieved
   final List<Post> posts;
 
@@ -56,20 +74,6 @@ final class PostsState extends Equatable implements BaseBlocState {
 
   /// Indicates if data is from cache
   final bool isFromCache;
-
-  /// Constructor with default values and optional parameters
-  const PostsState({
-    this.posts = const <Post>[],
-    this.hasReachedMax = false,
-    this.isLoading = false,
-    this.isPaginationLoading = false,
-    this.isBackgroundRefreshing = false,
-    this.failure,
-    this.lastFetchTime,
-    this.performanceMetrics,
-    this.currentPage = 0,
-    this.isFromCache = false,
-  });
 
   /// Creates a copy of the current state with optional parameter overrides
   @override
@@ -109,23 +113,24 @@ final class PostsState extends Equatable implements BaseBlocState {
   /// Check if data is fresh (less than 5 minutes old)
   bool get isDataFresh {
     if (lastFetchTime == null) return false;
-    return DateTime.now().difference(lastFetchTime!) < Duration(minutes: 5);
+    return DateTime.now().difference(lastFetchTime!) <
+        const Duration(minutes: 5);
   }
 
   /// Implements Equatable to allow state comparison
   @override
   List<Object?> get props => [
-        posts,
-        hasReachedMax,
-        isLoading,
-        isPaginationLoading,
-        isBackgroundRefreshing,
-        failure,
-        lastFetchTime,
-        performanceMetrics,
-        currentPage,
-        isFromCache,
-      ];
+    posts,
+    hasReachedMax,
+    isLoading,
+    isPaginationLoading,
+    isBackgroundRefreshing,
+    failure,
+    lastFetchTime,
+    performanceMetrics,
+    currentPage,
+    isFromCache,
+  ];
 
   /// Provides a string representation of the state
   @override

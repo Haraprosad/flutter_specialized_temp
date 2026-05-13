@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_specialized_temp/core/network/constants/error_messages_key.dart';
 import 'package:flutter_specialized_temp/core/network/constants/response_code.dart';
 import 'package:flutter_specialized_temp/core/network/enums/custom_error_type.dart';
-import 'package:flutter_specialized_temp/core/network/constants/error_messages_key.dart';
+import 'package:flutter_specialized_temp/core/network/error_handling/models/api_call_failure_model.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/models/custom_exception.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
-import 'package:flutter_specialized_temp/core/network/error_handling/models/api_call_failure_model.dart';
 import 'package:injectable/injectable.dart';
 
 /// Translates raw network errors into user-friendly messages.
@@ -14,9 +14,8 @@ import 'package:injectable/injectable.dart';
 /// HTTP status codes, and custom backend error formats.
 @lazySingleton
 class NetworkErrorHandler {
-  final LocalizationService _localizationService;
-
   NetworkErrorHandler(this._localizationService);
+  final LocalizationService _localizationService;
 
   /// Main entry point for error handling - figures out what went wrong
   ApiCallFailureModel handleError(dynamic error, [StackTrace? stackTrace]) {
@@ -112,7 +111,7 @@ class NetworkErrorHandler {
         );
       case DioExceptionType.badResponse:
         return _handleBadResponse(error, stackTrace);
-      default:
+      case DioExceptionType.unknown:
         return ApiCallFailureModel(
           code: ResponseCode.DEFAULT,
           translatedMessage: _localizationService.translate(
@@ -266,12 +265,10 @@ class NetworkErrorHandler {
     switch (customErrorType) {
       case CustomErrorType.preCallError:
         messageKey = ErrorMessagesKey.preCall;
-        break;
       case CustomErrorType.parsingError:
         messageKey = ErrorMessagesKey.parsing;
-        break;
-      default:
-        messageKey = ErrorMessagesKey.unknown;
+      case CustomErrorType.noInternet:
+        messageKey = ErrorMessagesKey.noInternet;
     }
 
     return ApiCallFailureModel(

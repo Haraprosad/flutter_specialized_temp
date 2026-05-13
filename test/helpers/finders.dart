@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// Finds a [Text] widget whose data contains [substring].
 Finder findTextContaining(String substring) => find.byWidgetPredicate(
-      (widget) => widget is Text && (widget.data?.contains(substring) ?? false),
-    );
+  (widget) => widget is Text && (widget.data?.contains(substring) ?? false),
+);
 
 /// Finds the first [ElevatedButton] in the tree.
 Finder findElevatedButton() => find.byType(ElevatedButton);

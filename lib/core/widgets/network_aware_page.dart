@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_specialized_temp/core/network/cubit/connectivity_cubit.dart';
+import 'package:flutter_specialized_temp/core/widgets/offline_indicator_banner.dart';
 import 'package:get_it/get_it.dart';
-import '../network/cubit/connectivity_cubit.dart';
-import 'offline_indicator_banner.dart';
 
 /// 🚀 Production-grade network-aware page wrapper for million-user scalability.
 ///
@@ -36,6 +38,25 @@ import 'offline_indicator_banner.dart';
 /// }
 /// ```
 class NetworkAwarePage extends StatelessWidget {
+  const NetworkAwarePage({
+    required this.title,
+    required this.body,
+    super.key,
+    this.actions,
+    this.showNetworkStatusInAppBar = true,
+    this.showOfflineBanner = true,
+    this.showCacheDetails = true,
+    this.onConnectionRestored,
+    this.leading,
+    this.enableRefresh = false,
+    this.onRefresh,
+    this.floatingActionButton,
+    this.appBarBackgroundColor,
+    this.bottomNavigationBar,
+    this.appBarElevation,
+    this.appBar,
+  });
+
   /// Page title displayed in AppBar
   final String title;
 
@@ -81,25 +102,6 @@ class NetworkAwarePage extends StatelessWidget {
   /// Custom app bar
   final PreferredSizeWidget? appBar;
 
-  const NetworkAwarePage({
-    super.key,
-    required this.title,
-    required this.body,
-    this.actions,
-    this.showNetworkStatusInAppBar = true,
-    this.showOfflineBanner = true,
-    this.showCacheDetails = true,
-    this.onConnectionRestored,
-    this.leading,
-    this.enableRefresh = false,
-    this.onRefresh,
-    this.floatingActionButton,
-    this.appBarBackgroundColor,
-    this.bottomNavigationBar,
-    this.appBarElevation,
-    this.appBar,
-  });
-
   @override
   Widget build(BuildContext context) {
     // 🎯 CRITICAL: Use existing singleton instead of creating new instance
@@ -129,6 +131,23 @@ class NetworkAwarePage extends StatelessWidget {
 
 /// Internal content widget with debouncing and lifecycle management
 class _NetworkAwarePageContent extends StatefulWidget {
+  const _NetworkAwarePageContent({
+    required this.title,
+    required this.body,
+    required this.showNetworkStatusInAppBar,
+    required this.showOfflineBanner,
+    required this.showCacheDetails,
+    required this.enableRefresh,
+    this.actions,
+    this.onConnectionRestored,
+    this.leading,
+    this.onRefresh,
+    this.floatingActionButton,
+    this.appBarBackgroundColor,
+    this.bottomNavigationBar,
+    this.appBarElevation,
+    this.appBar,
+  });
   final String title;
   final Widget body;
   final List<Widget>? actions;
@@ -144,24 +163,6 @@ class _NetworkAwarePageContent extends StatefulWidget {
   final Widget? bottomNavigationBar;
   final double? appBarElevation;
   final PreferredSizeWidget? appBar;
-
-  const _NetworkAwarePageContent({
-    required this.title,
-    required this.body,
-    this.actions,
-    required this.showNetworkStatusInAppBar,
-    required this.showOfflineBanner,
-    required this.showCacheDetails,
-    this.onConnectionRestored,
-    this.leading,
-    required this.enableRefresh,
-    this.onRefresh,
-    this.floatingActionButton,
-    this.appBarBackgroundColor,
-    this.bottomNavigationBar,
-    this.appBarElevation,
-    this.appBar,
-  });
 
   @override
   State<_NetworkAwarePageContent> createState() =>
@@ -193,7 +194,8 @@ class _NetworkAwarePageContentState extends State<_NetworkAwarePageContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.appBar ??
+      appBar:
+          widget.appBar ??
           AppBar(
             leading: widget.leading,
             title: Text(widget.title),
@@ -204,11 +206,8 @@ class _NetworkAwarePageContentState extends State<_NetworkAwarePageContent> {
               if (widget.showNetworkStatusInAppBar)
                 const Padding(
                   key: ValueKey('network_status_indicator'),
-                  padding: EdgeInsets.only(right: 8.0),
-                  child: NetworkStatusIndicator(
-                    showWhenOnline: false,
-                    compact: true,
-                  ),
+                  padding: EdgeInsets.only(right: 8),
+                  child: NetworkStatusIndicator(),
                 ),
 
               // Custom actions provided by the page
@@ -253,18 +252,17 @@ class _NetworkAwarePageContentState extends State<_NetworkAwarePageContent> {
 /// }
 /// ```
 class NetworkAwareErrorState extends StatefulWidget {
+  const NetworkAwareErrorState({
+    required this.onRetry,
+    super.key,
+    this.errorMessage,
+    this.retryButtonLabel,
+    this.errorIcon,
+  });
   final String? errorMessage;
   final VoidCallback onRetry;
   final String? retryButtonLabel;
   final IconData? errorIcon;
-
-  const NetworkAwareErrorState({
-    super.key,
-    this.errorMessage,
-    required this.onRetry,
-    this.retryButtonLabel,
-    this.errorIcon,
-  });
 
   @override
   State<NetworkAwareErrorState> createState() => _NetworkAwareErrorStateState();
@@ -304,7 +302,7 @@ class _NetworkAwareErrorStateState extends State<NetworkAwareErrorState> {
 
         return Center(
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24),
             child: Semantics(
               label: isOffline
                   ? 'No internet connection. Connect to load content.'
@@ -334,7 +332,7 @@ class _NetworkAwareErrorStateState extends State<NetworkAwareErrorState> {
                     duration: const Duration(milliseconds: 300),
                     child: Text(
                       isOffline
-                          ? 'You\'re offline'
+                          ? "You're offline"
                           : 'Oops! Something went wrong',
                       key: ValueKey(isOffline),
                       style: Theme.of(context).textTheme.headlineSmall,
@@ -351,9 +349,9 @@ class _NetworkAwareErrorStateState extends State<NetworkAwareErrorState> {
                           ? 'Connect to the internet to load content'
                           : (widget.errorMessage ?? 'Failed to load data'),
                       key: ValueKey('${isOffline}_${widget.errorMessage}'),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[600],
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -374,12 +372,14 @@ class _NetworkAwareErrorStateState extends State<NetworkAwareErrorState> {
                             ? const SizedBox(
                                 width: 16,
                                 height: 16,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
                             : const Icon(Icons.wifi_find),
                         label: Text(
-                            isChecking ? 'Checking...' : 'Check Connection'),
+                          isChecking ? 'Checking...' : 'Check Connection',
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange.shade600,
                           foregroundColor: Colors.white,
@@ -436,11 +436,6 @@ class _NetworkAwareErrorStateState extends State<NetworkAwareErrorState> {
 /// }
 /// ```
 class NetworkAwareLoadingState extends StatelessWidget {
-  final int itemCount;
-  final Widget Function(BuildContext context, int index)? itemBuilder;
-  final EdgeInsetsGeometry? padding;
-  final String? semanticLabel;
-
   const NetworkAwareLoadingState({
     super.key,
     this.itemCount = 10,
@@ -448,6 +443,10 @@ class NetworkAwareLoadingState extends StatelessWidget {
     this.padding,
     this.semanticLabel,
   });
+  final int itemCount;
+  final Widget Function(BuildContext context, int index)? itemBuilder;
+  final EdgeInsetsGeometry? padding;
+  final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -473,9 +472,9 @@ class DefaultShimmerItem extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -530,14 +529,13 @@ class DefaultShimmerItem extends StatelessWidget {
 /// );
 /// ```
 class NetworkAwareRefreshWrapper extends StatefulWidget {
-  final Widget child;
-  final Future<void> Function() onRefresh;
-
   const NetworkAwareRefreshWrapper({
-    super.key,
     required this.child,
     required this.onRefresh,
+    super.key,
   });
+  final Widget child;
+  final Future<void> Function() onRefresh;
 
   @override
   State<NetworkAwareRefreshWrapper> createState() =>
@@ -569,7 +567,7 @@ class _NetworkAwareRefreshWrapperState
 
             if (isOffline) {
               // Check connection first when offline
-              context.read<ConnectivityCubit>().refresh();
+              unawaited(context.read<ConnectivityCubit>().refresh());
 
               // Show helpful message
               if (context.mounted) {
@@ -589,9 +587,10 @@ class _NetworkAwareRefreshWrapperState
               }
 
               // Wait a bit to see if connection comes back
-              await Future.delayed(const Duration(milliseconds: 1500));
+              await Future<void>.delayed(const Duration(milliseconds: 1500));
 
               // Try refresh if now connected
+              if (!context.mounted) return;
               if (mounted) {
                 final newState = context.read<ConnectivityCubit>().state;
                 if (newState is ConnectedState) {

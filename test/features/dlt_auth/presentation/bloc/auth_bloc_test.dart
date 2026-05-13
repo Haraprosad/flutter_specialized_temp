@@ -57,10 +57,7 @@ void main() {
       act: (bloc) => bloc.add(
         const LoginRequested(email: 'test@example.com', password: 'pass'),
       ),
-      expect: () => [
-        isA<AuthLoading>(),
-        isA<AuthAuthenticated>(),
-      ],
+      expect: () => [isA<AuthLoading>(), isA<AuthAuthenticated>()],
     );
 
     blocTest<AuthBloc, AuthState>(
@@ -77,10 +74,7 @@ void main() {
       act: (bloc) => bloc.add(
         const LoginRequested(email: 'test@example.com', password: 'pass'),
       ),
-      expect: () => [
-        isA<AuthLoading>(),
-        const AuthAuthenticated(user: tUser),
-      ],
+      expect: () => [isA<AuthLoading>(), const AuthAuthenticated(user: tUser)],
     );
 
     blocTest<AuthBloc, AuthState>(
@@ -121,10 +115,7 @@ void main() {
       act: (bloc) => bloc.add(
         const LoginRequested(email: 'test@example.com', password: 'pass'),
       ),
-      expect: () => [
-        isA<AuthLoading>(),
-        isA<AuthError>(),
-      ],
+      expect: () => [isA<AuthLoading>(), isA<AuthError>()],
     );
 
     // --- Register ---
@@ -149,10 +140,7 @@ void main() {
           name: 'Test User',
         ),
       ),
-      expect: () => [
-        isA<AuthLoading>(),
-        const AuthAuthenticated(user: tUser),
-      ],
+      expect: () => [isA<AuthLoading>(), const AuthAuthenticated(user: tUser)],
     );
 
     blocTest<AuthBloc, AuthState>(
@@ -171,10 +159,7 @@ void main() {
       act: (bloc) => bloc.add(
         const RegisterRequested(email: 'new@example.com', password: 'pass'),
       ),
-      expect: () => [
-        isA<AuthLoading>(),
-        isA<AuthError>(),
-      ],
+      expect: () => [isA<AuthLoading>(), isA<AuthError>()],
     );
 
     // --- Logout ---
@@ -186,24 +171,19 @@ void main() {
         return buildBloc();
       },
       act: (bloc) => bloc.add(const LogoutRequested()),
-      expect: () => [
-        isA<AuthLoading>(),
-        isA<AuthUnauthenticated>(),
-      ],
+      expect: () => [isA<AuthLoading>(), isA<AuthUnauthenticated>()],
     );
 
     blocTest<AuthBloc, AuthState>(
       'emits [AuthLoading, AuthError] when logout throws',
       build: () {
-        when(() => mockRepository.logout())
-            .thenThrow(NetworkException('No connection'));
+        when(
+          () => mockRepository.logout(),
+        ).thenThrow(NetworkException('No connection'));
         return buildBloc();
       },
       act: (bloc) => bloc.add(const LogoutRequested()),
-      expect: () => [
-        isA<AuthLoading>(),
-        isA<AuthError>(),
-      ],
+      expect: () => [isA<AuthLoading>(), isA<AuthError>()],
     );
   });
 }

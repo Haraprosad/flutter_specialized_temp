@@ -102,23 +102,23 @@
 /// 2. **Hot Reload Issues**: Restart preview if hot reload stops working
 /// 3. **Layout Issues**: Check responsive units usage (.sp, .w, .h, .r)
 /// 4. **Performance**: Close preview when not testing responsiveness
+library;
 
 import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 import 'package:flutter_specialized_temp/core/di/injection.dart';
 import 'package:flutter_specialized_temp/core/localization/bloc/locale_bloc.dart';
 import 'package:flutter_specialized_temp/core/localization/l10n/app_localizations.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
 import 'package:flutter_specialized_temp/core/router/app_router.dart';
-import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
-import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
-import 'flavors/app_initializer.dart';
-import 'flavors/environment.dart';
+import 'package:flutter_specialized_temp/flavors/app_initializer.dart';
+import 'package:flutter_specialized_temp/flavors/environment.dart';
 
 /// ## Flavor Selection for Testing
 ///
@@ -187,12 +187,7 @@ const Env selectedFlavor = Env.DEVELOPMENT;
 void main() async {
   await initializeApp(selectedFlavor);
 
-  runApp(
-    DevicePreview(
-      enabled: !kReleaseMode, // Only enabled in debug mode
-      builder: (context) => const MyPreviewApp(),
-    ),
-  );
+  runApp(DevicePreview(builder: (context) => const MyPreviewApp()));
 }
 
 /// Preview-enabled app widget with full responsive design support.
@@ -219,12 +214,8 @@ class MyPreviewApp extends StatelessWidget {
               create: (context) =>
                   sl<ThemeBloc>()..add(const InitializeTheme()),
             ),
-            BlocProvider<LocaleBloc>(
-              create: (context) => sl<LocaleBloc>(),
-            ),
-            BlocProvider<AuthBloc>(
-              create: (context) => sl<AuthBloc>(),
-            ),
+            BlocProvider<LocaleBloc>(create: (context) => sl<LocaleBloc>()),
+            BlocProvider<AuthBloc>(create: (context) => sl<AuthBloc>()),
           ],
           child: const PreviewAppView(),
         );
@@ -248,10 +239,9 @@ class PreviewAppView extends StatelessWidget {
           builder: (context, localeState) {
             return MaterialApp.router(
               // Device Preview Integration
-              useInheritedMediaQuery: true, // Required for Device Preview
-              locale:
-                  DevicePreview.locale(context), // Use Device Preview locale
-
+              locale: DevicePreview.locale(
+                context,
+              ), // Use Device Preview locale
               // Standard App Configuration
               routerConfig: sl<AppRouter>().routerConfig,
               supportedLocales: AppLocalizations.supportedLocales,
@@ -280,8 +270,9 @@ class PreviewAppView extends StatelessWidget {
 
                 // Setup localization service
                 if (AppLocalizations.of(context) != null) {
-                  sl<LocalizationService>()
-                      .setLocalizations(AppLocalizations.of(context)!);
+                  sl<LocalizationService>().setLocalizations(
+                    AppLocalizations.of(context)!,
+                  );
                 }
 
                 // First apply EasyLoading wrapper

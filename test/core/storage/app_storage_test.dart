@@ -1,14 +1,17 @@
 // app_storage_test.dart
 
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
-import 'package:flutter_specialized_temp/core/storage/secure_storage_manager.dart';
 import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
+import 'package:flutter_specialized_temp/core/storage/secure_storage_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 // Generate the mock classes
-@GenerateNiceMocks([MockSpec<SecureStorageManager>(), MockSpec<PreferencesManager>()])
+@GenerateNiceMocks([
+  MockSpec<SecureStorageManager>(),
+  MockSpec<PreferencesManager>(),
+])
 import 'app_storage_test.mocks.dart';
 
 void main() {
@@ -23,29 +26,35 @@ void main() {
   });
 
   group('AppStorage', () {
-    test('should call deleteAllSecureData and clearAll in clearAllData', () async {
-      // Arrange
-      when(mockSecureStorage.deleteAllSecureData()).thenAnswer((_) async => Future.value());
-      when(mockPreferences.clearAll()).thenAnswer((_) async => Future.value());
+    test(
+      'should call deleteAllSecureData and clearAll in clearAllData',
+      () async {
+        // Arrange
+        when(
+          mockSecureStorage.deleteAllSecureData(),
+        ).thenAnswer((_) async => Future.value());
+        when(
+          mockPreferences.clearAll(),
+        ).thenAnswer((_) async => Future.value());
 
-      // Act
-      await appStorage.clearAllData();
+        // Act
+        await appStorage.clearAllData();
 
-      // Assert
-      verify(mockSecureStorage.deleteAllSecureData()).called(1);
-      verify(mockPreferences.clearAll()).called(1);
-    });
+        // Assert
+        verify(mockSecureStorage.deleteAllSecureData()).called(1);
+        verify(mockPreferences.clearAll()).called(1);
+      },
+    );
 
     test('should propagate exceptions if deleteAllSecureData fails', () async {
       // Arrange
-      when(mockSecureStorage.deleteAllSecureData()).thenThrow(Exception('Failed to delete secure data'));
+      when(
+        mockSecureStorage.deleteAllSecureData(),
+      ).thenThrow(Exception('Failed to delete secure data'));
       when(mockPreferences.clearAll()).thenAnswer((_) async => Future.value());
 
       // Act & Assert
-      await expectLater(
-        appStorage.clearAllData(),
-        throwsA(isA<Exception>()),
-      );
+      await expectLater(appStorage.clearAllData(), throwsA(isA<Exception>()));
 
       // Ensure deleteAllSecureData was called but clearAll was not called due to the exception
       verify(mockSecureStorage.deleteAllSecureData()).called(1);
@@ -54,14 +63,15 @@ void main() {
 
     test('should propagate exceptions if clearAll fails', () async {
       // Arrange
-      when(mockSecureStorage.deleteAllSecureData()).thenAnswer((_) async => Future.value());
-      when(mockPreferences.clearAll()).thenThrow(Exception('Failed to clear preferences'));
+      when(
+        mockSecureStorage.deleteAllSecureData(),
+      ).thenAnswer((_) async => Future.value());
+      when(
+        mockPreferences.clearAll(),
+      ).thenThrow(Exception('Failed to clear preferences'));
 
       // Act & Assert
-      await expectLater(
-        appStorage.clearAllData(),
-        throwsA(isA<Exception>()),
-      );
+      await expectLater(appStorage.clearAllData(), throwsA(isA<Exception>()));
 
       // Verify both methods were called, and exception propagated from clearAll
       verify(mockSecureStorage.deleteAllSecureData()).called(1);

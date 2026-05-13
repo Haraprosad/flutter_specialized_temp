@@ -1,10 +1,10 @@
 // base_bloc.dart
 
-import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_specialized_temp/core/network/bloc/base_bloc_state.dart';
-import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/models/api_call_failure_model.dart';
+import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
 
 /// Base class that simplifies API calls in BLoCs with built-in error handling.
 ///
@@ -28,13 +28,13 @@ abstract class BaseBloc<Event, State extends BaseBlocState>
   Future<void> handleApiCall<T>({
     required Future<ApiResult<T>> Function() apiCall,
     required void Function(T data) onSuccess,
-    void Function(ApiCallFailureModel failure)? onError,
     required Emitter<State> emit,
+    void Function(ApiCallFailureModel failure)? onError,
     bool showLoader = true,
   }) async {
     // Turn on the loading spinner if needed
     if (showLoader) {
-      emit(state.copyWith(isLoading: true, failure: null) as State);
+      emit(state.copyWith(isLoading: true) as State);
     }
 
     // Actually make the API call

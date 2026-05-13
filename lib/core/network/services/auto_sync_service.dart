@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:injectable/injectable.dart';
+
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/queue/mutation_queue.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
+import 'package:injectable/injectable.dart';
 
 /// Service that automatically syncs queued mutations when connection is restored
 ///
@@ -13,6 +14,7 @@ import 'package:flutter_specialized_temp/core/network/services/connection_manage
 /// - Notify listeners of sync status
 @lazySingleton
 class AutoSyncService {
+  AutoSyncService(this._mutationQueue, this._connectionManager);
   final MutationQueue _mutationQueue;
   final ConnectionManager _connectionManager;
 
@@ -21,8 +23,6 @@ class AutoSyncService {
 
   // Callback for custom mutation execution
   Future<bool> Function(QueuedMutation)? _mutationExecutor;
-
-  AutoSyncService(this._mutationQueue, this._connectionManager);
 
   /// Start auto-sync service
   ///

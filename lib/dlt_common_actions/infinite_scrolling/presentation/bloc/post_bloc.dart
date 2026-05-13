@@ -1,11 +1,12 @@
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_specialized_temp/core/network/utils/debounce_utils.dart';
-import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/presentation/bloc/post_state.dart';
+import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/bloc/base_bloc.dart';
+import 'package:flutter_specialized_temp/core/network/utils/debounce_utils.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/domain/usecases/get_posts_usecase.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/presentation/bloc/post_event.dart';
-import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/presentation/bloc/post_state.dart';
 import 'package:injectable/injectable.dart';
 
 /// High-performance PostsBloc optimized for million-user scalability.
@@ -19,20 +20,6 @@ import 'package:injectable/injectable.dart';
 /// - Automatic preloading for smooth scrolling
 @injectable
 class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
-  final GetPostsUseCase _getPostsUseCase;
-  final PreloadPostsUseCase _preloadPostsUseCase;
-  final ClearPostsCacheUseCase _clearPostsCacheUseCase;
-
-  // Optimized configuration for million users
-  static const int _postsPerPage = 20;
-  static const Duration _debounceTime = Duration(milliseconds: 300);
-  static const Duration _backgroundRefreshInterval = Duration(minutes: 5);
-
-  // Performance tracking
-  final Stopwatch _performanceTimer = Stopwatch();
-  Timer? _backgroundRefreshTimer;
-  final Set<String> _processedEvents = {};
-
   PostsBloc(
     this._getPostsUseCase,
     this._preloadPostsUseCase,
@@ -52,6 +39,19 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
     // Setup background refresh timer
     _setupBackgroundRefresh();
   }
+  final GetPostsUseCase _getPostsUseCase;
+  final PreloadPostsUseCase _preloadPostsUseCase;
+  final ClearPostsCacheUseCase _clearPostsCacheUseCase;
+
+  // Optimized configuration for million users
+  static const int _postsPerPage = 20;
+  static const Duration _debounceTime = Duration(milliseconds: 300);
+  static const Duration _backgroundRefreshInterval = Duration(minutes: 5);
+
+  // Performance tracking
+  final Stopwatch _performanceTimer = Stopwatch();
+  Timer? _backgroundRefreshTimer;
+  final Set<String> _processedEvents = {};
 
   Future<void> _onFetchPosts(
     PostsFetched event,
@@ -65,13 +65,14 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
       return;
     }
 
-    _performanceTimer.reset();
-    _performanceTimer.start();
+    _performanceTimer
+      ..reset()
+      ..start();
 
     AppLogger.i(message: '📱 Fetching initial posts');
 
     await handleApiCall(
-      apiCall: () => _getPostsUseCase(start: 0, limit: _postsPerPage),
+      apiCall: _getPostsUseCase.call,
       onSuccess: (posts) {
         _performanceTimer.stop();
 
@@ -79,17 +80,17 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
           loadTime: _performanceTimer.elapsedMilliseconds,
           itemCount: posts.length,
           timestamp: DateTime.now(),
-          fromCache: false, // First load typically from API
         );
 
-        emit(state.copyWith(
-          posts: posts,
-          hasReachedMax: posts.length < _postsPerPage,
-          lastFetchTime: DateTime.now(),
-          performanceMetrics: metrics,
-          currentPage: 0,
-          failure: null,
-        ));
+        emit(
+          state.copyWith(
+            posts: posts,
+            hasReachedMax: posts.length < _postsPerPage,
+            lastFetchTime: DateTime.now(),
+            performanceMetrics: metrics,
+            currentPage: 0,
+          ),
+        );
 
         AppLogger.i(
           message:
@@ -125,25 +126,24 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
     emit(state.copyWith(isPaginationLoading: true));
 
     await handleApiCall(
-      apiCall: () => _getPostsUseCase(
-        start: start,
-        limit: _postsPerPage,
-      ),
+      apiCall: () => _getPostsUseCase(start: start),
       onSuccess: (newPosts) {
         final allPosts = [...state.posts, ...newPosts];
 
-        emit(state.copyWith(
-          posts: allPosts,
-          hasReachedMax: newPosts.length < _postsPerPage,
-          isPaginationLoading: false,
-          currentPage: nextPage,
-          lastFetchTime: DateTime.now(),
-          failure: null,
-        ));
+        emit(
+          state.copyWith(
+            posts: allPosts,
+            hasReachedMax: newPosts.length < _postsPerPage,
+            isPaginationLoading: false,
+            currentPage: nextPage,
+            lastFetchTime: DateTime.now(),
+          ),
+        );
 
         AppLogger.i(
-            message:
-                '✅ Loaded ${newPosts.length} more posts (total: ${allPosts.length})');
+          message:
+              '✅ Loaded ${newPosts.length} more posts (total: ${allPosts.length})',
+        );
 
         // Trigger preloading when user is approaching end
         if (newPosts.isNotEmpty && !state.hasReachedMax) {
@@ -151,10 +151,7 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
         }
       },
       onError: (failure) {
-        emit(state.copyWith(
-          isPaginationLoading: false,
-          failure: failure,
-        ));
+        emit(state.copyWith(isPaginationLoading: false, failure: failure));
       },
       emit: emit,
       showLoader: false,
@@ -167,12 +164,12 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
   ) async {
     AppLogger.i(message: '🔄 Refreshing posts');
 
-    _performanceTimer.reset();
-    _performanceTimer.start();
+    _performanceTimer
+      ..reset()
+      ..start();
 
     await handleApiCall(
-      apiCall: () =>
-          _getPostsUseCase(start: 0, limit: _postsPerPage, refresh: true),
+      apiCall: () => _getPostsUseCase(refresh: true),
       onSuccess: (posts) {
         _performanceTimer.stop();
 
@@ -180,17 +177,17 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
           loadTime: _performanceTimer.elapsedMilliseconds,
           itemCount: posts.length,
           timestamp: DateTime.now(),
-          fromCache: false,
         );
 
-        emit(state.copyWith(
-          posts: posts,
-          hasReachedMax: posts.length < _postsPerPage,
-          lastFetchTime: DateTime.now(),
-          performanceMetrics: metrics,
-          currentPage: 0,
-          failure: null,
-        ));
+        emit(
+          state.copyWith(
+            posts: posts,
+            hasReachedMax: posts.length < _postsPerPage,
+            lastFetchTime: DateTime.now(),
+            performanceMetrics: metrics,
+            currentPage: 0,
+          ),
+        );
 
         AppLogger.i(message: '✅ Refreshed ${posts.length} posts');
       },
@@ -241,20 +238,21 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
     AppLogger.d(message: '🔄 Loading with background refresh');
 
     await handleApiCall(
-      apiCall: () => _getPostsUseCase.callWithBackgroundRefresh(
-          start: 0, limit: _postsPerPage),
+      apiCall: _getPostsUseCase.callWithBackgroundRefresh,
       onSuccess: (posts) {
-        emit(state.copyWith(
-          posts: posts,
-          hasReachedMax: posts.length < _postsPerPage,
-          lastFetchTime: DateTime.now(),
-          currentPage: 0,
-          isFromCache: true, // Likely from cache for background refresh
-          failure: null,
-        ));
+        emit(
+          state.copyWith(
+            posts: posts,
+            hasReachedMax: posts.length < _postsPerPage,
+            lastFetchTime: DateTime.now(),
+            currentPage: 0,
+            isFromCache: true, // Likely from cache for background refresh
+          ),
+        );
 
         AppLogger.i(
-            message: '✅ Loaded ${posts.length} posts with background refresh');
+          message: '✅ Loaded ${posts.length} posts with background refresh',
+        );
       },
       emit: emit,
       showLoader: state.posts.isEmpty,
@@ -264,8 +262,9 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
   // Private helper methods
 
   void _setupBackgroundRefresh() {
-    _backgroundRefreshTimer =
-        Timer.periodic(_backgroundRefreshInterval, (timer) {
+    _backgroundRefreshTimer = Timer.periodic(_backgroundRefreshInterval, (
+      timer,
+    ) {
       if (state.hasData && !isClosed) {
         AppLogger.d(message: '⏰ Background refresh triggered');
         add(const PostsLoadWithBackgroundRefresh());
@@ -280,8 +279,9 @@ class PostsBloc extends BaseBloc<PostsEvent, PostsState> {
 
     // Clean old events (keep only last 10)
     if (_processedEvents.length > 10) {
-      final eventsToRemove =
-          _processedEvents.take(_processedEvents.length - 10);
+      final eventsToRemove = _processedEvents.take(
+        _processedEvents.length - 10,
+      );
       _processedEvents.removeAll(eventsToRemove);
     }
 

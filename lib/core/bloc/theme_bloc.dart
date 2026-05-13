@@ -9,22 +9,23 @@ part 'theme_state.dart';
 
 @singleton
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  final AppStorage _storage;
-
   ThemeBloc(this._storage) : super(const ThemeState.initial()) {
     on<InitializeTheme>(_onInitializeTheme);
     on<ToggleTheme>(_onToggleTheme);
   }
+  final AppStorage _storage;
 
   Future<void> _onInitializeTheme(
     InitializeTheme event,
     Emitter<ThemeState> emit,
   ) async {
     final isDarkMode = _storage.preferences.getDarkMode();
-    emit(ThemeState(
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      isDark: isDarkMode,
-    ),);
+    emit(
+      ThemeState(
+        themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        isDark: isDarkMode,
+      ),
+    );
   }
 
   Future<void> _onToggleTheme(
@@ -32,10 +33,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     Emitter<ThemeState> emit,
   ) async {
     final newIsDark = !state.isDark;
-    await _storage.preferences.setDarkMode(newIsDark);
-    emit(ThemeState(
-      themeMode: newIsDark ? ThemeMode.dark : ThemeMode.light,
-      isDark: newIsDark,
-    ),);
+    await _storage.preferences.setDarkMode(isDark: newIsDark);
+    emit(
+      ThemeState(
+        themeMode: newIsDark ? ThemeMode.dark : ThemeMode.light,
+        isDark: newIsDark,
+      ),
+    );
   }
 }

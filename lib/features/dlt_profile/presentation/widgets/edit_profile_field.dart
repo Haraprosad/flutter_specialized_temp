@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class EditProfileField extends StatelessWidget {
-  final String label;
-  final String initialValue;
-
-  const EditProfileField({super.key, 
+  const EditProfileField({
     required this.label,
     required this.initialValue,
+    super.key,
   });
+  final String label;
+  final String initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class EditProfileField extends StatelessWidget {
       initialValue: initialValue,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
   }

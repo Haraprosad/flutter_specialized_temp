@@ -14,9 +14,8 @@ extension StringExtension on String {
       RegExp(r'^https?://[^\s/$.?#].[^\s]*$').hasMatch(trim());
 
   /// At least 8 characters, one uppercase, one lowercase, one digit.
-  bool get isStrongPassword => RegExp(
-        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$',
-      ).hasMatch(this);
+  bool get isStrongPassword =>
+      RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$').hasMatch(this);
 
   bool get isNotEmpty => trim().isNotEmpty;
 
@@ -38,7 +37,8 @@ extension StringExtension on String {
   /// Masks all but the last [visibleCount] characters (e.g. for passwords).
   String mask({int visibleCount = 4, String maskChar = '•'}) {
     if (length <= visibleCount) return this;
-    return maskChar * (length - visibleCount) + substring(length - visibleCount);
+    return maskChar * (length - visibleCount) +
+        substring(length - visibleCount);
   }
 }
 

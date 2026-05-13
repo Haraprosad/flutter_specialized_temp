@@ -13,11 +13,10 @@ class RegisterUseCase {
     required String password,
     String? name,
     String? phone,
-  }) =>
-      _repository.register(
-        email: email,
-        password: password,
-        name: name,
-        phone: phone,
-      );
+  }) => _repository.register(
+    email: email,
+    password: password,
+    name: name,
+    phone: phone,
+  );
 }

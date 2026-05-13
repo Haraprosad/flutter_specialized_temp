@@ -6,22 +6,21 @@ import 'package:flutter/semantics.dart';
 ///
 /// Use instead of bare [IconButton] or small [GestureDetector] wrappers.
 class AccessibleIconButton extends StatelessWidget {
+  const AccessibleIconButton({
+    required this.onPressed,
+    required this.icon,
+    required this.semanticLabel,
+    super.key,
+    this.size = 24,
+    this.color,
+    this.tooltip,
+  });
   final VoidCallback? onPressed;
   final IconData icon;
   final String semanticLabel;
   final double size;
   final Color? color;
   final String? tooltip;
-
-  const AccessibleIconButton({
-    super.key,
-    required this.onPressed,
-    required this.icon,
-    required this.semanticLabel,
-    this.size = 24,
-    this.color,
-    this.tooltip,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,22 +48,21 @@ class AccessibleIconButton extends StatelessWidget {
 /// Accessible image that provides [semanticLabel] for screen readers and
 /// marks decorative images as excluded from the semantic tree.
 class AccessibleImage extends StatelessWidget {
-  final ImageProvider image;
-  final String? semanticLabel;
-  final double? width;
-  final double? height;
-  final BoxFit fit;
-
   /// Pass null for [semanticLabel] to mark the image as decorative
   /// (excluded from accessibility tree per WCAG 1.1.1).
   const AccessibleImage({
-    super.key,
     required this.image,
+    super.key,
     this.semanticLabel,
     this.width,
     this.height,
     this.fit = BoxFit.cover,
   });
+  final ImageProvider image;
+  final String? semanticLabel;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +70,7 @@ class AccessibleImage extends StatelessWidget {
       label: semanticLabel,
       image: semanticLabel != null,
       excludeSemantics: semanticLabel == null,
-      child: Image(
-        image: image,
-        width: width,
-        height: height,
-        fit: fit,
-      ),
+      child: Image(image: image, width: width, height: height, fit: fit),
     );
   }
 }
@@ -87,22 +80,21 @@ class AccessibleImage extends StatelessWidget {
 /// Use when Flutter's built-in widget doesn't surface the right semantic label
 /// to TalkBack / VoiceOver (e.g. custom cards, stat tiles, chart segments).
 class AccessibleLabel extends StatelessWidget {
+  const AccessibleLabel({
+    required this.child,
+    required this.label,
+    super.key,
+    this.hint,
+    this.isButton = false,
+    this.liveRegion = false,
+    this.onTap,
+  });
   final Widget child;
   final String label;
   final String? hint;
   final bool isButton;
   final bool liveRegion;
   final VoidCallback? onTap;
-
-  const AccessibleLabel({
-    super.key,
-    required this.child,
-    required this.label,
-    this.hint,
-    this.isButton = false,
-    this.liveRegion = false,
-    this.onTap,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -119,15 +111,11 @@ class AccessibleLabel extends StatelessWidget {
 
 /// Screen-reader-friendly loading indicator.
 ///
-/// Announces "Loading, please wait" via [liveRegion] so VoiceOver / TalkBack
+/// Announces "Loading, please wait" via `liveRegion` so VoiceOver / TalkBack
 /// users know content is being fetched.
 class AccessibleLoadingIndicator extends StatelessWidget {
+  const AccessibleLoadingIndicator({super.key, this.semanticLabel});
   final String? semanticLabel;
-
-  const AccessibleLoadingIndicator({
-    super.key,
-    this.semanticLabel,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +130,18 @@ class AccessibleLoadingIndicator extends StatelessWidget {
 /// Wraps a [TextField] with an explicit semantic label when the visual label
 /// alone is insufficient (e.g. icon-only inputs, chat bubbles).
 class AccessibleTextField extends StatelessWidget {
+  const AccessibleTextField({
+    required this.semanticLabel,
+    super.key,
+    this.controller,
+    this.hintText,
+    this.keyboardType,
+    this.obscureText = false,
+    this.decoration,
+    this.onChanged,
+    this.textInputAction,
+    this.focusNode,
+  });
   final TextEditingController? controller;
   final String semanticLabel;
   final String? hintText;
@@ -151,19 +151,6 @@ class AccessibleTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
-
-  const AccessibleTextField({
-    super.key,
-    this.controller,
-    required this.semanticLabel,
-    this.hintText,
-    this.keyboardType,
-    this.obscureText = false,
-    this.decoration,
-    this.onChanged,
-    this.textInputAction,
-    this.focusNode,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -177,11 +164,9 @@ class AccessibleTextField extends StatelessWidget {
         onChanged: onChanged,
         textInputAction: textInputAction,
         focusNode: focusNode,
-        decoration: decoration ??
-            InputDecoration(
-              hintText: hintText,
-              labelText: semanticLabel,
-            ),
+        decoration:
+            decoration ??
+            InputDecoration(hintText: hintText, labelText: semanticLabel),
       ),
     );
   }
@@ -192,14 +177,13 @@ class AccessibleTextField extends StatelessWidget {
 /// Useful for ephemeral status changes (form submission result, network
 /// status change) that don't warrant a dialog or navigation.
 class AnnouncementWidget extends StatefulWidget {
-  final String message;
-  final Widget child;
-
   const AnnouncementWidget({
-    super.key,
     required this.message,
     required this.child,
+    super.key,
   });
+  final String message;
+  final Widget child;
 
   @override
   State<AnnouncementWidget> createState() => _AnnouncementWidgetState();
@@ -210,7 +194,11 @@ class _AnnouncementWidgetState extends State<AnnouncementWidget> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      SemanticsService.announce(widget.message, TextDirection.ltr);
+      SemanticsService.sendAnnouncement(
+        WidgetsBinding.instance.platformDispatcher.views.first,
+        widget.message,
+        TextDirection.ltr,
+      );
     });
   }
 

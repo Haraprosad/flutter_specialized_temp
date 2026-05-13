@@ -13,6 +13,13 @@ import 'package:flutter_specialized_temp/core/network/cubit/connectivity_cubit.d
 /// - Memory efficient with minimal rebuilds
 /// - Progressive disclosure of connection details
 class OfflineIndicatorBanner extends StatefulWidget {
+  const OfflineIndicatorBanner({
+    super.key,
+    this.onConnectionRestored,
+    this.showDetails = false,
+    this.onRetry,
+  });
+
   /// Optional callback when connection is restored
   final VoidCallback? onConnectionRestored;
 
@@ -21,13 +28,6 @@ class OfflineIndicatorBanner extends StatefulWidget {
 
   /// Custom retry action
   final VoidCallback? onRetry;
-
-  const OfflineIndicatorBanner({
-    super.key,
-    this.onConnectionRestored,
-    this.showDetails = false,
-    this.onRetry,
-  });
 
   @override
   State<OfflineIndicatorBanner> createState() => _OfflineIndicatorBannerState();
@@ -55,39 +55,28 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
       duration: const Duration(milliseconds: 400),
       vsync: this,
     );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, -1),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
 
     // Pulse animation for retry button
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    _pulseAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.1,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
+    _pulseAnimation = Tween<double>(begin: 1, end: 1.1).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
 
     // Celebration animation for connection restored
     _celebrationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    _celebrationAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _celebrationController,
-      curve: Curves.elasticOut,
-    ));
+    _celebrationAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _celebrationController, curve: Curves.elasticOut),
+    );
   }
 
   @override
@@ -154,7 +143,7 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
   Widget _buildEnhancedBanner(BuildContext context, ConnectivityState state) {
     return Material(
       elevation: 8,
-      shadowColor: Colors.red.withOpacity(0.5),
+      shadowColor: Colors.red.withValues(alpha: 0.5),
       child: AnimatedBuilder(
         animation: _celebrationAnimation,
         builder: (context, child) {
@@ -172,10 +161,8 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
               gradient: LinearGradient(
                 colors: [
                   backgroundColor,
-                  backgroundColor.withOpacity(0.8),
+                  backgroundColor.withValues(alpha: 0.8),
                 ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
               ),
             ),
             child: SafeArea(
@@ -227,7 +214,7 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
                     child: Text(
-                      isConnected ? 'Connection restored!' : 'You\'re offline',
+                      isConnected ? 'Connection restored!' : "You're offline",
                       key: ValueKey(isConnected),
                       style: const TextStyle(
                         color: Colors.white,
@@ -241,7 +228,7 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
                     Text(
                       'Using cached content when available',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                         fontSize: 12,
                       ),
                     ),
@@ -279,7 +266,7 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
         child: CircularProgressIndicator(
           strokeWidth: 2,
           valueColor: AlwaysStoppedAnimation<Color>(
-            Colors.white.withOpacity(0.8),
+            Colors.white.withValues(alpha: 0.8),
           ),
         ),
       );
@@ -294,7 +281,7 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -303,7 +290,7 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
                 Text(
                   'Retry',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.95),
+                    color: Colors.white.withValues(alpha: 0.95),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -311,7 +298,7 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
                 const SizedBox(width: 4),
                 Icon(
                   Icons.refresh,
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   size: 16,
                 ),
               ],
@@ -337,18 +324,17 @@ class _OfflineIndicatorBannerState extends State<OfflineIndicatorBanner>
 
 /// 🎯 Smart offline wrapper with enhanced UX patterns for million users
 class SmartOfflineWrapper extends StatelessWidget {
-  final Widget child;
-  final bool showNetworkStatus;
-  final bool showCacheIndicators;
-  final VoidCallback? onConnectionRestored;
-
   const SmartOfflineWrapper({
-    super.key,
     required this.child,
+    super.key,
     this.showNetworkStatus = true,
     this.showCacheIndicators = false,
     this.onConnectionRestored,
   });
+  final Widget child;
+  final bool showNetworkStatus;
+  final bool showCacheIndicators;
+  final VoidCallback? onConnectionRestored;
 
   @override
   Widget build(BuildContext context) {
@@ -367,14 +353,13 @@ class SmartOfflineWrapper extends StatelessWidget {
 
 /// 📊 Network status indicator for AppBar
 class NetworkStatusIndicator extends StatelessWidget {
-  final bool showWhenOnline;
-  final bool compact;
-
   const NetworkStatusIndicator({
     super.key,
     this.showWhenOnline = false,
     this.compact = true,
   });
+  final bool showWhenOnline;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -393,17 +378,14 @@ class NetworkStatusIndicator extends StatelessWidget {
             color = Colors.green;
             icon = Icons.wifi;
             text = 'Online';
-            break;
           case DisconnectedState:
             color = Colors.red;
             icon = Icons.wifi_off;
             text = 'Offline';
-            break;
           case ConnectivityChecking:
             color = Colors.orange;
             icon = Icons.wifi_find;
             text = 'Checking...';
-            break;
           default:
             color = Colors.grey;
             icon = Icons.help_outline;
@@ -413,9 +395,9 @@ class NetworkStatusIndicator extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color.withOpacity(0.3)),
+            border: Border.all(color: color.withValues(alpha: 0.3)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -449,9 +431,8 @@ class NetworkStatusIndicator extends StatelessWidget {
 /// );
 /// ```
 class WithOfflineIndicator extends StatelessWidget {
+  const WithOfflineIndicator({required this.child, super.key});
   final Widget child;
-
-  const WithOfflineIndicator({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -474,16 +455,15 @@ class WithOfflineIndicator extends StatelessWidget {
 /// )
 /// ```
 class ConnectivityAwareButton extends StatelessWidget {
+  const ConnectivityAwareButton({
+    required this.onPressed,
+    required this.child,
+    super.key,
+    this.style,
+  });
   final VoidCallback? onPressed;
   final Widget child;
   final ButtonStyle? style;
-
-  const ConnectivityAwareButton({
-    super.key,
-    required this.onPressed,
-    required this.child,
-    this.style,
-  });
 
   @override
   Widget build(BuildContext context) {

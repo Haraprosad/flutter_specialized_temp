@@ -18,10 +18,7 @@ class AppButtonStyles {
         borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
       ),
       padding: AppSpacing.paddingButtonElevated,
-      textStyle: TextStyle(
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-      ),
+      textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
     );
   }
 

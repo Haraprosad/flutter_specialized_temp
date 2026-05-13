@@ -16,5 +16,5 @@ class NetworkConstants {
   // Retry configuration with exponential backoff
   static const int maxRetries = 3;
   static const Duration initialRetryDelay = Duration(seconds: 1);
-  static const double retryBackoffMultiplier = 2.0; // 1s, 2s, 4s
+  static const double retryBackoffMultiplier = 2; // 1s, 2s, 4s
 }

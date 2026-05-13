@@ -67,24 +67,16 @@ class OptimisticUpdateHandler<T> {
       // Rollback on any error
       await rollback();
       await onFailure(e);
-      return OptimisticUpdateResult.failure(
-        'An unexpected error occurred',
-        canRetry: false,
-      );
+      return OptimisticUpdateResult.failure('An unexpected error occurred');
     }
   }
 }
 
 /// Result of an optimistic update operation
 class OptimisticUpdateResult<T> {
-  final T? data;
-  final bool isSuccess;
-  final String? errorMessage;
-  final bool canRetry;
-
   const OptimisticUpdateResult._({
-    this.data,
     required this.isSuccess,
+    this.data,
     this.errorMessage,
     this.canRetry = false,
   });
@@ -103,6 +95,10 @@ class OptimisticUpdateResult<T> {
       canRetry: canRetry,
     );
   }
+  final T? data;
+  final bool isSuccess;
+  final String? errorMessage;
+  final bool canRetry;
 
   bool get hasError => !isSuccess;
   bool get shouldShowRetry => hasError && canRetry;

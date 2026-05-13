@@ -24,13 +24,10 @@ abstract class RegisterModule {
 
   @lazySingleton
   FlutterSecureStorage get secureStorage => const FlutterSecureStorage(
-        aOptions: AndroidOptions(
-          storageNamespace: 'securePrefs',
-          preferencesKeyPrefix: 'secure_',
-        ),
-        iOptions: IOSOptions(
-          accessibility: KeychainAccessibility.first_unlock,
-          synchronizable: false,
-        ),
-      );
+    aOptions: AndroidOptions(
+      storageNamespace: 'securePrefs',
+      preferencesKeyPrefix: 'secure_',
+    ),
+    iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
+  );
 }

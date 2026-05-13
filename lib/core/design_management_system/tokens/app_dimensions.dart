@@ -60,8 +60,8 @@ class AppDimensions {
 
   // ─── Elevation ────────────────────────────────────────────────────────────
 
-  static const double elevationCard = 2.0;
-  static const double elevationModal = 8.0;
-  static const double elevationAppBar = 1.0;
-  static const double elevationButton = 8.0;
+  static const double elevationCard = 2;
+  static const double elevationModal = 8;
+  static const double elevationAppBar = 1;
+  static const double elevationButton = 8;
 }

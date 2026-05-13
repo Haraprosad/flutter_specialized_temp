@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// Wraps [widget] with [MaterialApp] and [ScreenUtilInit] so widget tests
 /// have a minimal but realistic rendering context.
 ///
-/// Pass [providers] to inject any BLoC/Cubit instances the widget under test
+/// Pass `providers` to inject any BLoC/Cubit instances the widget under test
 /// needs. Example:
 /// ```dart
 /// await tester.pumpApp(
@@ -20,7 +20,7 @@ extension PumpApp on WidgetTester {
     List<BlocProvider> providers = const [],
     ThemeData? theme,
   }) async {
-    Widget child = widget;
+    var child = widget;
 
     if (providers.isNotEmpty) {
       child = MultiBlocProvider(providers: providers, child: child);
@@ -30,10 +30,7 @@ extension PumpApp on WidgetTester {
       ScreenUtilInit(
         designSize: const Size(375, 812),
         minTextAdapt: true,
-        child: MaterialApp(
-          theme: theme ?? ThemeData.light(),
-          home: child,
-        ),
+        child: MaterialApp(theme: theme ?? ThemeData.light(), home: child),
       ),
     );
   }

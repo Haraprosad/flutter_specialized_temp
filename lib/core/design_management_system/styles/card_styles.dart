@@ -24,9 +24,7 @@ class AppCardStyles {
     return BoxDecoration(
       color: colors.surface,
       borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-      border: Border.all(
-        color: colors.textSecondary.withAlpha(51),
-      ),
+      border: Border.all(color: colors.textSecondary.withAlpha(51)),
     );
   }
 

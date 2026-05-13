@@ -28,15 +28,16 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) => m.createAll(),
-        onUpgrade: (m, from, to) async {
-          // Add migration steps here as schemaVersion grows.
-          // Example:
-          //   if (from < 2) await m.addColumn(tasks, tasks.someNewColumn);
-        },
-      );
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      // Add migration steps here as schemaVersion grows.
+      // Example:
+      //   if (from < 2) await m.addColumn(tasks, tasks.someNewColumn);
+    },
+  );
 
   /// DAO accessors — used by feature repositories via DI.
+  @override
   TaskDao get taskDao => TaskDao(this);
 }
 

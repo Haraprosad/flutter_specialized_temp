@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/widgets/network_aware_page.dart';
-import '../../../core/network/cubit/connectivity_cubit.dart';
+import 'package:flutter_specialized_temp/core/network/cubit/connectivity_cubit.dart';
+import 'package:flutter_specialized_temp/core/widgets/network_aware_page.dart';
 
 /// 🚀 EXAMPLE: How to create a new network-aware page professionally
 ///
@@ -24,11 +24,7 @@ class SimpleNetworkAwarePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const NetworkAwarePage(
       title: 'My Feature',
-      showNetworkStatusInAppBar: true,
-      showOfflineBanner: true,
-      body: Center(
-        child: Text('Your content here'),
-      ),
+      body: Center(child: Text('Your content here')),
     );
   }
 }
@@ -41,9 +37,6 @@ class ProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return NetworkAwarePage(
       title: 'Products',
-      showNetworkStatusInAppBar: true,
-      showOfflineBanner: true,
-      showCacheDetails: true,
 
       // 🚀 Auto-refresh when connection is restored
       onConnectionRestored: () {
@@ -63,7 +56,6 @@ class ProductsPage extends StatelessWidget {
         //     return SizedBox.shrink();
         //   },
         // ),
-
         IconButton(
           icon: const Icon(Icons.filter_list),
           onPressed: () {
@@ -76,7 +68,7 @@ class ProductsPage extends StatelessWidget {
       enableRefresh: true,
       onRefresh: () async {
         // context.read<ProductsBloc>().add(const ProductsRefresh());
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future<void>.delayed(const Duration(milliseconds: 500));
       },
 
       body: const _ProductsContent(),
@@ -100,29 +92,11 @@ class _ProductsContentExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Example structure - replace with your actual BLoC
-    final isLoading = false;
-    final hasError = false;
-    final hasData = true;
-
-    // 💀 Loading state with shimmer
-    if (isLoading && !hasData) {
-      return const NetworkAwareLoadingState(
-        itemCount: 10,
-        // Optional: Custom shimmer item
-        // itemBuilder: (context, index) => ProductItemShimmer(),
-      );
-    }
-
-    // 🚨 Error state with network awareness
-    if (hasError && !hasData) {
-      return NetworkAwareErrorState(
-        errorMessage: 'Failed to load products',
-        onRetry: () {
-          // context.read<ProductsBloc>().add(const ProductsFetched());
-        },
-      );
-    }
+    // Example structure - replace with your actual BLoC.
+    // Example loading check:
+    //   if (isLoading && !hasData) return const NetworkAwareLoadingState();
+    // Example error check:
+    //   if (hasError && !hasData) return NetworkAwareErrorState(...);
 
     // ✅ Success state with data
     return ListView.builder(
@@ -152,11 +126,8 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const NetworkAwarePage(
       title: 'Settings',
-      showNetworkStatusInAppBar: true,
       showOfflineBanner: false, // Hide banner for settings page
-      body: Center(
-        child: Text('Settings content'),
-      ),
+      body: Center(child: Text('Settings content')),
     );
   }
 }
@@ -238,11 +209,11 @@ class _OrdersContent extends StatelessWidget {
 }
 
 /// 📚 PROFESSIONAL PATTERNS FOR NEW PAGES
-/// 
+///
 /// ═══════════════════════════════════════════════════════════════════
 /// Pattern 1: Standard BLoC Page
 /// ═══════════════════════════════════════════════════════════════════
-/// 
+///
 /// class MyPage extends StatelessWidget {
 ///   @override
 ///   Widget build(BuildContext context) {
@@ -258,25 +229,25 @@ class _OrdersContent extends StatelessWidget {
 ///               itemBuilder: (context, index) => MyShimmer(),
 ///             );
 ///           }
-///           
+///
 ///           if (state.hasError && !state.hasData) {
 ///             return NetworkAwareErrorState(
 ///               errorMessage: state.failure?.message,
 ///               onRetry: () => context.read<MyBloc>().add(FetchEvent()),
 ///             );
 ///           }
-///           
+///
 ///           return MyContentWidget(data: state.data);
 ///         },
 ///       ),
 ///     );
 ///   }
 /// }
-/// 
+///
 /// ═══════════════════════════════════════════════════════════════════
 /// Pattern 2: Page with Custom Refresh Logic
 /// ═══════════════════════════════════════════════════════════════════
-/// 
+///
 /// class MyPage extends StatelessWidget {
 ///   @override
 ///   Widget build(BuildContext context) {
@@ -286,7 +257,7 @@ class _OrdersContent extends StatelessWidget {
 ///       onRefresh: () async {
 ///         final bloc = context.read<MyBloc>();
 ///         bloc.add(const RefreshEvent());
-///         
+///
 ///         // Wait for completion
 ///         await bloc.stream.firstWhere(
 ///           (state) => !state.isRefreshing,
@@ -296,11 +267,11 @@ class _OrdersContent extends StatelessWidget {
 ///     );
 ///   }
 /// }
-/// 
+///
 /// ═══════════════════════════════════════════════════════════════════
 /// Pattern 3: Page with Performance Metrics
 /// ═══════════════════════════════════════════════════════════════════
-/// 
+///
 /// class MyPage extends StatelessWidget {
 ///   @override
 ///   Widget build(BuildContext context) {
@@ -308,18 +279,18 @@ class _OrdersContent extends StatelessWidget {
 ///       title: 'My Feature',
 ///       actions: [
 ///         BlocBuilder<MyBloc, MyState>(
-///           buildWhen: (prev, curr) => 
+///           buildWhen: (prev, curr) =>
 ///             prev.performanceMetrics != curr.performanceMetrics,
 ///           builder: (context, state) {
 ///             if (state.performanceMetrics != null) {
 ///               return Tooltip(
-///                 message: state.isFromCache 
-///                   ? 'Loaded from cache' 
+///                 message: state.isFromCache
+///                   ? 'Loaded from cache'
 ///                   : 'Loaded from network',
 ///                 child: Chip(
 ///                   label: Text('${state.performanceMetrics!.loadTime}ms'),
-///                   backgroundColor: state.isFromCache 
-///                     ? Colors.green.shade100 
+///                   backgroundColor: state.isFromCache
+///                     ? Colors.green.shade100
 ///                     : Colors.blue.shade100,
 ///                 ),
 ///               );
@@ -332,11 +303,11 @@ class _OrdersContent extends StatelessWidget {
 ///     );
 ///   }
 /// }
-/// 
+///
 /// ═══════════════════════════════════════════════════════════════════
 /// Pattern 4: Minimal Page (No Network Indicators)
 /// ═══════════════════════════════════════════════════════════════════
-/// 
+///
 /// class MyPage extends StatelessWidget {
 ///   @override
 ///   Widget build(BuildContext context) {

@@ -5,19 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 @lazySingleton
 class PreferencesManager {
+  PreferencesManager(this._prefs);
   final SharedPreferences _prefs;
 
-  PreferencesManager(this._prefs);
-
   // Theme preferences
-  Future<void> setDarkMode(bool isDark) async {
+  Future<void> setDarkMode({required bool isDark}) async {
     try {
       await _prefs.setBool(StorageKeys.isDarkMode, isDark);
     } catch (e) {
-      throw PreferencesException(
-        'Failed to save dark mode preference',
-        e,
-      );
+      throw PreferencesException('Failed to save dark mode preference', e);
     }
   }
 
@@ -30,10 +26,7 @@ class PreferencesManager {
     try {
       await _prefs.setString(StorageKeys.language, languageCode);
     } catch (e) {
-      throw PreferencesException(
-        'Failed to save language preference',
-        e,
-      );
+      throw PreferencesException('Failed to save language preference', e);
     }
   }
 
@@ -42,14 +35,11 @@ class PreferencesManager {
   }
 
   // Authentication state methods
-  Future<void> setIsAuthenticated(bool isAuthenticated) async {
+  Future<void> setIsAuthenticated({required bool isAuthenticated}) async {
     try {
       await _prefs.setBool(StorageKeys.isAuthenticated, isAuthenticated);
     } catch (e) {
-      throw PreferencesException(
-        'Failed to save authentication state',
-        e,
-      );
+      throw PreferencesException('Failed to save authentication state', e);
     }
   }
 
@@ -62,10 +52,7 @@ class PreferencesManager {
     try {
       await _prefs.setString(StorageKeys.userRole, role);
     } catch (e) {
-      throw PreferencesException(
-        'Failed to save user role',
-        e,
-      );
+      throw PreferencesException('Failed to save user role', e);
     }
   }
 
@@ -78,10 +65,7 @@ class PreferencesManager {
     try {
       await _prefs.setString(StorageKeys.userId, userId);
     } catch (e) {
-      throw PreferencesException(
-        'Failed to save user ID',
-        e,
-      );
+      throw PreferencesException('Failed to save user ID', e);
     }
   }
 
@@ -93,10 +77,7 @@ class PreferencesManager {
     try {
       await _prefs.setString(StorageKeys.userEmail, email);
     } catch (e) {
-      throw PreferencesException(
-        'Failed to save user email',
-        e,
-      );
+      throw PreferencesException('Failed to save user email', e);
     }
   }
 
@@ -109,10 +90,7 @@ class PreferencesManager {
     try {
       await _prefs.clear();
     } catch (e) {
-      throw PreferencesException(
-        'Failed to clear preferences',
-        e,
-      );
+      throw PreferencesException('Failed to clear preferences', e);
     }
   }
 }

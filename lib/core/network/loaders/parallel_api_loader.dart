@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
-import 'package:flutter_specialized_temp/core/network/error_handling/network_error_handler.dart';
-import 'package:injectable/injectable.dart';
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:flutter_specialized_temp/core/network/error_handling/network_error_handler.dart';
+import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
+import 'package:injectable/injectable.dart';
 
 /// 🚀 CENTRAL PARALLEL LOADER - Battle-Tested for Million-User Scale
 ///
@@ -33,10 +33,9 @@ import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 /// - Detail screens (product + reviews + related items)
 @injectable
 class ParallelApiLoader {
+  ParallelApiLoader(this._errorHandler);
   final NetworkErrorHandler _errorHandler;
   final Map<String, CancelToken> _activeCancelTokens = {};
-
-  ParallelApiLoader(this._errorHandler);
 
   /// 🎯 CORE METHOD: Load Multiple APIs in Parallel
   ///
@@ -87,7 +86,8 @@ class ParallelApiLoader {
       // Sort loaders by priority (critical → high → normal → low)
       final sortedEntries = loaders.entries.toList()
         ..sort(
-            (a, b) => a.value.priority.index.compareTo(b.value.priority.index));
+          (a, b) => a.value.priority.index.compareTo(b.value.priority.index),
+        );
 
       // Group by priority for staged loading if enabled
       if (effectiveOptions.useStagedLoading) {
@@ -149,8 +149,8 @@ class ParallelApiLoader {
 
     return Map.fromEntries(
       loaders.asMap().entries.map(
-            (e) => MapEntry(loaders[e.key].key, results[e.key]),
-          ),
+        (e) => MapEntry(loaders[e.key].key, results[e.key]),
+      ),
     );
   }
 
@@ -207,14 +207,17 @@ class ParallelApiLoader {
               config.timeout!,
               onTimeout: () {
                 AppLogger.w(
-                    message: '⏱️ "$key" timed out after ${config.timeout}');
-                return ApiFailure(_errorHandler.handleError(
-                  DioException(
-                    requestOptions: RequestOptions(path: key),
-                    type: DioExceptionType.connectionTimeout,
+                  message: '⏱️ "$key" timed out after ${config.timeout}',
+                );
+                return ApiFailure(
+                  _errorHandler.handleError(
+                    DioException(
+                      requestOptions: RequestOptions(path: key),
+                      type: DioExceptionType.connectionTimeout,
+                    ),
+                    StackTrace.current,
                   ),
-                  StackTrace.current,
-                ));
+                );
               },
             )
           : await config.loader();
@@ -303,7 +306,7 @@ class ParallelApiLoader {
 
   /// Check if result has partial success
   bool _hasPartialSuccess(Map<String, ApiResult<dynamic>> results) {
-    final successCount = results.values.where((r) => r is ApiSuccess).length;
+    final successCount = results.values.whereType<ApiSuccess<dynamic>>().length;
     return successCount > 0 && successCount < results.length;
   }
 
@@ -337,6 +340,13 @@ class ParallelApiLoader {
 
 /// Configuration for a single API loader
 class LoaderConfig {
+  const LoaderConfig({
+    required this.loader,
+    this.priority = LoaderPriority.normal,
+    this.timeout,
+    this.maxRetries = 0,
+  });
+
   /// The API call function
   final Future<ApiResult<dynamic>> Function() loader;
 
@@ -348,13 +358,6 @@ class LoaderConfig {
 
   /// Optional retry configuration
   final int maxRetries;
-
-  const LoaderConfig({
-    required this.loader,
-    this.priority = LoaderPriority.normal,
-    this.timeout,
-    this.maxRetries = 0,
-  });
 }
 
 /// Priority levels for parallel loading
@@ -367,6 +370,12 @@ enum LoaderPriority {
 
 /// Options for parallel loading behavior
 class ParallelLoadOptions {
+  const ParallelLoadOptions({
+    this.useStagedLoading = false,
+    this.globalTimeout,
+    this.enableProgressiveUI = true,
+  });
+
   /// Use staged loading (load by priority groups sequentially)
   /// - false: All APIs load in parallel (fastest)
   /// - true: Critical APIs → High APIs → Normal APIs → Low APIs
@@ -377,12 +386,6 @@ class ParallelLoadOptions {
 
   /// Show partial UI as data loads
   final bool enableProgressiveUI;
-
-  const ParallelLoadOptions({
-    this.useStagedLoading = false,
-    this.globalTimeout,
-    this.enableProgressiveUI = true,
-  });
 }
 
 // =============================================================================
@@ -391,6 +394,14 @@ class ParallelLoadOptions {
 
 /// Result of parallel loading operation
 class ParallelLoadResult {
+  const ParallelLoadResult({
+    required this.results,
+    required this.metrics,
+    required this.totalDuration,
+    required this.isPartialSuccess,
+    this.error,
+  });
+
   /// Map of results by loader key
   final Map<String, ApiResult<dynamic>> results;
 
@@ -405,14 +416,6 @@ class ParallelLoadResult {
 
   /// Error message if complete failure
   final String? error;
-
-  const ParallelLoadResult({
-    required this.results,
-    required this.metrics,
-    required this.totalDuration,
-    required this.isPartialSuccess,
-    this.error,
-  });
 
   /// Get result for specific key with type safety
   ApiResult<T>? getResult<T>(String key) {
@@ -500,17 +503,16 @@ class ParallelLoadResult {
 
 /// Performance metrics for a single loader
 class LoaderMetrics {
-  final Duration duration;
-  final bool isSuccess;
-  final LoaderPriority priority;
-  final String? error;
-
   const LoaderMetrics({
     required this.duration,
     required this.isSuccess,
     required this.priority,
     this.error,
   });
+  final Duration duration;
+  final bool isSuccess;
+  final LoaderPriority priority;
+  final String? error;
 
   int get durationMs => duration.inMilliseconds;
 }

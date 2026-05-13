@@ -10,12 +10,12 @@ sealed class ApiResult<T> {
 
 /// The API call worked and we got data back
 final class ApiSuccess<T> extends ApiResult<T> {
-  final T data;
   const ApiSuccess(this.data);
+  final T data;
 }
 
 /// The API call failed for some reason - network error, server error, etc.
 final class ApiFailure<T> extends ApiResult<T> {
-  final ApiCallFailureModel failure;
   const ApiFailure(this.failure);
+  final ApiCallFailureModel failure;
 }

@@ -23,8 +23,9 @@ void main() {
       // Arrange
       const key = 'testKey';
       const value = 'testValue';
-      when(mockStorage.write(key: key, value: value))
-          .thenAnswer((_) => Future.value());
+      when(
+        mockStorage.write(key: key, value: value),
+      ).thenAnswer((_) => Future.value());
 
       // Act
       await storageManager.writeSecureData(key, value);
@@ -37,8 +38,9 @@ void main() {
       // Arrange
       const key = 'testKey';
       const value = 'testValue';
-      when(mockStorage.write(key: key, value: value))
-          .thenThrow(Exception('Test error'));
+      when(
+        mockStorage.write(key: key, value: value),
+      ).thenThrow(Exception('Test error'));
 
       // Act & Assert
       expect(
@@ -131,17 +133,15 @@ void main() {
       // Arrange
       const accessToken = 'testAccessToken';
       const refreshToken = 'testRefreshToken';
-      
+
       // Setup mocks with specific values
-      when(mockStorage.write(
-        key: StorageKeys.authToken,
-        value: accessToken,
-      )).thenAnswer((_) => Future.value());
-      
-      when(mockStorage.write(
-        key: StorageKeys.refreshToken,
-        value: refreshToken,
-      )).thenAnswer((_) => Future.value());
+      when(
+        mockStorage.write(key: StorageKeys.authToken, value: accessToken),
+      ).thenAnswer((_) => Future.value());
+
+      when(
+        mockStorage.write(key: StorageKeys.refreshToken, value: refreshToken),
+      ).thenAnswer((_) => Future.value());
 
       // Act
       await storageManager.saveAuthTokens(
@@ -150,14 +150,12 @@ void main() {
       );
 
       // Assert
-      verify(mockStorage.write(
-        key: StorageKeys.authToken,
-        value: accessToken,
-      )).called(1);
-      verify(mockStorage.write(
-        key: StorageKeys.refreshToken,
-        value: refreshToken,
-      )).called(1);
+      verify(
+        mockStorage.write(key: StorageKeys.authToken, value: accessToken),
+      ).called(1);
+      verify(
+        mockStorage.write(key: StorageKeys.refreshToken, value: refreshToken),
+      ).called(1);
     });
   });
 
@@ -166,38 +164,39 @@ void main() {
       // Arrange
       const accessToken = 'testAccessToken';
       const refreshToken = 'testRefreshToken';
-      when(mockStorage.read(key: StorageKeys.authToken))
-          .thenAnswer((_) => Future.value(accessToken));
-      when(mockStorage.read(key: StorageKeys.refreshToken))
-          .thenAnswer((_) => Future.value(refreshToken));
+      when(
+        mockStorage.read(key: StorageKeys.authToken),
+      ).thenAnswer((_) => Future.value(accessToken));
+      when(
+        mockStorage.read(key: StorageKeys.refreshToken),
+      ).thenAnswer((_) => Future.value(refreshToken));
 
       // Act
       final result = await storageManager.getAuthTokens();
 
       // Assert
-      expect(result, equals({
-        'accessToken': accessToken,
-        'refreshToken': refreshToken,
-      }));
+      expect(
+        result,
+        equals({'accessToken': accessToken, 'refreshToken': refreshToken}),
+      );
       verify(mockStorage.read(key: StorageKeys.authToken)).called(1);
       verify(mockStorage.read(key: StorageKeys.refreshToken)).called(1);
     });
 
     test('should handle null tokens', () async {
       // Arrange
-      when(mockStorage.read(key: StorageKeys.authToken))
-          .thenAnswer((_) => Future.value(null));
-      when(mockStorage.read(key: StorageKeys.refreshToken))
-          .thenAnswer((_) => Future.value(null));
+      when(
+        mockStorage.read(key: StorageKeys.authToken),
+      ).thenAnswer((_) => Future.value());
+      when(
+        mockStorage.read(key: StorageKeys.refreshToken),
+      ).thenAnswer((_) => Future.value());
 
       // Act
       final result = await storageManager.getAuthTokens();
 
       // Assert
-      expect(result, equals({
-        'accessToken': null,
-        'refreshToken': null,
-      }));
+      expect(result, equals({'accessToken': null, 'refreshToken': null}));
     });
   });
 }

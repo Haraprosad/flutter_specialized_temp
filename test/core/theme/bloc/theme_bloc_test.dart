@@ -1,11 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
 
 import 'theme_bloc_test.mocks.dart';
 
@@ -28,10 +28,7 @@ void main() {
 
   group('ThemeBloc', () {
     test('initial state is correct', () {
-      expect(
-        themeBloc.state,
-        equals(const ThemeState.initial()),
-      );
+      expect(themeBloc.state, equals(const ThemeState.initial()));
       expect(themeBloc.state.isDark, isFalse);
       expect(themeBloc.state.themeMode, equals(ThemeMode.light));
     });
@@ -45,10 +42,7 @@ void main() {
         build: () => ThemeBloc(mockAppStorage),
         act: (bloc) => bloc.add(const InitializeTheme()),
         expect: () => [
-          const ThemeState(
-            themeMode: ThemeMode.light,
-            isDark: false,
-          ),
+          const ThemeState(themeMode: ThemeMode.light, isDark: false),
         ],
         verify: (_) {
           verify(mockPreferencesManager.getDarkMode()).called(1);
@@ -63,10 +57,7 @@ void main() {
         build: () => ThemeBloc(mockAppStorage),
         act: (bloc) => bloc.add(const InitializeTheme()),
         expect: () => [
-          const ThemeState(
-            themeMode: ThemeMode.dark,
-            isDark: true,
-          ),
+          const ThemeState(themeMode: ThemeMode.dark, isDark: true),
         ],
         verify: (_) {
           verify(mockPreferencesManager.getDarkMode()).called(1);
@@ -78,60 +69,51 @@ void main() {
       blocTest<ThemeBloc, ThemeState>(
         'toggles from light to dark theme',
         setUp: () {
-          when(mockPreferencesManager.setDarkMode(true))
-              .thenAnswer((_) async {});
+          when(
+            mockPreferencesManager.setDarkMode(isDark: true),
+          ).thenAnswer((_) async {});
         },
         build: () => ThemeBloc(mockAppStorage),
-        seed: () => const ThemeState(
-          themeMode: ThemeMode.light,
-          isDark: false,
-        ),
+        seed: () => const ThemeState(themeMode: ThemeMode.light, isDark: false),
         act: (bloc) => bloc.add(const ToggleTheme()),
         expect: () => [
-          const ThemeState(
-            themeMode: ThemeMode.dark,
-            isDark: true,
-          ),
+          const ThemeState(themeMode: ThemeMode.dark, isDark: true),
         ],
         verify: (_) {
-          verify(mockPreferencesManager.setDarkMode(true)).called(1);
+          verify(mockPreferencesManager.setDarkMode(isDark: true)).called(1);
         },
       );
 
       blocTest<ThemeBloc, ThemeState>(
         'toggles from dark to light theme',
         setUp: () {
-          when(mockPreferencesManager.setDarkMode(false))
-              .thenAnswer((_) async {});
+          when(
+            mockPreferencesManager.setDarkMode(isDark: false),
+          ).thenAnswer((_) async {});
         },
         build: () => ThemeBloc(mockAppStorage),
-        seed: () => const ThemeState(
-          themeMode: ThemeMode.dark,
-          isDark: true,
-        ),
+        seed: () => const ThemeState(themeMode: ThemeMode.dark, isDark: true),
         act: (bloc) => bloc.add(const ToggleTheme()),
         expect: () => [
-          const ThemeState(
-            themeMode: ThemeMode.light,
-            isDark: false,
-          ),
+          const ThemeState(themeMode: ThemeMode.light, isDark: false),
         ],
         verify: (_) {
-          verify(mockPreferencesManager.setDarkMode(false)).called(1);
+          verify(mockPreferencesManager.setDarkMode(isDark: false)).called(1);
         },
       );
 
       blocTest<ThemeBloc, ThemeState>(
         'handles storage errors gracefully',
         setUp: () {
-          when(mockPreferencesManager.setDarkMode(true))
-              .thenThrow(Exception('Storage error'));
+          when(
+            mockPreferencesManager.setDarkMode(isDark: true),
+          ).thenThrow(Exception('Storage error'));
         },
         build: () => ThemeBloc(mockAppStorage),
         act: (bloc) => bloc.add(const ToggleTheme()),
         errors: () => [isA<Exception>()],
         verify: (_) {
-          verify(mockPreferencesManager.setDarkMode(true)).called(1);
+          verify(mockPreferencesManager.setDarkMode(isDark: true)).called(1);
         },
       );
     });
@@ -147,7 +129,9 @@ void main() {
       test('different states are not equal', () {
         expect(
           const ThemeState(themeMode: ThemeMode.light, isDark: false),
-          isNot(equals(const ThemeState(themeMode: ThemeMode.dark, isDark: true))),
+          isNot(
+            equals(const ThemeState(themeMode: ThemeMode.dark, isDark: true)),
+          ),
         );
       });
 

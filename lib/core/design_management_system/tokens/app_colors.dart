@@ -3,16 +3,6 @@ import 'package:flutter/material.dart';
 /// Canonical color model for custom semantic colors not covered by Material 3's ColorScheme.
 /// Used for: success, background, textPrimary, textSecondary, warning, alert.
 class AppColorTokens {
-  final Color primary;
-  final Color secondary;
-  final Color success;
-  final Color background;
-  final Color surface;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color warning;
-  final Color alert;
-
   const AppColorTokens({
     required this.primary,
     required this.secondary,
@@ -24,6 +14,15 @@ class AppColorTokens {
     required this.warning,
     required this.alert,
   });
+  final Color primary;
+  final Color secondary;
+  final Color success;
+  final Color background;
+  final Color surface;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color warning;
+  final Color alert;
 }
 
 /// Single source of truth for all application colors.

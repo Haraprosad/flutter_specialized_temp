@@ -12,9 +12,8 @@ class GetTasksEvent extends TaskEvent {
 }
 
 class GetTaskDetailsEvent extends TaskEvent {
-  final String taskId;
-
   const GetTaskDetailsEvent(this.taskId);
+  final String taskId;
 
   @override
   List<Object?> get props => [taskId];

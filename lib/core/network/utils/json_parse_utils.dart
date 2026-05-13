@@ -38,11 +38,11 @@ class JsonParseUtils {
 
   /// Safely converts any value to double.
   static double toDouble(dynamic value) {
-    if (value == null) return 0.0;
+    if (value == null) return 0;
     if (value is double) return value;
     if (value is int) return value.toDouble();
     if (value is String) return double.tryParse(value.trim()) ?? 0.0;
-    return 0.0;
+    return 0;
   }
 
   static double? toDoubleOrNull(dynamic value) {
@@ -158,10 +158,7 @@ class JsonParseUtils {
     return true;
   }
 
-  static void validateRequired(
-    Map<String, dynamic> json,
-    List<String> fields,
-  ) {
+  static void validateRequired(Map<String, dynamic> json, List<String> fields) {
     for (final field in fields) {
       if (!json.containsKey(field) || !isNotEmpty(json[field])) {
         throw FormatException('Required field "$field" is missing or empty');

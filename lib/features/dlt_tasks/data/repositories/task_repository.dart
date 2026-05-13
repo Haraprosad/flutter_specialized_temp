@@ -5,9 +5,8 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: TaskRepository)
 class TaskRepositoryImpl implements TaskRepository {
-  final TaskLocalDataSource localDataSource;
-
   TaskRepositoryImpl(this.localDataSource);
+  final TaskLocalDataSource localDataSource;
 
   @override
   Future<List<TaskEntity>> getTasks() async {

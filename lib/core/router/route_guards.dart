@@ -6,10 +6,7 @@ import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class RouteGuards {
-  static String? authGuard(
-    BuildContext context,
-    GoRouterState state,
-  ) {
+  static String? authGuard(BuildContext context, GoRouterState state) {
     final isAuthenticated = sl<AppStorage>().preferences.getIsAuthenticated();
     final currentLocation = state.matchedLocation;
 
@@ -17,16 +14,9 @@ class RouteGuards {
     final isLoginRoute = currentLocation == RoutePaths.login;
     final isRegisterRoute = currentLocation == RoutePaths.register;
 
-    final publicRoutes = {
-      RoutePaths.splash,
-      RoutePaths.login,
-      RoutePaths.register,
-    };
-
-    final isPublicRoute = publicRoutes.contains(currentLocation);
-
     AppLogger.d(
-      message: "Route Guard - Location: $currentLocation, "
+      message:
+          "Route Guard - Location: $currentLocation, "
           "Authenticated: $isAuthenticated, "
           "IsSplash: $isSplash, "
           "IsLoginRoute: $isLoginRoute, "

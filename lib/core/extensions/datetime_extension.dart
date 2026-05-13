@@ -6,8 +6,18 @@ extension DateTimeExtension on DateTime {
   /// `dd MMM yyyy`  →  "05 Jan 2025"
   String get formatted {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${day.toString().padLeft(2, '0')} ${months[month - 1]} $year';
   }
@@ -64,8 +74,7 @@ extension DateTimeExtension on DateTime {
 
   DateTime get startOfDay => DateTime(year, month, day);
 
-  DateTime get endOfDay =>
-      DateTime(year, month, day, 23, 59, 59, 999);
+  DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999);
 
   DateTime addDays(int days) => add(Duration(days: days));
 

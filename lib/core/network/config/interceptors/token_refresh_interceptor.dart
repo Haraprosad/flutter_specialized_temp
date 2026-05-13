@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:flutter_specialized_temp/core/network/config/dio_client.dart'
+    show DioClient;
+import 'package:flutter_specialized_temp/core/network/config/interceptors/retry_interceptor.dart'
+    show RetryInterceptor;
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:flutter_specialized_temp/core/storage/storage_keys.dart';
 
@@ -15,10 +19,14 @@ import 'package:flutter_specialized_temp/core/storage/storage_keys.dart';
 /// call is ever made per token lifetime.
 ///
 /// ## Wiring
-/// Call [setDio] after the [Dio] instance is fully built (same pattern as
+/// Call [dio =] after the [Dio] instance is fully built (same pattern as
 /// [RetryInterceptor]) so the interceptor can replay requests through the
 /// complete interceptor chain with the new token.
 class TokenRefreshInterceptor extends Interceptor {
+  TokenRefreshInterceptor({
+    required AppStorage appStorage,
+    this.refreshPath = '/auth/refresh',
+  }) : _appStorage = appStorage;
   final AppStorage _appStorage;
 
   /// Override in your project to match your actual refresh endpoint.
@@ -32,13 +40,9 @@ class TokenRefreshInterceptor extends Interceptor {
   /// Requests that arrived with a 401 while a refresh was already in flight.
   final List<_PendingRequest> _queue = [];
 
-  TokenRefreshInterceptor({
-    required AppStorage appStorage,
-    this.refreshPath = '/auth/refresh',
-  }) : _appStorage = appStorage;
-
   /// Must be called by [DioClient] after the [Dio] instance is created.
-  void setDio(Dio dio) => _dio = dio;
+  Dio get dio => _dio ?? Dio();
+  set dio(Dio value) => _dio = value;
 
   @override
   Future<void> onError(
@@ -88,8 +92,9 @@ class TokenRefreshInterceptor extends Interceptor {
 
   Future<bool> _attemptRefresh() async {
     try {
-      final storedRefreshToken =
-          await _appStorage.secure.readSecureData(StorageKeys.refreshToken);
+      final storedRefreshToken = await _appStorage.secure.readSecureData(
+        StorageKeys.refreshToken,
+      );
 
       if (storedRefreshToken == null || storedRefreshToken.isEmpty) {
         AppLogger.w(message: 'TokenRefreshInterceptor: no refresh token found');
@@ -97,9 +102,7 @@ class TokenRefreshInterceptor extends Interceptor {
       }
 
       // Use a bare Dio instance to bypass the interceptor chain and avoid loops.
-      final refreshDio = Dio(
-        BaseOptions(baseUrl: _dio?.options.baseUrl ?? ''),
-      );
+      final refreshDio = Dio(BaseOptions(baseUrl: _dio?.options.baseUrl ?? ''));
 
       final response = await refreshDio.post<Map<String, dynamic>>(
         refreshPath,
@@ -115,7 +118,8 @@ class TokenRefreshInterceptor extends Interceptor {
 
       if (newAccess == null || newAccess.isEmpty) {
         AppLogger.w(
-          message: 'TokenRefreshInterceptor: refresh response missing access token',
+          message:
+              'TokenRefreshInterceptor: refresh response missing access token',
         );
         return false;
       }
@@ -125,7 +129,9 @@ class TokenRefreshInterceptor extends Interceptor {
         refreshToken: newRefresh ?? storedRefreshToken,
       );
 
-      AppLogger.i(message: 'TokenRefreshInterceptor: token refreshed successfully');
+      AppLogger.i(
+        message: 'TokenRefreshInterceptor: token refreshed successfully',
+      );
       return true;
     } catch (e) {
       AppLogger.w(message: 'TokenRefreshInterceptor: refresh failed', error: e);
@@ -159,8 +165,7 @@ class TokenRefreshInterceptor extends Interceptor {
 }
 
 class _PendingRequest {
+  _PendingRequest(this.options, this.handler);
   final RequestOptions options;
   final ErrorInterceptorHandler handler;
-
-  _PendingRequest(this.options, this.handler);
 }

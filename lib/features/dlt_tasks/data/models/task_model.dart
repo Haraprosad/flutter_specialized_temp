@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_specialized_temp/features/dlt_tasks/domain/entities/task_entity.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'task_model.freezed.dart';
 part 'task_model.g.dart';
@@ -20,10 +20,10 @@ abstract class TaskModel with _$TaskModel {
       _$TaskModelFromJson(json);
 
   TaskEntity toEntity() => TaskEntity(
-        id: id,
-        title: title,
-        description: description,
-        isCompleted: isCompleted,
-        createdAt: createdAt,
-      );
+    id: id,
+    title: title,
+    description: description,
+    isCompleted: isCompleted,
+    createdAt: createdAt,
+  );
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_specialized_temp/core/localization/extension/loc.dart';
 
@@ -7,31 +6,31 @@ class FlutterErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Colors.red,
-      title: Text(context.loc.error_unknown),
-    ),
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error, size: 80, color: Colors.red),
-          const SizedBox(height: 16),
-          Text(
-            context.loc.error_unknown,
-            style: TextStyle(fontSize: 18, color: Colors.black),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            context.loc.try_again,
-            style: TextStyle(fontSize: 16, color: Colors.black54),
-            textAlign: TextAlign.center,
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text(context.loc.error_unknown),
       ),
-    ),
-  );
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error, size: 80, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              context.loc.error_unknown,
+              style: const TextStyle(fontSize: 18, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              context.loc.try_again,
+              style: const TextStyle(fontSize: 16, color: Colors.black54),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

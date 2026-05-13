@@ -1,16 +1,14 @@
 // splash_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_specialized_temp/core/router/app_router.dart';
+import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/router/route_names.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/logger/app_logger.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -27,27 +25,26 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 2000),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOutCubic,
-      ),
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic),
     );
 
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _opacityAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+        curve: const Interval(0, 0.5, curve: Curves.easeIn),
       ),
     );
 
     _controller.forward();
 
-  // Navigate to next screen after animation
+    // Navigate to next screen after animation
     Future.delayed(const Duration(seconds: 3), () {
-      if(mounted){
-        AppLogger.d(message: "****Login route is called from splash screen *****");
-      context.pushReplacementNamed(RouteNames.login);
+      if (mounted) {
+        AppLogger.d(
+          message: "****Login route is called from splash screen *****",
+        );
+        context.pushReplacementNamed(RouteNames.login);
       }
     });
   }
@@ -66,10 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue.shade900,
-              Colors.blue.shade500,
-            ],
+            colors: [Colors.blue.shade900, Colors.blue.shade500],
           ),
         ),
         child: Center(
@@ -89,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen>
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withValues(alpha: 0.3),
                               blurRadius: 15,
                               offset: const Offset(0, 5),
                             ),

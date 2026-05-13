@@ -5,15 +5,16 @@ import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class SecureStorageManager {
-  final FlutterSecureStorage _storage;
-
   SecureStorageManager(this._storage);
+  final FlutterSecureStorage _storage;
 
   Future<void> writeSecureData(String key, String value) async {
     try {
       await _storage.write(key: key, value: value);
     } catch (e) {
-      throw SecureStorageException('Failed to write secure data for key "$key": $e');
+      throw SecureStorageException(
+        'Failed to write secure data for key "$key": $e',
+      );
     }
   }
 
@@ -21,7 +22,9 @@ class SecureStorageManager {
     try {
       return await _storage.read(key: key);
     } catch (e) {
-      throw SecureStorageException('Failed to read secure data for key "$key": $e');
+      throw SecureStorageException(
+        'Failed to read secure data for key "$key": $e',
+      );
     }
   }
 
@@ -29,7 +32,9 @@ class SecureStorageManager {
     try {
       await _storage.delete(key: key);
     } catch (e) {
-      throw SecureStorageException('Failed to delete secure data for key "$key": $e');
+      throw SecureStorageException(
+        'Failed to delete secure data for key "$key": $e',
+      );
     }
   }
 

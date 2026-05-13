@@ -4,18 +4,14 @@ import 'package:flutter_specialized_temp/features/dlt_tasks/domain/entities/task
 import 'package:go_router/go_router.dart';
 
 class TaskItem extends StatelessWidget {
+  const TaskItem({required this.task, super.key});
   final TaskEntity task;
-
-  const TaskItem({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(
-          task.title,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        title: Text(task.title, style: Theme.of(context).textTheme.titleMedium),
         subtitle: Text(
           task.description,
           style: Theme.of(context).textTheme.bodyMedium,

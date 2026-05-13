@@ -12,9 +12,8 @@ class InitializeLocale extends LocaleEvent {
 }
 
 class ChangeLocaleEvent extends LocaleEvent {
-  final Locale locale;
-
   const ChangeLocaleEvent(this.locale);
+  final Locale locale;
 
   @override
   List<Object?> get props => [locale];

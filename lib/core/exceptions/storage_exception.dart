@@ -1,16 +1,12 @@
-import 'app_exceptions.dart';
+import 'package:flutter_specialized_temp/core/exceptions/app_exceptions.dart';
 
 class StorageException extends AppException {
-  StorageException(
-    super.message, [
-    super.error,
-    super.stackTrace,
-  ]);
+  StorageException(super.message, [super.error, super.stackTrace]);
 }
 
 class StorageNotInitializedException extends StorageException {
   StorageNotInitializedException([String? message])
-      : super(message ?? 'Storage not initialized. Call init() first.');
+    : super(message ?? 'Storage not initialized. Call init() first.');
 }
 
 class SecureStorageException extends StorageException {
@@ -22,9 +18,6 @@ class SecureStorageException extends StorageException {
 }
 
 class PreferencesException extends StorageException {
-  PreferencesException(
-    String message, [
-    dynamic error,
-    StackTrace? stackTrace,
-  ]) : super('Preferences Error: $message', error, stackTrace);
+  PreferencesException(String message, [dynamic error, StackTrace? stackTrace])
+    : super('Preferences Error: $message', error, stackTrace);
 }

@@ -1,7 +1,8 @@
 import 'dart:async';
+
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 /// 🎯 Centralized debouncing utilities for network operations
@@ -42,11 +43,6 @@ import 'package:stream_transform/stream_transform.dart';
 /// - hell → cancels previous, waits 500ms
 /// - hello → cancels previous, waits 500ms → ✅ EXECUTES (only once!)
 class Debouncer {
-  /// Delay duration before executing callback
-  final Duration delay;
-
-  Timer? _timer;
-
   /// Create debouncer with specified delay
   ///
   /// **Recommended delays:**
@@ -55,6 +51,11 @@ class Debouncer {
   /// - Form validation: 500-800ms (wait for user to finish)
   /// - Heavy operations: 800-1000ms (save resources)
   Debouncer({required this.delay});
+
+  /// Delay duration before executing callback
+  final Duration delay;
+
+  Timer? _timer;
 
   /// Run callback after delay (cancels previous pending calls)
   ///
@@ -109,11 +110,6 @@ class Debouncer {
 /// - Wait 1 second...
 /// - Click 6 → ✅ EXECUTES (cooldown finished)
 class Throttler {
-  /// Minimum duration between executions
-  final Duration duration;
-
-  DateTime? _lastExecutionTime;
-
   /// Create throttler with specified duration
   ///
   /// **Recommended durations:**
@@ -122,6 +118,11 @@ class Throttler {
   /// - API refresh: 800-1500ms (prevent spam)
   /// - Like/favorite actions: 300-500ms (instant feel)
   Throttler({required this.duration});
+
+  /// Minimum duration between executions
+  final Duration duration;
+
+  DateTime? _lastExecutionTime;
 
   /// Execute callback if cooldown period has passed
   ///
@@ -209,14 +210,14 @@ class Throttler {
 /// }
 /// ```
 class AsyncDebouncer<T> {
+  /// Create async debouncer with specified delay
+  AsyncDebouncer({required this.delay});
+
   /// Delay duration before executing callback
   final Duration delay;
 
   Timer? _timer;
   Completer<T?>? _completer;
-
-  /// Create async debouncer with specified delay
-  AsyncDebouncer({required this.delay});
 
   /// Run async callback after delay (cancels previous pending calls)
   ///
@@ -269,23 +270,27 @@ class NetworkDebouncers {
 
   /// Autocomplete debouncer (300ms)
   /// Use for: Autocomplete dropdowns, location search, tag suggestions
-  static final autocomplete =
-      Debouncer(delay: const Duration(milliseconds: 300));
+  static final autocomplete = Debouncer(
+    delay: const Duration(milliseconds: 300),
+  );
 
   /// Form validation debouncer (800ms)
   /// Use for: Email validation, username check, phone validation
-  static final formValidation =
-      Debouncer(delay: const Duration(milliseconds: 800));
+  static final formValidation = Debouncer(
+    delay: const Duration(milliseconds: 800),
+  );
 
   /// API refresh throttler (1000ms)
   /// Use for: Pull-to-refresh, retry button, reload actions
-  static final apiRefresh =
-      Throttler(duration: const Duration(milliseconds: 1000));
+  static final apiRefresh = Throttler(
+    duration: const Duration(milliseconds: 1000),
+  );
 
   /// Button click throttler (500ms)
   /// Use for: Submit buttons, like buttons, favorite actions
-  static final buttonClick =
-      Throttler(duration: const Duration(milliseconds: 500));
+  static final buttonClick = Throttler(
+    duration: const Duration(milliseconds: 500),
+  );
 
   /// Async search debouncer (500ms)
   /// Use for: API search calls with cancellation
@@ -325,7 +330,7 @@ class DebounceMetrics {
 
   /// Get percentage of calls that were prevented
   double get savingsPercentage {
-    if (_totalCalls == 0) return 0.0;
+    if (_totalCalls == 0) return 0;
     return ((_totalCalls - _executedCalls) / _totalCalls) * 100;
   }
 
@@ -345,9 +350,8 @@ class DebounceMetrics {
 
 /// 🎯 Tracked Debouncer with performance metrics
 class TrackedDebouncer extends Debouncer {
-  final DebounceMetrics metrics = DebounceMetrics();
-
   TrackedDebouncer({required super.delay});
+  final DebounceMetrics metrics = DebounceMetrics();
 
   @override
   void run(VoidCallback action) {
@@ -370,9 +374,8 @@ class TrackedDebouncer extends Debouncer {
 
 /// 🎯 Tracked Throttler with performance metrics
 class TrackedThrottler extends Throttler {
-  final DebounceMetrics metrics = DebounceMetrics();
-
   TrackedThrottler({required super.duration});
+  final DebounceMetrics metrics = DebounceMetrics();
 
   @override
   bool run(VoidCallback action) {

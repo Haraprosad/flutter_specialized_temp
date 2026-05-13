@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_specialized_temp/core/network/config/dio_client.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/error_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
+import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:flutter_specialized_temp/core/storage/secure_storage_manager.dart';
-import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
 import 'package:flutter_specialized_temp/flavors/env_config.dart';
 import 'package:flutter_specialized_temp/flavors/environment.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +12,11 @@ import 'package:mockito/annotations.dart';
 
 import 'base_bloc_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<ConnectionManager>(), MockSpec<SecureStorageManager>(), MockSpec<AppStorage>()])
+@GenerateNiceMocks([
+  MockSpec<ConnectionManager>(),
+  MockSpec<SecureStorageManager>(),
+  MockSpec<AppStorage>(),
+])
 void main() {
   late DioClient dioClient;
   late MockConnectionManager mockConnectionManager;
@@ -29,7 +33,11 @@ void main() {
     mockSecureStorage = MockSecureStorageManager();
     mockAppStorage = MockAppStorage();
 
-    dioClient = DioClient(mockConnectionManager, mockSecureStorage, mockAppStorage);
+    dioClient = DioClient(
+      mockConnectionManager,
+      mockSecureStorage,
+      mockAppStorage,
+    );
   });
 
   group('DioClient Tests', () {
@@ -44,12 +52,18 @@ void main() {
     test('should set correct timeout values', () {
       final dio = dioClient.client;
 
-      expect(dio.options.connectTimeout?.inSeconds,
-          NetworkConstants.connectionTimeout.inSeconds);
-      expect(dio.options.receiveTimeout?.inSeconds,
-          NetworkConstants.receiveTimeout.inSeconds);
-      expect(dio.options.sendTimeout?.inSeconds,
-          NetworkConstants.sendTimeout.inSeconds);
+      expect(
+        dio.options.connectTimeout?.inSeconds,
+        NetworkConstants.connectionTimeout.inSeconds,
+      );
+      expect(
+        dio.options.receiveTimeout?.inSeconds,
+        NetworkConstants.receiveTimeout.inSeconds,
+      );
+      expect(
+        dio.options.sendTimeout?.inSeconds,
+        NetworkConstants.sendTimeout.inSeconds,
+      );
     });
 
     test('should set correct default headers', () {

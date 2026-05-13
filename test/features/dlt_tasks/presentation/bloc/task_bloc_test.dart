@@ -49,10 +49,7 @@ void main() {
         return TaskBloc(getTasks);
       },
       act: (bloc) => bloc.add(const GetTasksEvent()),
-      expect: () => [
-        isA<TaskLoading>(),
-        isA<TasksLoaded>(),
-      ],
+      expect: () => [isA<TaskLoading>(), isA<TasksLoaded>()],
     );
 
     blocTest<TaskBloc, TaskState>(
@@ -62,31 +59,27 @@ void main() {
         return TaskBloc(getTasks);
       },
       act: (bloc) => bloc.add(const GetTasksEvent()),
-      expect: () => [
-        isA<TaskLoading>(),
-        TasksLoaded(tTasks),
-      ],
+      expect: () => [isA<TaskLoading>(), TasksLoaded(tTasks)],
     );
 
     blocTest<TaskBloc, TaskState>(
       'emits [TaskLoading, TaskError] when repository throws',
       build: () {
-        when(() => mockRepository.getTasks())
-            .thenThrow(Exception('Network error'));
+        when(
+          () => mockRepository.getTasks(),
+        ).thenThrow(Exception('Network error'));
         return TaskBloc(getTasks);
       },
       act: (bloc) => bloc.add(const GetTasksEvent()),
-      expect: () => [
-        isA<TaskLoading>(),
-        isA<TaskError>(),
-      ],
+      expect: () => [isA<TaskLoading>(), isA<TaskError>()],
     );
 
     blocTest<TaskBloc, TaskState>(
       'TaskError carries the error message string',
       build: () {
-        when(() => mockRepository.getTasks())
-            .thenThrow(Exception('Network error'));
+        when(
+          () => mockRepository.getTasks(),
+        ).thenThrow(Exception('Network error'));
         return TaskBloc(getTasks);
       },
       act: (bloc) => bloc.add(const GetTasksEvent()),
@@ -107,10 +100,7 @@ void main() {
         return TaskBloc(getTasks);
       },
       act: (bloc) => bloc.add(const GetTasksEvent()),
-      expect: () => [
-        isA<TaskLoading>(),
-        const TasksLoaded([]),
-      ],
+      expect: () => [isA<TaskLoading>(), const TasksLoaded([])],
     );
 
     blocTest<TaskBloc, TaskState>(

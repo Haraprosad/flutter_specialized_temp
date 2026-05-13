@@ -12,14 +12,18 @@ part 'locale_state.dart';
 
 @singleton
 class LocaleBloc extends Bloc<LocaleEvent, LocaleState> {
-  LocaleBloc(this._storage) : super(const LocaleState(LocaleConstants.english)) {
+  LocaleBloc(this._storage)
+    : super(const LocaleState(LocaleConstants.english)) {
     on<ChangeLocaleEvent>(_onChangeLocale);
     on<InitializeLocale>(_onInitializeLocale);
   }
 
   final AppStorage _storage;
 
-  void _onChangeLocale(ChangeLocaleEvent event, Emitter<LocaleState> emit) async {
+  Future<void> _onChangeLocale(
+    ChangeLocaleEvent event,
+    Emitter<LocaleState> emit,
+  ) async {
     try {
       // Don't update if the locale is the same
       if (event.locale == state.locale) {
@@ -32,12 +36,16 @@ class LocaleBloc extends Bloc<LocaleEvent, LocaleState> {
         emit(LocaleState(event.locale));
       } else {
         // Invalid locale, fallback to English
-        await _storage.preferences.setLanguage(LocaleConstants.english.languageCode);
+        await _storage.preferences.setLanguage(
+          LocaleConstants.english.languageCode,
+        );
         emit(const LocaleState(LocaleConstants.english));
       }
     } catch (e) {
       // Handle any potential errors by falling back to English
-      await _storage.preferences.setLanguage(LocaleConstants.english.languageCode);
+      await _storage.preferences.setLanguage(
+        LocaleConstants.english.languageCode,
+      );
       emit(const LocaleState(LocaleConstants.english));
     }
   }

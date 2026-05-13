@@ -61,29 +61,20 @@ class CustomImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return alignment != null
-        ? Align(
-            alignment: alignment!,
-            child: _buildWidget(),
-          )
+        ? Align(alignment: alignment!, child: _buildWidget())
         : _buildWidget();
   }
 
   Widget _buildWidget() {
     return Padding(
       padding: margin ?? EdgeInsets.zero,
-      child: InkWell(
-        onTap: onTap,
-        child: _buildCircleImage(),
-      ),
+      child: InkWell(onTap: onTap, child: _buildCircleImage()),
     );
   }
 
   Widget _buildCircleImage() {
     if (radius != null) {
-      return ClipRRect(
-        borderRadius: radius!,
-        child: _buildImageWithBorder(),
-      );
+      return ClipRRect(borderRadius: radius!, child: _buildImageWithBorder());
     }
     return _buildImageWithBorder();
   }
@@ -91,10 +82,7 @@ class CustomImageView extends StatelessWidget {
   Widget _buildImageWithBorder() {
     if (border != null) {
       return Container(
-        decoration: BoxDecoration(
-          border: border,
-          borderRadius: radius,
-        ),
+        decoration: BoxDecoration(border: border, borderRadius: radius),
         child: _buildImageView(),
       );
     }
@@ -153,8 +141,7 @@ class CustomImageView extends StatelessWidget {
   }
 
   Widget _buildNetworkImage() {
-    final hasThumbnail =
-        thumbnailUrl != null && thumbnailUrl!.isNotEmpty;
+    final hasThumbnail = thumbnailUrl != null && thumbnailUrl!.isNotEmpty;
 
     if (hasThumbnail) {
       return _ProgressiveNetworkImage(
@@ -181,10 +168,8 @@ class CustomImageView extends StatelessWidget {
       memCacheHeight: memCacheHeight,
       fadeInDuration: const Duration(milliseconds: 300),
       fadeOutDuration: const Duration(milliseconds: 150),
-      placeholder: (context, url) => _ShimmerPlaceholder(
-        height: height,
-        width: width,
-      ),
+      placeholder: (context, url) =>
+          _ShimmerPlaceholder(height: height, width: width),
       errorWidget: (context, url, error) => Image.asset(
         placeHolder,
         height: height,
@@ -242,10 +227,8 @@ class _ProgressiveNetworkImageState extends State<_ProgressiveNetworkImage> {
           fit: widget.fit ?? BoxFit.cover,
           color: widget.color,
           cacheManager: AppImageCacheManager.instance,
-          placeholder: (context, url) => _ShimmerPlaceholder(
-            height: widget.height,
-            width: widget.width,
-          ),
+          placeholder: (context, url) =>
+              _ShimmerPlaceholder(height: widget.height, width: widget.width),
           errorWidget: (context, url, error) => const SizedBox.shrink(),
         ),
         // Layer 2 — full-resolution image that fades in once decoded.

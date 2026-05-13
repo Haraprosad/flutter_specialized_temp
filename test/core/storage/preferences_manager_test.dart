@@ -1,10 +1,10 @@
+import 'package:flutter_specialized_temp/core/exceptions/storage_exception.dart';
+import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
+import 'package:flutter_specialized_temp/core/storage/storage_keys.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_specialized_temp/core/exceptions/storage_exception.dart';
-import 'package:flutter_specialized_temp/core/storage/storage_keys.dart';
-import 'package:flutter_specialized_temp/core/storage/preferences_manager.dart';
 
 import 'preferences_manager_test.mocks.dart';
 
@@ -21,11 +21,12 @@ void main() {
   group('Theme preferences', () {
     test('setDarkMode should save dark mode preference', () async {
       // Arrange
-      when(mockPrefs.setBool(StorageKeys.isDarkMode, true))
-          .thenAnswer((_) async => true);
+      when(
+        mockPrefs.setBool(StorageKeys.isDarkMode, true),
+      ).thenAnswer((_) async => true);
 
       // Act
-      await preferencesManager.setDarkMode(true);
+      await preferencesManager.setDarkMode(isDark: true);
 
       // Assert
       verify(mockPrefs.setBool(StorageKeys.isDarkMode, true)).called(1);
@@ -33,12 +34,13 @@ void main() {
 
     test('setDarkMode should throw PreferencesException when save fails', () {
       // Arrange
-      when(mockPrefs.setBool(StorageKeys.isDarkMode, true))
-          .thenThrow(Exception('Save failed'));
+      when(
+        mockPrefs.setBool(StorageKeys.isDarkMode, true),
+      ).thenThrow(Exception('Save failed'));
 
       // Act & Assert
       expect(
-        () => preferencesManager.setDarkMode(true),
+        () => preferencesManager.setDarkMode(isDark: true),
         throwsA(isA<PreferencesException>()),
       );
     });
@@ -70,8 +72,9 @@ void main() {
   group('Language preferences', () {
     test('setLanguage should save language preference', () async {
       // Arrange
-      when(mockPrefs.setString(StorageKeys.language, 'fr'))
-          .thenAnswer((_) async => true);
+      when(
+        mockPrefs.setString(StorageKeys.language, 'fr'),
+      ).thenAnswer((_) async => true);
 
       // Act
       await preferencesManager.setLanguage('fr');
@@ -82,8 +85,9 @@ void main() {
 
     test('setLanguage should throw PreferencesException when save fails', () {
       // Arrange
-      when(mockPrefs.setString(StorageKeys.language, 'fr'))
-          .thenThrow(Exception('Save failed'));
+      when(
+        mockPrefs.setString(StorageKeys.language, 'fr'),
+      ).thenThrow(Exception('Save failed'));
 
       // Act & Assert
       expect(

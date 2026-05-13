@@ -22,12 +22,12 @@ class TaskLocalDataSource {
 
   Future<List<TaskModel>> getTasks() async {
     // Simulate API delay
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     return _dummyTasks;
   }
 
   Future<TaskModel> getTaskById(String id) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     return _dummyTasks.firstWhere((task) => task.id == id);
   }
 }

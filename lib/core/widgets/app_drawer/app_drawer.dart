@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 import 'package:flutter_specialized_temp/core/di/injection.dart';
 import 'package:flutter_specialized_temp/core/localization/locale_constants.dart';
 import 'package:flutter_specialized_temp/core/localization/localization_actions.dart';
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
-import 'package:flutter_specialized_temp/core/bloc/theme_bloc.dart';
-
-import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
 import 'package:flutter_specialized_temp/core/widgets/app_drawer/drawer_menu_item.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 
@@ -24,9 +23,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: colorScheme.primaryContainer,
-            ),
+            decoration: BoxDecoration(color: colorScheme.primaryContainer),
             child: Text(
               'CodeVidhi',
               style: context.headlineMedium?.copyWith(
@@ -40,12 +37,13 @@ class AppDrawer extends StatelessWidget {
               return SwitchListTile(
                 title: Text('Toggle Theme', style: context.titleMedium),
                 secondary: Icon(
-                    state.isDark ? Icons.dark_mode : Icons.light_mode,
-                    color: context.colorScheme.primary),
+                  state.isDark ? Icons.dark_mode : Icons.light_mode,
+                  color: context.colorScheme.primary,
+                ),
                 value: state.isDark,
                 onChanged: (value) {
-                  context.read<ThemeBloc>().add(ToggleTheme());
-                  preferencesManager.setDarkMode(value);
+                  context.read<ThemeBloc>().add(const ToggleTheme());
+                  preferencesManager.setDarkMode(isDark: value);
                 },
               );
             },
@@ -55,11 +53,7 @@ class AppDrawer extends StatelessWidget {
             title: 'Change Language',
             onTap: () => _showLanguageDialog(context),
           ),
-          DrawerMenuItem(
-            icon: Icons.settings,
-            title: 'Settings',
-            onTap: () {},
-          ),
+          DrawerMenuItem(icon: Icons.settings, title: 'Settings', onTap: () {}),
           DrawerMenuItem(
             icon: Icons.help,
             title: 'Help & Support',
@@ -81,7 +75,7 @@ class AppDrawer extends StatelessWidget {
 
   void _showLanguageDialog(BuildContext context) {
     final preferencesManager = sl<AppStorage>().preferences;
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -119,9 +113,12 @@ class AppDrawer extends StatelessWidget {
                   isSelected: preferencesManager.getLanguage() == 'en',
                   onTap: () {
                     LocalizationActions.setLocale(
-                        context, LocaleConstants.english);
-                    preferencesManager
-                        .setLanguage(LocaleConstants.english.languageCode);
+                      context,
+                      LocaleConstants.english,
+                    );
+                    preferencesManager.setLanguage(
+                      LocaleConstants.english.languageCode,
+                    );
                     Navigator.pop(context);
                   },
                 ),
@@ -177,11 +174,13 @@ class AppDrawer extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
-              color:
-                  isSelected ? colorScheme.primary : colorScheme.outlineVariant,
+              color: isSelected
+                  ? colorScheme.primary
+                  : colorScheme.outlineVariant,
             ),
-            color:
-                isSelected ? colorScheme.primaryContainer : colorScheme.surface,
+            color: isSelected
+                ? colorScheme.primaryContainer
+                : colorScheme.surface,
           ),
           child: Row(
             children: [

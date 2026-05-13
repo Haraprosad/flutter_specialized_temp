@@ -17,27 +17,24 @@ class TaskLoading extends TaskState {
 }
 
 class TasksLoaded extends TaskState {
-  final List<TaskEntity> tasks;
-
   const TasksLoaded(this.tasks);
+  final List<TaskEntity> tasks;
 
   @override
   List<Object?> get props => [tasks];
 }
 
 class TaskDetailsLoaded extends TaskState {
-  final TaskEntity task;
-
   const TaskDetailsLoaded(this.task);
+  final TaskEntity task;
 
   @override
   List<Object?> get props => [task];
 }
 
 class TaskError extends TaskState {
-  final String message;
-
   const TaskError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];

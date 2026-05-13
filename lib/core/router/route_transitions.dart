@@ -10,10 +10,7 @@ class RouteTransitions {
       child: child,
       transitionDuration: duration,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
+        return FadeTransition(opacity: animation, child: child);
       },
     );
   }
@@ -21,7 +18,7 @@ class RouteTransitions {
   static CustomTransitionPage<T> slideTransition<T extends Object?>(
     Widget child, {
     Duration duration = const Duration(milliseconds: 300),
-    Offset begin = const Offset(1.0, 0.0),
+    Offset begin = const Offset(1, 0),
   }) {
     return CustomTransitionPage<T>(
       child: child,

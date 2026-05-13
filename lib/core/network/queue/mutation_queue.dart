@@ -1,18 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:injectable/injectable.dart';
+
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Represents a mutation operation to be queued
 class QueuedMutation {
-  final String id;
-  final String type; // 'create', 'update', 'delete'
-  final String entity; // 'transaction', 'category', etc.
-  final Map<String, dynamic> data;
-  final DateTime timestamp;
-  final int retryCount;
-
   QueuedMutation({
     required this.id,
     required this.type,
@@ -22,32 +16,38 @@ class QueuedMutation {
     this.retryCount = 0,
   });
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'type': type,
-        'entity': entity,
-        'data': data,
-        'timestamp': timestamp.toIso8601String(),
-        'retryCount': retryCount,
-      };
-
   factory QueuedMutation.fromJson(Map<String, dynamic> json) => QueuedMutation(
-        id: json['id'] as String,
-        type: json['type'] as String,
-        entity: json['entity'] as String,
-        data: json['data'] as Map<String, dynamic>,
-        timestamp: DateTime.parse(json['timestamp'] as String),
-        retryCount: json['retryCount'] as int? ?? 0,
-      );
+    id: json['id'] as String,
+    type: json['type'] as String,
+    entity: json['entity'] as String,
+    data: json['data'] as Map<String, dynamic>,
+    timestamp: DateTime.parse(json['timestamp'] as String),
+    retryCount: json['retryCount'] as int? ?? 0,
+  );
+  final String id;
+  final String type; // 'create', 'update', 'delete'
+  final String entity; // 'transaction', 'category', etc.
+  final Map<String, dynamic> data;
+  final DateTime timestamp;
+  final int retryCount;
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'type': type,
+    'entity': entity,
+    'data': data,
+    'timestamp': timestamp.toIso8601String(),
+    'retryCount': retryCount,
+  };
 
   QueuedMutation copyWithRetry() => QueuedMutation(
-        id: id,
-        type: type,
-        entity: entity,
-        data: data,
-        timestamp: timestamp,
-        retryCount: retryCount + 1,
-      );
+    id: id,
+    type: type,
+    entity: entity,
+    data: data,
+    timestamp: timestamp,
+    retryCount: retryCount + 1,
+  );
 }
 
 /// Manages offline mutation queue with persistence
@@ -60,16 +60,15 @@ class QueuedMutation {
 /// - Remove duplicates
 @lazySingleton
 class MutationQueue {
+  MutationQueue(this._prefs) {
+    _loadQueueFromDisk();
+  }
   final SharedPreferences _prefs;
   final List<QueuedMutation> _queue = [];
   final _random = Random();
 
   static const String _queueKey = 'MUTATION_QUEUE';
   static const int _maxRetries = 3;
-
-  MutationQueue(this._prefs) {
-    _loadQueueFromDisk();
-  }
 
   /// Generate a simple unique ID
   String _generateId() {
@@ -117,7 +116,7 @@ class MutationQueue {
 
     final mutationsToProcess = List<QueuedMutation>.from(_queue);
     final failedMutations = <QueuedMutation>[];
-    int successCount = 0;
+    var successCount = 0;
 
     for (final mutation in mutationsToProcess) {
       try {
@@ -140,8 +139,9 @@ class MutationQueue {
           // Retry logic
           if (mutation.retryCount < _maxRetries) {
             final retried = mutation.copyWithRetry();
-            _queue.remove(mutation);
-            _queue.add(retried);
+            _queue
+              ..remove(mutation)
+              ..add(retried);
             failedMutations.add(retried);
             AppLogger.w(
               message:

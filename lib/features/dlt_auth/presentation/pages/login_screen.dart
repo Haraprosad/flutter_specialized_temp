@@ -1,11 +1,8 @@
 // login_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_specialized_temp/core/router/route_names.dart';
-import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
-
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_specialized_temp/core/design_management_system/design_management_system.dart';
+import 'package:flutter_specialized_temp/core/router/route_names.dart';
 import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -32,10 +29,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      context.read<AuthBloc>().add(LoginRequested(
-            email: _emailController.text,
-            password: _passwordController.text,
-          ));
+      context.read<AuthBloc>().add(
+        LoginRequested(
+          email: _emailController.text,
+          password: _passwordController.text,
+        ),
+      );
     }
   }
 
@@ -46,9 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is AuthAuthenticated) {
           context.goNamed(RouteNames.home);
         } else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       child: Scaffold(
@@ -79,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Container(
           padding: AppSpacing.xlPadding,
           decoration: BoxDecoration(
-            color: context.colors.primary.withOpacity(0.1),
+            color: context.colors.primary.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -152,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         hintText: 'Enter your email',
         hintStyle: context.bodyMedium?.copyWith(
-          color: context.colors.textSecondary.withOpacity(0.7),
+          color: context.colors.textSecondary.withValues(alpha: 0.7),
         ),
         prefixIcon: Icon(
           Icons.email_outlined,
@@ -184,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         hintText: 'Enter your password',
         hintStyle: context.bodyMedium?.copyWith(
-          color: context.colors.textSecondary.withOpacity(0.7),
+          color: context.colors.textSecondary.withValues(alpha: 0.7),
         ),
         prefixIcon: Icon(
           Icons.lock_outline,
@@ -245,7 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         TextButton(
           onPressed: () {
-            // TODO: Implement forgot password
+            // TODO(niloy): Implement forgot password
           },
           style: TextButton.styleFrom(
             foregroundColor: context.colors.primary,
@@ -284,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Expanded(
           child: Divider(
-            color: context.colors.textSecondary.withOpacity(0.3),
+            color: context.colors.textSecondary.withValues(alpha: 0.3),
             thickness: 1,
           ),
         ),
@@ -300,7 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         Expanded(
           child: Divider(
-            color: context.colors.textSecondary.withOpacity(0.3),
+            color: context.colors.textSecondary.withValues(alpha: 0.3),
             thickness: 1,
           ),
         ),
@@ -315,19 +314,19 @@ class _LoginScreenState extends State<LoginScreen> {
         _buildSocialLoginButton(
           icon: Icons.g_mobiledata,
           onPressed: () {
-            // TODO: Implement Google login
+            // TODO(niloy): Implement Google login
           },
         ),
         _buildSocialLoginButton(
           icon: Icons.facebook,
           onPressed: () {
-            // TODO: Implement Facebook login
+            // TODO(niloy): Implement Facebook login
           },
         ),
         _buildSocialLoginButton(
           icon: Icons.apple,
           onPressed: () {
-            // TODO: Implement Apple login
+            // TODO(niloy): Implement Apple login
           },
         ),
       ],
@@ -346,7 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: OutlinedButton.styleFrom(
             padding: AppSpacing.mdVertical,
             side: BorderSide(
-              color: context.colors.textSecondary.withOpacity(0.3),
+              color: context.colors.textSecondary.withValues(alpha: 0.3),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
@@ -367,7 +366,7 @@ class _LoginScreenState extends State<LoginScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Don\'t have an account? ',
+          "Don't have an account? ",
           style: context.bodyMedium?.copyWith(
             color: context.colors.textSecondary,
           ),

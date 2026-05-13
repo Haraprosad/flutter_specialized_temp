@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
+import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:flutter_specialized_temp/core/network/cache/scalable_cache_manager.dart';
 import 'package:flutter_specialized_temp/core/network/config/dio_client.dart';
 import 'package:flutter_specialized_temp/core/network/enums/custom_error_type.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/models/custom_exception.dart';
-import 'package:flutter_specialized_temp/core/network/cache/scalable_cache_manager.dart';
-import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/data/models/post_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -30,6 +32,7 @@ abstract class PostsRemoteDataSource {
 
 @Injectable(as: PostsRemoteDataSource)
 class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
+  PostsRemoteDataSourceImpl(this._dioClient, this._cacheManager);
   final DioClient _dioClient;
   final ScalableCacheManager _cacheManager;
 
@@ -42,8 +45,6 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
   int _cacheHits = 0;
   int _cacheMisses = 0;
   final Map<String, DateTime> _requestTimestamps = {};
-
-  PostsRemoteDataSourceImpl(this._dioClient, this._cacheManager);
 
   @override
   Future<List<PostModel>> getPosts({
@@ -76,23 +77,19 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
       }
 
       _cacheMisses++;
-      AppLogger.d(
-        message: '🌐 API call for posts: start=$start, limit=$limit',
-      );
+      AppLogger.d(message: '🌐 API call for posts: start=$start, limit=$limit');
 
       // API call with optimizations
-      final response = await _dioClient.client.get(
+      final response = await _dioClient.client.get<dynamic>(
         '/posts',
-        queryParameters: {
-          '_start': start,
-          '_limit': limit,
-        },
+        queryParameters: {'_start': start, '_limit': limit},
         options: Options(
           receiveTimeout: _requestTimeout,
           sendTimeout: _requestTimeout,
           extra: {
-            'priority':
-                start == 0 ? 'high' : 'normal', // First page gets priority
+            'priority': start == 0
+                ? 'high'
+                : 'normal', // First page gets priority
             'retry_count': 2,
           },
         ),
@@ -115,10 +112,7 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
 
       return posts;
     } on DioException catch (e) {
-      AppLogger.e(
-        message: '❌ API error loading posts: ${e.message}',
-        error: e,
-      );
+      AppLogger.e(message: '❌ API error loading posts: ${e.message}', error: e);
 
       // Try to return stale cache in case of network error
       if (e.type == DioExceptionType.connectionTimeout ||
@@ -126,23 +120,18 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
           e.type == DioExceptionType.connectionError) {
         final staleCache = await _cacheManager.get<List<PostModel>>(
           cacheKey,
-          ttl: Duration(days: 1), // Accept stale cache for network errors
+          ttl: const Duration(days: 1), // Accept stale cache for network errors
         );
 
         if (staleCache != null) {
-          AppLogger.w(
-            message: '🔄 Returning stale cache due to network error',
-          );
+          AppLogger.w(message: '🔄 Returning stale cache due to network error');
           return staleCache;
         }
       }
 
       rethrow;
     } catch (e) {
-      AppLogger.e(
-        message: '❌ Parsing error for posts data',
-        error: e,
-      );
+      AppLogger.e(message: '❌ Parsing error for posts data', error: e);
 
       throw CustomException(
         type: CustomErrorType.parsingError,
@@ -158,22 +147,20 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
     try {
       final nextStart = (currentPage + 1) * 20;
 
-      AppLogger.d(
-        message: '🚀 Preloading next page: start=$nextStart',
-      );
+      AppLogger.d(message: '🚀 Preloading next page: start=$nextStart');
 
       // Background preloading - fire and forget
-      getPosts(start: nextStart, limit: 20).catchError((error) {
-        AppLogger.w(
-          message: '⚠️ Preloading failed for page ${currentPage + 1}: $error',
-        );
-        return <PostModel>[]; // Return empty list for error case
-      });
+      unawaited(
+        getPosts(start: nextStart).catchError((Object error) {
+          AppLogger.w(
+            message: '⚠️ Preloading failed for page ${currentPage + 1}: $error',
+          );
+          return <PostModel>[]; // Return empty list for error case
+        }),
+      );
     } catch (e) {
       // Silent failure for preloading
-      AppLogger.w(
-        message: '⚠️ Preloading error: $e',
-      );
+      AppLogger.w(message: '⚠️ Preloading error: $e');
     }
   }
 
@@ -184,10 +171,7 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
       await _cacheManager.clearByPattern('posts_');
       AppLogger.i(message: '🧹 Posts cache cleared');
     } catch (e) {
-      AppLogger.e(
-        message: '❌ Error clearing posts cache',
-        error: e,
-      );
+      AppLogger.e(message: '❌ Error clearing posts cache', error: e);
     }
   }
 
@@ -214,11 +198,11 @@ class PostsRemoteDataSourceImpl implements PostsRemoteDataSource {
   Duration _calculateOptimalCacheTTL(int start, int itemCount) {
     // First page gets longer cache time as it's accessed more frequently
     if (start == 0) {
-      return Duration(minutes: 10);
+      return const Duration(minutes: 10);
     }
 
     // Shorter cache for subsequent pages
-    return Duration(minutes: 5);
+    return const Duration(minutes: 5);
   }
 
   void _logRequestPerformance(String requestId, {required bool fromCache}) {

@@ -11,6 +11,7 @@ import 'package:flutter_specialized_temp/core/storage/storage_keys.dart';
 /// The token is read from [SecureStorageManager] on every request so that a
 /// freshly-refreshed token is always picked up without restarting the interceptor.
 class AuthInterceptor extends Interceptor {
+  AuthInterceptor(this._secureStorage);
   final SecureStorageManager _secureStorage;
 
   /// Paths that do NOT need an Authorization header.
@@ -20,20 +21,18 @@ class AuthInterceptor extends Interceptor {
     '/auth/refresh',
   ];
 
-  AuthInterceptor(this._secureStorage);
-
   @override
   Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final isPublic = _publicPaths.any(
-      (path) => options.path.contains(path),
-    );
+    final isPublic = _publicPaths.any((path) => options.path.contains(path));
 
     if (!isPublic) {
       try {
-        final token = await _secureStorage.readSecureData(StorageKeys.authToken);
+        final token = await _secureStorage.readSecureData(
+          StorageKeys.authToken,
+        );
         if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';
         }

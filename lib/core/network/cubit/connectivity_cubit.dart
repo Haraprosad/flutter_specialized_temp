@@ -1,9 +1,10 @@
 import 'dart:async';
+
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
-import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
 
 /// Cubit that manages global connectivity state
 ///
@@ -11,12 +12,11 @@ import 'package:equatable/equatable.dart';
 /// to the entire app. This allows any widget to react to connectivity changes.
 @injectable
 class ConnectivityCubit extends Cubit<ConnectivityState> {
-  final ConnectionManager _connectionManager;
-  StreamSubscription<bool>? _connectivitySubscription;
-
   ConnectivityCubit(this._connectionManager) : super(ConnectivityInitial()) {
     _init();
   }
+  final ConnectionManager _connectionManager;
+  StreamSubscription<bool>? _connectivitySubscription;
 
   void _init() {
     // Start monitoring connectivity

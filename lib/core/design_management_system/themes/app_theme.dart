@@ -11,15 +11,11 @@ import 'package:flutter_specialized_temp/core/design_management_system/tokens/ap
 class AppTheme {
   AppTheme._();
 
-  static ThemeData lightTheme() => _buildTheme(
-        colorScheme: AppColorScheme.light,
-        colors: AppColors.light,
-      );
+  static ThemeData lightTheme() =>
+      _buildTheme(colorScheme: AppColorScheme.light, colors: AppColors.light);
 
-  static ThemeData darkTheme() => _buildTheme(
-        colorScheme: AppColorScheme.dark,
-        colors: AppColors.dark,
-      );
+  static ThemeData darkTheme() =>
+      _buildTheme(colorScheme: AppColorScheme.dark, colors: AppColors.dark);
 
   static ThemeData _buildTheme({
     required ColorScheme colorScheme,
@@ -73,9 +69,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: AppButtonStyles.outlined(colors),
       ),
-      textButtonTheme: TextButtonThemeData(
-        style: AppButtonStyles.text(colors),
-      ),
+      textButtonTheme: TextButtonThemeData(style: AppButtonStyles.text(colors)),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMd),

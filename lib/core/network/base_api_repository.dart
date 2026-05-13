@@ -1,6 +1,8 @@
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/network_error_handler.dart';
 import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
+import 'package:flutter_specialized_temp/core/network/repository/scalable_base_repository.dart'
+    show ScalableBaseRepository;
 
 /// Lightweight base class for feature repositories that need standardised
 /// error handling and logging without the full [ScalableBaseRepository]
@@ -28,9 +30,8 @@ import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
 /// }
 /// ```
 abstract class BaseApiRepository {
-  final NetworkErrorHandler _errorHandler;
-
   const BaseApiRepository(this._errorHandler);
+  final NetworkErrorHandler _errorHandler;
 
   /// Executes [call] and wraps the result in [ApiResult].
   ///

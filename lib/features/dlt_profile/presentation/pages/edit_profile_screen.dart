@@ -25,31 +25,33 @@ class EditProfileScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 50.r,
                   backgroundColor: context.colorScheme.primary,
-                  child: Text('JD', style: context.headlineLarge?.copyWith(
-                    color: context.colorScheme.onPrimary,
-                  )),
+                  child: Text(
+                    'JD',
+                    style: context.headlineLarge?.copyWith(
+                      color: context.colorScheme.onPrimary,
+                    ),
+                  ),
                 ),
                 CircleAvatar(
                   radius: 18.r,
                   backgroundColor: context.colorScheme.secondary,
-                  child: Icon(Icons.camera_alt,
-                      size: 20.r,
-                      color: context.colorScheme.onSecondary),
+                  child: Icon(
+                    Icons.camera_alt,
+                    size: 20.r,
+                    color: context.colorScheme.onSecondary,
+                  ),
                 ),
               ],
             ),
             SizedBox(height: AppSpacing.lgV),
-            EditProfileField(
-              label: 'Name',
-              initialValue: 'John Doe',
-            ),
+            const EditProfileField(label: 'Name', initialValue: 'John Doe'),
             SizedBox(height: AppSpacing.mdV),
-            EditProfileField(
+            const EditProfileField(
               label: 'Email',
               initialValue: 'john.doe@example.com',
             ),
             SizedBox(height: AppSpacing.mdV),
-            EditProfileField(
+            const EditProfileField(
               label: 'Phone',
               initialValue: '+1 234 567 890',
             ),
@@ -59,7 +61,7 @@ class EditProfileScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 48.h),
               ),
-              child: Text('Save Changes'),
+              child: const Text('Save Changes'),
             ),
           ],
         ),

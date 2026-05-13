@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
-import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/auth_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/error_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/retry_interceptor.dart';
 import 'package:flutter_specialized_temp/core/network/config/interceptors/token_refresh_interceptor.dart';
+import 'package:flutter_specialized_temp/core/network/constants/network_constants.dart';
+import 'package:flutter_specialized_temp/core/network/services/connection_manager.dart';
 import 'package:flutter_specialized_temp/core/storage/app_storage.dart';
 import 'package:flutter_specialized_temp/core/storage/secure_storage_manager.dart';
 import 'package:flutter_specialized_temp/flavors/env_config.dart';
+import 'package:injectable/injectable.dart';
 
 /// Central HTTP client setup using Dio.
 ///
@@ -21,15 +21,14 @@ import 'package:flutter_specialized_temp/flavors/env_config.dart';
 ///   5. LogInterceptor       — full request/response logging (debug only)
 @lazySingleton
 class DioClient {
+  DioClient(this._connectionManager, this._secureStorage, this._appStorage) {
+    _dio = _createDioClient();
+  }
   final ConnectionManager _connectionManager;
   final SecureStorageManager _secureStorage;
   final AppStorage _appStorage;
 
   late final Dio _dio;
-
-  DioClient(this._connectionManager, this._secureStorage, this._appStorage) {
-    _dio = _createDioClient();
-  }
 
   Dio get client => _dio;
 
@@ -69,8 +68,8 @@ class DioClient {
     ]);
 
     // Wire Dio back into interceptors that need to replay requests.
-    retryInterceptor.setDio(dio);
-    tokenRefreshInterceptor.setDio(dio);
+    retryInterceptor.dio = dio;
+    tokenRefreshInterceptor.dio = dio;
 
     return dio;
   }

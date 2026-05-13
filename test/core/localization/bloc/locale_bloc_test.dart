@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAppStorage extends Mock implements AppStorage {}
+
 class MockPreferencesManager extends Mock implements PreferencesManager {}
 
 void main() {
@@ -18,12 +19,14 @@ void main() {
   setUp(() {
     mockAppStorage = MockAppStorage();
     mockPreferencesManager = MockPreferencesManager();
-    
+
     // Set up the base stubs
     when(() => mockAppStorage.preferences).thenReturn(mockPreferencesManager);
     when(() => mockPreferencesManager.getLanguage()).thenReturn('en');
-    when(() => mockPreferencesManager.setLanguage(any())).thenAnswer((_) async {});
-    
+    when(
+      () => mockPreferencesManager.setLanguage(any()),
+    ).thenAnswer((_) async {});
+
     localeBloc = LocaleBloc(mockAppStorage);
   });
 
@@ -57,7 +60,7 @@ void main() {
       blocTest<LocaleBloc, LocaleState>(
         'changes locale to Bengali (supported language)',
         build: () => LocaleBloc(mockAppStorage),
-        act: (bloc) => bloc.add(ChangeLocaleEvent(const Locale('bn'))),
+        act: (bloc) => bloc.add(const ChangeLocaleEvent(Locale('bn'))),
         expect: () => [
           predicate<LocaleState>(
             (state) => state.locale.languageCode == 'bn',
@@ -69,7 +72,7 @@ void main() {
       blocTest<LocaleBloc, LocaleState>(
         'falls back to English when unsupported locale is provided',
         build: () => LocaleBloc(mockAppStorage),
-        act: (bloc) => bloc.add(ChangeLocaleEvent(const Locale('fr'))),
+        act: (bloc) => bloc.add(const ChangeLocaleEvent(Locale('fr'))),
         expect: () => [
           predicate<LocaleState>(
             (state) => state.locale.languageCode == 'en',
@@ -81,13 +84,15 @@ void main() {
       blocTest<LocaleBloc, LocaleState>(
         'handles storage errors gracefully',
         setUp: () {
-          when(() => mockPreferencesManager.setLanguage(any()))
-              .thenThrow(Exception('Storage error'));
-          when(() => mockPreferencesManager.setLanguage('en'))
-              .thenAnswer((_) async {});
+          when(
+            () => mockPreferencesManager.setLanguage(any()),
+          ).thenThrow(Exception('Storage error'));
+          when(
+            () => mockPreferencesManager.setLanguage('en'),
+          ).thenAnswer((_) async {});
         },
         build: () => LocaleBloc(mockAppStorage),
-        act: (bloc) => bloc.add(ChangeLocaleEvent(const Locale('bn'))),
+        act: (bloc) => bloc.add(const ChangeLocaleEvent(Locale('bn'))),
         expect: () => [
           predicate<LocaleState>(
             (state) => state.locale.languageCode == 'en',
@@ -100,8 +105,9 @@ void main() {
         'does not emit new state when same locale is selected',
         build: () => LocaleBloc(mockAppStorage),
         seed: () => const LocaleState(LocaleConstants.english),
-        act: (bloc) => bloc.add(const ChangeLocaleEvent(LocaleConstants.english)),
-        expect: () => [],
+        act: (bloc) =>
+            bloc.add(const ChangeLocaleEvent(LocaleConstants.english)),
+        expect: () => <LocaleState>[],
       );
     });
   });

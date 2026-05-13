@@ -3,31 +3,31 @@ import 'package:logger/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AppLogger {
+  factory AppLogger() => _instance;
+
+  AppLogger._internal();
   static final Logger _logger = Logger(
-    printer: PrettyPrinter(
-      methodCount: 2,
-      errorMethodCount: 8,
-      lineLength: 120,
-      colors: true,
-      printEmojis: true,
-      dateTimeFormat: DateTimeFormat.dateAndTime,
-    ),
+    printer: PrettyPrinter(dateTimeFormat: DateTimeFormat.dateAndTime),
     level: kDebugMode ? Level.trace : Level.error,
   );
 
   static final AppLogger _instance = AppLogger._internal();
 
-  factory AppLogger() => _instance;
-
-  AppLogger._internal();
-
-  static void d({required String message, dynamic error, StackTrace? stackTrace}) {
+  static void d({
+    required String message,
+    dynamic error,
+    StackTrace? stackTrace,
+  }) {
     if (kDebugMode) {
       _logger.d(message, error: error, stackTrace: stackTrace);
     }
   }
 
-  static void i({required String message, dynamic error, StackTrace? stackTrace}) {
+  static void i({
+    required String message,
+    dynamic error,
+    StackTrace? stackTrace,
+  }) {
     if (kDebugMode) {
       _logger.i(message, error: error, stackTrace: stackTrace);
     }
@@ -41,7 +41,13 @@ class AppLogger {
   }) {
     _logger.w(message, error: error, stackTrace: stackTrace);
     if (!kDebugMode) {
-      _logToServices(message, error, stackTrace, _LogLevel.warning, metadata: metadata);
+      _logToServices(
+        message,
+        error,
+        stackTrace,
+        _LogLevel.warning,
+        metadata: metadata,
+      );
     }
   }
 
@@ -53,7 +59,13 @@ class AppLogger {
   }) {
     _logger.e(message, error: error, stackTrace: stackTrace);
     if (!kDebugMode) {
-      _logToServices(message, error, stackTrace, _LogLevel.error, metadata: metadata);
+      _logToServices(
+        message,
+        error,
+        stackTrace,
+        _LogLevel.error,
+        metadata: metadata,
+      );
     }
   }
 
@@ -65,7 +77,13 @@ class AppLogger {
   }) {
     _logger.f(message, error: error, stackTrace: stackTrace);
     if (!kDebugMode) {
-      _logToServices(message, error, stackTrace, _LogLevel.fatal, metadata: metadata);
+      _logToServices(
+        message,
+        error,
+        stackTrace,
+        _LogLevel.fatal,
+        metadata: metadata,
+      );
     }
   }
 

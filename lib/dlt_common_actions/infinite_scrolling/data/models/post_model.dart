@@ -17,10 +17,5 @@ abstract class PostModel with _$PostModel {
 
   const PostModel._();
 
-  Post toEntity()=> Post(
-    id: id,
-    title: title,
-    body: body,
-  );
-
+  Post toEntity() => Post(id: id, title: title, body: body);
 }

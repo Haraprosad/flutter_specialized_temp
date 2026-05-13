@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
-import 'package:injectable/injectable.dart';
+
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:injectable/injectable.dart';
 
 /// Enhanced multi-layer cache manager for scalable applications.
 ///
@@ -16,6 +17,9 @@ import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 /// - Concurrent request deduplication
 @lazySingleton
 class ScalableCacheManager {
+  ScalableCacheManager() {
+    _startMemoryPressureMonitoring();
+  }
   // Memory cache with LRU eviction
   final LinkedHashMap<String, _CacheEntry> _memoryCache = LinkedHashMap();
   final Map<String, Completer<dynamic>> _pendingRequests = {};
@@ -32,10 +36,6 @@ class ScalableCacheManager {
   int _evictionCount = 0;
 
   Timer? _memoryPressureTimer;
-
-  ScalableCacheManager() {
-    _startMemoryPressureMonitoring();
-  }
 
   /// Gets data from cache with automatic fallback chain:
   /// Memory -> Persistent -> API -> Cache update
@@ -150,8 +150,9 @@ class ScalableCacheManager {
     }
 
     AppLogger.i(
-        message:
-            '🧹 Cleared ${keysToRemove.length} cache entries matching pattern: $pattern');
+      message:
+          '🧹 Cleared ${keysToRemove.length} cache entries matching pattern: $pattern',
+    );
   }
 
   /// Gets cache statistics for monitoring
@@ -219,7 +220,7 @@ class ScalableCacheManager {
     // For now, we'll use a simple heuristic based on cache size
 
     final currentSize = _memoryCache.length;
-    final maxSize = _maxMemoryCacheSize;
+    const maxSize = _maxMemoryCacheSize;
 
     if (currentSize > maxSize * 0.8) {
       // Cache is getting full, proactively remove expired entries
@@ -249,20 +250,12 @@ class ScalableCacheManager {
 }
 
 class _CacheEntry {
+  _CacheEntry(this.data, this.expiryTime);
   final dynamic data;
   final DateTime expiryTime;
-
-  _CacheEntry(this.data, this.expiryTime);
 }
 
 class CacheStats {
-  final int hitCount;
-  final int missCount;
-  final double hitRate;
-  final int evictionCount;
-  final int memoryCacheSize;
-  final int pendingRequestsCount;
-
   CacheStats({
     required this.hitCount,
     required this.missCount,
@@ -271,6 +264,12 @@ class CacheStats {
     required this.memoryCacheSize,
     required this.pendingRequestsCount,
   });
+  final int hitCount;
+  final int missCount;
+  final double hitRate;
+  final int evictionCount;
+  final int memoryCacheSize;
+  final int pendingRequestsCount;
 
   @override
   String toString() {

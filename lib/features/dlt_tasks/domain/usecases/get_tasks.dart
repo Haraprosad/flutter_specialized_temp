@@ -4,11 +4,10 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class GetTasks {
+  GetTasks(this.repository);
   final TaskRepository repository;
 
-  GetTasks(this.repository);
-
   Future<List<TaskEntity>> call() async {
-    return await repository.getTasks();
+    return repository.getTasks();
   }
 }

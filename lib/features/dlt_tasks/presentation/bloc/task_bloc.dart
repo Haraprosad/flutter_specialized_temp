@@ -6,11 +6,9 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
-  final GetTasks getTasks;
-
-  TaskBloc(this.getTasks) : super(TaskInitial()) {
+  TaskBloc(this.getTasks) : super(const TaskInitial()) {
     on<GetTasksEvent>((event, emit) async {
-      emit(TaskLoading());
+      emit(const TaskLoading());
       try {
         final tasks = await getTasks();
         emit(TasksLoaded(tasks));
@@ -19,4 +17,5 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       }
     });
   }
+  final GetTasks getTasks;
 }

@@ -1,9 +1,10 @@
 import 'dart:async';
+
+import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
+import 'package:flutter_specialized_temp/core/network/cache/scalable_cache_manager.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/models/api_call_failure_model.dart';
 import 'package:flutter_specialized_temp/core/network/error_handling/network_error_handler.dart';
 import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
-import 'package:flutter_specialized_temp/core/network/cache/scalable_cache_manager.dart';
-import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 
 /// Enhanced base repository with advanced performance optimizations for scalable applications.
 ///
@@ -17,6 +18,7 @@ import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 /// - Performance monitoring
 /// - Memory efficient operations
 abstract class ScalableBaseRepository {
+  ScalableBaseRepository(this._errorHandler, this._cacheManager);
   final NetworkErrorHandler _errorHandler;
   final ScalableCacheManager _cacheManager;
 
@@ -38,8 +40,6 @@ abstract class ScalableBaseRepository {
   static const int _circuitBreakerThreshold = 5;
   static const Duration _circuitBreakerTimeout = Duration(minutes: 1);
   static const Duration _batchingWindow = Duration(milliseconds: 100);
-
-  ScalableBaseRepository(this._errorHandler, this._cacheManager);
 
   /// Enhanced API call wrapper with advanced optimizations
   Future<ApiResult<T>> optimizedApiCall<T>({
@@ -77,11 +77,11 @@ abstract class ScalableBaseRepository {
 
     // Handle batching for eligible requests
     if (enableBatching) {
-      return await _handleBatchedRequest(cacheKey, apiCall, cacheTTL);
+      return _handleBatchedRequest(cacheKey, apiCall, cacheTTL);
     }
 
     // Execute single request
-    return await _executeSingleRequest(cacheKey, apiCall, cacheTTL);
+    return _executeSingleRequest(cacheKey, apiCall, cacheTTL);
   }
 
   /// Batch multiple related API calls to execute together
@@ -95,14 +95,14 @@ abstract class ScalableBaseRepository {
     final futures = <Future<void>>[];
 
     for (final entry in calls.entries) {
-      final future = optimizedApiCall(
-        cacheKey: entry.key,
-        apiCall: entry.value,
-        cacheTTL: cacheTTL,
-        enableBatching: false, // Already batching at this level
-      ).then((result) {
-        results[entry.key] = result;
-      });
+      final future =
+          optimizedApiCall(
+            cacheKey: entry.key,
+            apiCall: entry.value,
+            cacheTTL: cacheTTL,
+          ).then((result) {
+            results[entry.key] = result;
+          });
 
       futures.add(future);
     }
@@ -184,7 +184,7 @@ abstract class ScalableBaseRepository {
       // Join existing batch
       final completer = Completer<ApiResult<T>>();
       _pendingBatches[batchKey]!.add(completer as Completer<dynamic>);
-      return await completer.future;
+      return completer.future;
     }
 
     // Start new batch
@@ -192,7 +192,7 @@ abstract class ScalableBaseRepository {
     _pendingBatches[batchKey] = completers;
 
     // Wait for batching window
-    await Future.delayed(_batchingWindow);
+    await Future<void>.delayed(_batchingWindow);
 
     // Execute all requests in the batch
     final batchCompleters = _pendingBatches.remove(batchKey) ?? [];
@@ -261,7 +261,7 @@ abstract class ScalableBaseRepository {
 
     while (_activeRequests.length >= _maxConcurrentRequests &&
         stopwatch.elapsed < maxWaitTime) {
-      await Future.delayed(checkInterval);
+      await Future<void>.delayed(checkInterval);
     }
   }
 
@@ -281,19 +281,18 @@ abstract class ScalableBaseRepository {
 enum RequestPriority { low, normal, high, critical }
 
 class RepositoryStats {
+  RepositoryStats({
+    required this.activeRequests,
+    required this.circuitOpen,
+    required this.failureCount,
+    required this.cacheStats,
+    this.lastFailureTime,
+  });
   final int activeRequests;
   final bool circuitOpen;
   final int failureCount;
   final DateTime? lastFailureTime;
   final CacheStats cacheStats;
-
-  RepositoryStats({
-    required this.activeRequests,
-    required this.circuitOpen,
-    required this.failureCount,
-    this.lastFailureTime,
-    required this.cacheStats,
-  });
 
   @override
   String toString() {

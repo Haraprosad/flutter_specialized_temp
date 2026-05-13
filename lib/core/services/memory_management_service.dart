@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/painting.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/cache/scalable_cache_manager.dart';
 import 'package:injectable/injectable.dart';
@@ -17,6 +18,7 @@ import 'package:injectable/injectable.dart';
 /// - Performance metrics tracking
 @singleton
 class MemoryManagementService {
+  MemoryManagementService(this._cacheManager);
   final ScalableCacheManager _cacheManager;
 
   // Configuration
@@ -28,8 +30,6 @@ class MemoryManagementService {
   Timer? _memoryMonitorTimer;
   int _lastKnownMemoryUsage = 0;
   int _cleanupCount = 0;
-
-  MemoryManagementService(this._cacheManager);
 
   /// Initialize memory monitoring
   void initialize() {
@@ -135,7 +135,8 @@ class MemoryManagementService {
 
       if (estimatedUsage > _memoryCriticalThreshold) {
         AppLogger.w(
-            message: '🚨 Critical memory usage detected: $estimatedUsage%');
+          message: '🚨 Critical memory usage detected: $estimatedUsage%',
+        );
         forceCleanup();
       } else if (estimatedUsage > _memoryWarningThreshold) {
         AppLogger.w(message: '⚠️ High memory usage detected: $estimatedUsage%');
@@ -154,8 +155,10 @@ class MemoryManagementService {
 
     // Rough estimation (this is simplified)
     final estimatedUsage =
-        ((imageCacheSize / (1024 * 1024)) * 0.1 + liveImages * 0.5)
-            .clamp(0, 100);
+        ((imageCacheSize / (1024 * 1024)) * 0.1 + liveImages * 0.5).clamp(
+          0,
+          100,
+        );
 
     return estimatedUsage.toInt();
   }
@@ -176,8 +179,12 @@ class MemoryManagementService {
     // Reduce image cache size if it's too large
     if (imageCache.currentSize > 100 * 1024 * 1024) {
       // 100MB
-      imageCache.maximumSize = 50 * 1024 * 1024; // Reduce to 50MB
-      imageCache.clear();
+      imageCache
+        ..maximumSize =
+            50 *
+            1024 *
+            1024 // Reduce to 50MB
+        ..clear();
 
       AppLogger.d(message: '📉 Image cache size reduced');
     }
@@ -197,22 +204,10 @@ class MemoryManagementService {
 }
 
 /// Memory pressure levels
-enum MemoryPressureLevel {
-  low,
-  moderate,
-  high,
-  critical,
-}
+enum MemoryPressureLevel { low, moderate, high, critical }
 
 /// Memory usage statistics
 class MemoryStats {
-  final int totalMemory;
-  final int usedMemory;
-  final int freeMemory;
-  final double usagePercentage;
-  final MemoryPressureLevel pressureLevel;
-  final DateTime timestamp;
-
   const MemoryStats({
     required this.totalMemory,
     required this.usedMemory,
@@ -221,13 +216,19 @@ class MemoryStats {
     required this.pressureLevel,
     required this.timestamp,
   });
+  final int totalMemory;
+  final int usedMemory;
+  final int freeMemory;
+  final double usagePercentage;
+  final MemoryPressureLevel pressureLevel;
+  final DateTime timestamp;
 
   Map<String, dynamic> toJson() => {
-        'total_memory': totalMemory,
-        'used_memory': usedMemory,
-        'free_memory': freeMemory,
-        'usage_percentage': usagePercentage,
-        'pressure_level': pressureLevel.name,
-        'timestamp': timestamp.toIso8601String(),
-      };
+    'total_memory': totalMemory,
+    'used_memory': usedMemory,
+    'free_memory': freeMemory,
+    'usage_percentage': usagePercentage,
+    'pressure_level': pressureLevel.name,
+    'timestamp': timestamp.toIso8601String(),
+  };
 }

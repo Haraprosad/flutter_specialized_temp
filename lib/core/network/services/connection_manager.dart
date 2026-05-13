@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:injectable/injectable.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 
 /// Monitors internet connectivity and provides instant connection status.
 ///
@@ -14,6 +14,7 @@ import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 /// Performance win: 0ms vs 200-500ms per request if we checked every time
 @lazySingleton
 class ConnectionManager {
+  ConnectionManager(this._connectionChecker, this._connectivity);
   final InternetConnectionChecker _connectionChecker;
   final Connectivity _connectivity;
 
@@ -27,11 +28,6 @@ class ConnectionManager {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   StreamSubscription<InternetConnectionStatus>? _connectionStatusSubscription;
 
-  ConnectionManager(
-    this._connectionChecker,
-    this._connectivity,
-  );
-
   /// Subscribe to get notified whenever connection status changes
   Stream<bool> get connectivityStream => _connectivityController.stream;
 
@@ -41,13 +37,12 @@ class ConnectionManager {
   /// Check internet connection on demand.
   /// Prefer using [isConnected] for instant cached state.
   Future<bool> checkInternetConnection() async {
-    var isDeviceConnected = false;
+    const isDeviceConnected = false;
     final connectivityResult = await _connectivity.checkConnectivity();
 
     if (connectivityResult.isNotEmpty &&
         !connectivityResult.contains(ConnectivityResult.none)) {
-      isDeviceConnected = await _connectionChecker.hasConnection;
-      return isDeviceConnected;
+      return _connectionChecker.hasConnection;
     }
 
     return isDeviceConnected;

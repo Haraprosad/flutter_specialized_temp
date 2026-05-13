@@ -1,5 +1,5 @@
-import 'package:flutter_specialized_temp/features/dlt_auth/domain/usecases/logout_usecase.dart';
 import 'package:flutter_specialized_temp/core/exceptions/app_exceptions.dart';
+import 'package:flutter_specialized_temp/features/dlt_auth/domain/usecases/logout_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -33,8 +33,9 @@ void main() {
     });
 
     test('propagates NetworkException when remote logout fails', () async {
-      when(() => mockRepository.logout())
-          .thenThrow(NetworkException('No connection'));
+      when(
+        () => mockRepository.logout(),
+      ).thenThrow(NetworkException('No connection'));
 
       expect(() => useCase(), throwsA(isA<NetworkException>()));
     });

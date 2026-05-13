@@ -14,7 +14,7 @@ part 'auth_state.dart';
 @singleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._loginUseCase, this._registerUseCase, this._logoutUseCase)
-      : super(AuthInitial()) {
+    : super(AuthInitial()) {
     AppLogger.d(message: 'AuthBloc initialized');
     on<LoginRequested>(_handleLogin);
     on<LogoutRequested>(_handleLogout);

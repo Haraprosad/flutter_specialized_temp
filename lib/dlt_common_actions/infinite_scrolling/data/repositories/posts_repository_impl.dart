@@ -1,8 +1,6 @@
+import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/core/network/models/api_result.dart';
 import 'package:flutter_specialized_temp/core/network/repository/scalable_base_repository.dart';
-import 'package:flutter_specialized_temp/core/network/error_handling/network_error_handler.dart';
-import 'package:flutter_specialized_temp/core/network/cache/scalable_cache_manager.dart';
-import 'package:flutter_specialized_temp/core/logger/app_logger.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/data/datasources/posts_remote_datasource.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/domain/entities/post.dart';
 import 'package:flutter_specialized_temp/dlt_common_actions/infinite_scrolling/domain/repository/posts_repository.dart';
@@ -20,18 +18,17 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: PostsRepository)
 class PostsRepositoryImpl extends ScalableBaseRepository
     implements PostsRepository {
+  PostsRepositoryImpl(
+    super.errorHandler,
+    super.cacheManager,
+    this._remoteDataSource,
+  );
   final PostsRemoteDataSource _remoteDataSource;
 
   // Performance tracking
   int _totalRequests = 0;
-  int _cacheHits = 0;
+  final int _cacheHits = 0;
   final Map<String, DateTime> _lastFetchTimes = {};
-
-  PostsRepositoryImpl(
-    NetworkErrorHandler errorHandler,
-    ScalableCacheManager cacheManager,
-    this._remoteDataSource,
-  ) : super(errorHandler, cacheManager);
 
   @override
   Future<ApiResult<List<Post>>> getPosts({
@@ -46,7 +43,7 @@ class PostsRepositoryImpl extends ScalableBaseRepository
       message: '📝 Loading posts: start=$start, limit=$limit, refresh=$refresh',
     );
 
-    return await optimizedApiCall<List<Post>>(
+    return optimizedApiCall<List<Post>>(
       cacheKey: 'posts_entities_${start}_$limit',
       cacheTTL: _calculateCacheTTL(start),
       bypassCache: refresh,
@@ -83,13 +80,13 @@ class PostsRepositoryImpl extends ScalableBaseRepository
   Future<ApiResult<void>> preloadCriticalPosts() async {
     AppLogger.i(message: '🚀 Preloading critical posts for app startup');
 
-    return await optimizedApiCall<void>(
+    return optimizedApiCall<void>(
       cacheKey: 'preload_critical_posts',
-      cacheTTL: Duration(minutes: 1), // Short TTL for preload tracking
+      cacheTTL: const Duration(minutes: 1), // Short TTL for preload tracking
       priority: RequestPriority.low,
       apiCall: () async {
         // Preload first page in background
-        await getPosts(start: 0, limit: 20);
+        await getPosts();
         AppLogger.i(message: '✅ Critical posts preloaded successfully');
       },
     );
@@ -118,7 +115,7 @@ class PostsRepositoryImpl extends ScalableBaseRepository
     }
 
     // No cache available, fetch normally
-    return await getPosts(start: start, limit: limit);
+    return getPosts(start: start, limit: limit);
   }
 
   @override
@@ -130,10 +127,7 @@ class PostsRepositoryImpl extends ScalableBaseRepository
 
       AppLogger.i(message: '🧹 Posts cache cleared completely');
     } catch (e) {
-      AppLogger.e(
-        message: '❌ Error clearing posts cache',
-        error: e,
-      );
+      AppLogger.e(message: '❌ Error clearing posts cache', error: e);
     }
   }
 
@@ -168,16 +162,16 @@ class PostsRepositoryImpl extends ScalableBaseRepository
   Duration _calculateCacheTTL(int start) {
     // First page gets longer cache time (accessed more frequently)
     if (start == 0) {
-      return Duration(minutes: 15);
+      return const Duration(minutes: 15);
     }
 
     // Second page gets medium cache time
     if (start <= 20) {
-      return Duration(minutes: 10);
+      return const Duration(minutes: 10);
     }
 
     // Subsequent pages get shorter cache time
-    return Duration(minutes: 5);
+    return const Duration(minutes: 5);
   }
 
   bool _isDataStale(int start) {
@@ -187,19 +181,17 @@ class PostsRepositoryImpl extends ScalableBaseRepository
     if (lastFetch == null) return true;
 
     final staleDuration = start == 0
-        ? Duration(minutes: 5) // First page refreshes more frequently
-        : Duration(minutes: 10);
+        ? const Duration(minutes: 5) // First page refreshes more frequently
+        : const Duration(minutes: 10);
 
     return DateTime.now().difference(lastFetch) > staleDuration;
   }
 
   void _triggerBackgroundPreload(int start, int limit) {
     // Background preloading - fire and forget
-    Future.delayed(Duration(milliseconds: 500), () {
-      getPosts(start: start, limit: limit).catchError((error) {
-        AppLogger.w(
-          message: '⚠️ Background preload failed: $error',
-        );
+    Future.delayed(const Duration(milliseconds: 500), () {
+      getPosts(start: start, limit: limit).catchError((Object error) {
+        AppLogger.w(message: '⚠️ Background preload failed: $error');
         return ApiFailure<List<Post>>(errorHandler.handleError(error));
       });
     });
@@ -207,11 +199,11 @@ class PostsRepositoryImpl extends ScalableBaseRepository
 
   void _triggerBackgroundRefresh(int start, int limit) {
     // Background refresh - fire and forget
-    Future.delayed(Duration(milliseconds: 100), () {
-      getPosts(start: start, limit: limit, refresh: true).catchError((error) {
-        AppLogger.w(
-          message: '⚠️ Background refresh failed: $error',
-        );
+    Future.delayed(const Duration(milliseconds: 100), () {
+      getPosts(start: start, limit: limit, refresh: true).catchError((
+        Object error,
+      ) {
+        AppLogger.w(message: '⚠️ Background refresh failed: $error');
         return ApiFailure<List<Post>>(errorHandler.handleError(error));
       });
     });

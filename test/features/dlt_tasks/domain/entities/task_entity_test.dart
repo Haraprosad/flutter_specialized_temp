@@ -58,7 +58,7 @@ void main() {
         title: 'Done',
         description: 'Finished',
         isCompleted: true,
-        createdAt: DateTime(2024, 1, 1),
+        createdAt: DateTime(2024),
       );
 
       expect(completed.isCompleted, isTrue);
