@@ -28,6 +28,12 @@
 #       - name: Checkout
 #         uses: actions/checkout@v4
 
+#       - name: Write environment files
+#         run: |
+#           echo "${{ secrets.ENV_DEVELOPMENT }}" > .env.development
+#           echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
+#           echo "${{ secrets.ENV_STAGING }}" > .env.staging
+
 #       - name: Setup Java
 #         uses: actions/setup-java@v4
 #         with:
@@ -107,6 +113,12 @@
 #     steps:
 #       - name: Checkout
 #         uses: actions/checkout@v4
+
+#       - name: Write environment files
+#         run: |
+#           echo "${{ secrets.ENV_DEVELOPMENT }}" > .env.development
+#           echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
+#           echo "${{ secrets.ENV_STAGING }}" > .env.staging
 
 #       - name: Setup Flutter
 #         uses: subosito/flutter-action@v2
