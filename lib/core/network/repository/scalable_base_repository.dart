@@ -41,11 +41,23 @@ abstract class ScalableBaseRepository {
   static const Duration _circuitBreakerTimeout = Duration(minutes: 1);
   static const Duration _batchingWindow = Duration(milliseconds: 100);
 
-  /// Enhanced API call wrapper with advanced optimizations
+  /// Enhanced API call wrapper with advanced optimizations.
+  ///
+  /// Implements **stale-while-revalidate**:
+  /// - within the stale window (`staleTime`, default 5 min) the cached value
+  ///   is returned and no network call is made;
+  /// - once stale (but before `maxStaleAge`) the cached value is returned
+  ///   **immediately** while a background refresh silently fetches fresh data
+  ///   and updates the cache for the next read;
+  /// - on a miss (or past `maxStaleAge`) it fetches and waits.
+  ///
+  /// [cacheTTL] is a backward-compat alias for [staleTime].
   Future<ApiResult<T>> optimizedApiCall<T>({
     required String cacheKey,
     required Future<T> Function() apiCall,
     Duration? cacheTTL,
+    Duration? staleTime,
+    Duration? maxStaleAge,
     RequestPriority priority = RequestPriority.normal,
     bool enableBatching = false,
     bool bypassCache = false,
@@ -58,12 +70,23 @@ abstract class ScalableBaseRepository {
       return ApiFailure(_createCircuitBreakerFailure());
     }
 
-    // Try cache first (unless bypassed)
+    final staleAfter = staleTime ?? cacheTTL;
+
+    // Stale-while-revalidate: consult the cache without evicting it.
     if (!bypassCache) {
-      final cachedResult = await _cacheManager.get<T>(cacheKey, ttl: cacheTTL);
-      if (cachedResult != null) {
-        AppLogger.d(message: '🎯 Returning cached result for: $cacheKey');
-        return ApiSuccess(cachedResult);
+      final lookup = _cacheManager.peek<T>(cacheKey);
+      switch (lookup.freshness) {
+        case CacheFreshness.fresh:
+          AppLogger.d(message: '🎯 Returning fresh cached result: $cacheKey');
+          return ApiSuccess(lookup.value as T);
+        case CacheFreshness.stale:
+          AppLogger.d(
+            message: '🕰️ Serving stale + revalidating in background: $cacheKey',
+          );
+          _revalidateInBackground(cacheKey, apiCall, staleAfter, maxStaleAge);
+          return ApiSuccess(lookup.value as T);
+        case CacheFreshness.miss:
+          break; // fall through to a blocking fetch
       }
     }
 
@@ -77,11 +100,40 @@ abstract class ScalableBaseRepository {
 
     // Handle batching for eligible requests
     if (enableBatching) {
-      return _handleBatchedRequest(cacheKey, apiCall, cacheTTL);
+      return _handleBatchedRequest(cacheKey, apiCall, staleAfter, maxStaleAge);
     }
 
     // Execute single request
-    return _executeSingleRequest(cacheKey, apiCall, cacheTTL);
+    return _executeSingleRequest(cacheKey, apiCall, staleAfter, maxStaleAge);
+  }
+
+  /// Fire-and-forget background refresh for a stale entry. Deduplicated so a
+  /// key already being refreshed is not refreshed again; failures are logged
+  /// (the user keeps the served stale value) without throwing.
+  void _revalidateInBackground<T>(
+    String cacheKey,
+    Future<T> Function() apiCall,
+    Duration? staleAfter,
+    Duration? maxAge,
+  ) {
+    if (_activeRequests.contains(cacheKey)) {
+      AppLogger.d(message: '⏳ Revalidation already in flight: $cacheKey');
+      return;
+    }
+    unawaited(
+      _executeSingleRequest<T>(cacheKey, apiCall, staleAfter, maxAge).then((
+        result,
+      ) {
+        switch (result) {
+          case ApiSuccess<T>():
+            AppLogger.d(message: '✅ Background revalidation done: $cacheKey');
+          case ApiFailure<T>():
+            AppLogger.w(
+              message: '⚠️ Background revalidation failed: $cacheKey',
+            );
+        }
+      }),
+    );
   }
 
   /// Batch multiple related API calls to execute together
@@ -146,7 +198,8 @@ abstract class ScalableBaseRepository {
   Future<ApiResult<T>> _executeSingleRequest<T>(
     String cacheKey,
     Future<T> Function() apiCall,
-    Duration? cacheTTL,
+    Duration? staleAfter,
+    Duration? maxAge,
   ) async {
     _activeRequests.add(cacheKey);
 
@@ -155,7 +208,12 @@ abstract class ScalableBaseRepository {
       final result = await apiCall();
 
       // Cache the result
-      await _cacheManager.put(cacheKey, result, ttl: cacheTTL);
+      await _cacheManager.put(
+        cacheKey,
+        result,
+        staleAfter: staleAfter,
+        maxAge: maxAge,
+      );
 
       // Reset circuit breaker on success
       _resetCircuitBreaker();
@@ -175,7 +233,8 @@ abstract class ScalableBaseRepository {
   Future<ApiResult<T>> _handleBatchedRequest<T>(
     String cacheKey,
     Future<T> Function() apiCall,
-    Duration? cacheTTL,
+    Duration? staleAfter,
+    Duration? maxAge,
   ) async {
     // Check if there's already a pending batch for this type of request
     final batchKey = _getBatchKey(cacheKey);
@@ -198,7 +257,12 @@ abstract class ScalableBaseRepository {
     final batchCompleters = _pendingBatches.remove(batchKey) ?? [];
 
     try {
-      final result = await _executeSingleRequest(cacheKey, apiCall, cacheTTL);
+      final result = await _executeSingleRequest(
+        cacheKey,
+        apiCall,
+        staleAfter,
+        maxAge,
+      );
 
       // Complete all waiting requests with the same result
       for (final completer in batchCompleters) {

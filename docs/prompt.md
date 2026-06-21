@@ -13,6 +13,27 @@ the phases in [00_WORKFLOW.md](00_WORKFLOW.md) → "Design-to-code".
 
 Run them **in order**. Skip Prompt 1 if the screen needs no new design tokens.
 
+> **Before any prompt below:** capture the product idea in
+> [APP_OVERVIEW.md](APP_OVERVIEW.md) (Prompt 0). It drives the brand brief in
+> Prompt 1 and the per-feature specs in Prompt 2.
+
+---
+
+## Prompt 0 — Capture the app idea (once, before everything)
+
+> Do this first. It's the product-level source of truth the later prompts read.
+
+```
+I'm starting a new app on this template. Help me fill in docs/APP_OVERVIEW.md:
+
+Idea: <one paragraph — what the app is, who it's for, the problem it solves>
+Brand: primary <#hex>, accent <#hex>, font <family>, feel <snappy/smooth>
+Features I want, in build order: <feature 1>, <feature 2>, ...
+
+Draft docs/APP_OVERVIEW.md from the template already in that file. Don't write
+any code or feature specs yet — just the overview for me to confirm.
+```
+
 ---
 
 ## Prompt 1 — Reconcile Figma tokens into the design system (only if needed)
@@ -89,9 +110,13 @@ Spec: docs/features/<feature_name>.md. Follow CLAUDE.md exactly.
    - presentation/
        bloc/   : events/states; handler switches exhaustively on ApiResult;
                  bloc_concurrency transformers
-       pages/  : <feature_name>_screen.dart — full screen composition + BlocBuilder,
-                 rendering all states (initial, loading, empty, populated, error)
-       widgets/: the reusable pieces of the screen, one concept per file
+       pages/  : <feature_name>_screen.dart — ONLY composes sections + wires
+                 BlocBuilder, rendering all states (initial, loading, empty,
+                 populated, error). The page is a thin assembler — it must NOT
+                 contain hundreds of lines of inline widget tree.
+       widgets/: every section of the screen is its own widget file here
+                 (header, list item, filter bar, empty-state, ... — one concept
+                 per file). If a chunk of the page has a name, it's a widget.
    - routing  : register the route in lib/core/router/
 
 Hard rules (stop and fix if any is at risk):

@@ -6,7 +6,7 @@ import 'package:flutter_specialized_temp/core/network/repository/scalable_base_r
 
 /// Lightweight base class for feature repositories that need standardised
 /// error handling and logging without the full [ScalableBaseRepository]
-/// complexity (circuit breaker, batching, multi-tier cache).
+/// complexity (circuit breaker, batching, stale-while-revalidate cache).
 ///
 /// Extend this for simple CRUD repositories. Extend [ScalableBaseRepository]
 /// when you need caching, request batching, or circuit breaking.

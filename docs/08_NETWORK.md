@@ -113,7 +113,7 @@ Every HTTP request in this application goes through the **Network Management Sys
 | Component | File | Purpose |
 |---|---|---|
 | **BaseApiRepository** | `base_api_repository.dart` | Lightweight base for simple CRUD repos. Provides `safeApiCall()` → wraps any API call in try/catch → `ApiResult<T>`. |
-| **ScalableBaseRepository** | `repository/scalable_base_repository.dart` | Advanced base with circuit breaker, request batching, multi-tier cache, concurrent request limiting, performance stats. Use for high-traffic features. Provides `optimizedApiCall()`. |
+| **ScalableBaseRepository** | `repository/scalable_base_repository.dart` | Advanced base with circuit breaker, request batching, stale-while-revalidate caching, concurrent request limiting, performance stats. Use for high-traffic features. Provides `optimizedApiCall()`. |
 
 ### Connectivity & Offline
 
@@ -138,7 +138,7 @@ Every HTTP request in this application goes through the **Network Management Sys
 |---|---|---|
 | **JsonParseUtils** | `utils/json_parse_utils.dart` | Type-safe JSON converters for handling inconsistent backend responses (null → default, String → int, etc.). |
 | **DebounceUtils** | `utils/debounce_utils.dart` | Debounce utility for search inputs and rapid-fire API calls. |
-| **ScalableCacheManager** | `cache/scalable_cache_manager.dart` | Two-tier cache: L1 in-memory + L2 disk. TTL support, warmup, stats. |
+| **ScalableCacheManager** | `cache/scalable_cache_manager.dart` | In-memory (L1) cache with **stale-while-revalidate**: each entry has a stale window (`staleAfter`) and a hard `maxAge`. `peek()` reports fresh/stale/miss; warmup, LRU eviction, stats. In-memory only — does **not** survive an app restart (use Drift / the mutation queue for durable storage). |
 | **AppImageCacheManager** | `cache/app_image_cache_manager.dart` | Image-specific cache with size limits and eviction. |
 
 ### Constants & Enums
@@ -513,7 +513,7 @@ When an API call fails, the error travels through a defined pipeline:
 ### When to Use ScalableBaseRepository
 
 Use `ScalableBaseRepository` + `optimizedApiCall()` when your feature needs:
-- **Caching** — Serve stale data while refreshing in background
+- **Stale-while-revalidate caching** — instant re-entry with silent background refresh (see below)
 - **Circuit breaker** — Stop hammering a failing API (opens after 5 failures, resets after 1 minute)
 - **Request batching** — Coalesce identical concurrent requests
 - **Concurrent limiting** — Max 10 concurrent requests
@@ -534,6 +534,7 @@ class ProductRepositoryImpl extends ScalableBaseRepository
   Future<ApiResult<List<ProductEntity>>> getProducts({
     int page = 1,
     int limit = 20,
+    bool refresh = false,
   }) =>
       optimizedApiCall(
         cacheKey: 'products_page_${page}_limit_$limit',
@@ -541,10 +542,43 @@ class ProductRepositoryImpl extends ScalableBaseRepository
           final models = await _remote.getProducts(page: page, limit: limit);
           return models.map((m) => m.toEntity()).toList();
         },
-        cacheTTL: const Duration(minutes: 5),
+        staleTime: const Duration(minutes: 5),   // fresh window
+        maxStaleAge: const Duration(hours: 1),    // hard expiry
+        bypassCache: refresh,                     // pull-to-refresh forces network
       );
 }
 ```
+
+### Stale-while-revalidate (SWR)
+
+`optimizedApiCall()` implements stale-while-revalidate so screens re-open
+instantly and update themselves silently. Each cached entry has two phases:
+
+| Phase | Window | Behavior on read |
+|---|---|---|
+| **Fresh** | `now < staleTime` | Return cached value. **No network call.** |
+| **Stale** | `staleTime ≤ now < maxStaleAge` | Return cached value **immediately**, then fire a **background refresh** that updates the cache for the next read. The user never waits or sees a spinner. |
+| **Expired** | `now ≥ maxStaleAge` | Cache miss — fetch and wait (shows loading). |
+
+Concretely, with `staleTime: 5min`: revisit the screen within 5 minutes and it
+serves the cached data with zero network. After 5 minutes the next visit still
+paints instantly from cache *and* kicks off a silent refresh in the background,
+so the data is up to date by the next frame without a loading state. Only after
+`maxStaleAge` (default 1 hour) does a visit block on the network again.
+
+Parameters:
+- `staleTime` (alias: `cacheTTL`) — how long data stays fresh. Default 5 min.
+- `maxStaleAge` — hard expiry past which stale data is no longer served. Default 1 hour. Clamped up to at least `staleTime`.
+- `bypassCache: true` — skip the cache entirely and fetch (use for pull-to-refresh).
+
+Background revalidation is deduplicated (one in-flight refresh per `cacheKey`)
+and best-effort: if it fails the user keeps the served stale value and the
+failure is logged, never thrown.
+
+> **Scope:** the cache is **in-memory only** — it does not survive an app
+> restart. SWR optimizes in-session navigation. For data that must be readable
+> offline after a cold start, persist it with Drift or queue writes through the
+> `MutationQueue`.
 
 ---
 
@@ -806,7 +840,7 @@ lib/core/network/
 │   └── base_bloc_state.dart            # Base state for BaseBloc
 ├── cache/
 │   ├── app_image_cache_manager.dart     # Image-specific cache
-│   └── scalable_cache_manager.dart      # L1 in-memory + L2 disk cache
+│   └── scalable_cache_manager.dart      # In-memory cache w/ stale-while-revalidate
 ├── config/
 │   ├── dio_client.dart                  # Dio instance + interceptor chain
 │   └── interceptors/

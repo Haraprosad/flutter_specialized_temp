@@ -37,8 +37,10 @@ Four things work together:
 **Goal:** get the template running with your app's identity.
 
 Follow [01_GETTING_STARTED.md](01_GETTING_STARTED.md) for the full steps (env
-files, app name, package/bundle ID, icon, splash). Two things specific to this
-workflow:
+files, app name, package/bundle ID, icon, splash). Before moving on, capture the
+product idea in [APP_OVERVIEW.md](APP_OVERVIEW.md) — it's the product-level
+source of truth that feeds the Phase 1 brand brief and the Phase 2 feature specs.
+Two things specific to this workflow:
 
 - Set `BASE_URL=http://localhost:3000/` in `.env.development` — it'll point at
   the Phase 3 mock.

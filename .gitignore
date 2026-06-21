@@ -78,3 +78,8 @@ macos/Podfile.lock
 
 # DevTools personal preferences
 devtools_options.yaml
+
+# Claude Code — personal/local settings only.
+# DO commit CLAUDE.md, .claude/agents/, and .claude/skills/ — they are the
+# project's rules and drive the whole workflow. Only the local override is ignored.
+.claude/settings.local.json

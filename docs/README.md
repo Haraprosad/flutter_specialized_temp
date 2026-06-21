@@ -1,25 +1,77 @@
-# Flutter Specialized Template — Source of Truth
+# Documentation Hub — flutter_specialized_temp
 
-A **production-ready, battle-proof Flutter starter** built with Clean Architecture, BLoC, Injectable DI, multi-flavor support, a unified Design Management System, and comprehensive testing infrastructure.
+This folder is the **deep reference** for the template. Each guide owns exactly
+**one topic**, and nothing is documented in two places — when you need detail on
+a layer, there's exactly one file to open.
 
-> **New to this template?** Start with the runbook, then use the numbered guides
-> as deep reference:
->
-> 0. [Workflow](00_WORKFLOW.md) — **the runbook**: phases 0–7, agents & skills, the per-feature loop
-> 1. [Getting Started](01_GETTING_STARTED.md) — Set up your app, run it
-> 2. [Architecture](02_ARCHITECTURE.md) — Understand the codebase
-> 3. [Feature Guide](03_FEATURE_GUIDE.md) — Build a feature end-to-end
-> 4. [Design System](04_DESIGN_SYSTEM.md) — UI tokens, responsive/adaptive patterns
-> 5. [Testing](05_TESTING.md) — Unit, widget, bloc, integration tests
-> 6. [Deployment](06_DEPLOYMENT.md) — Build, sign, submit to stores
+> **First time here?** Read the root [README.md](../README.md) (the
+> fork → running-app journey), then [00_WORKFLOW.md](00_WORKFLOW.md) (the
+> runbook). Come back to this hub when you need a specific topic.
 
 ---
 
-## Quick Start
+## How to use these docs
 
-See [01_GETTING_STARTED.md](01_GETTING_STARTED.md) for the full first-run setup
-(env files, app name, package, icon, splash). The short version lives in the root
-[README.md](../README.md).
+**Reading order (first time)**
+
+1. [../README.md](../README.md) — what this template is + the newbie journey.
+2. [00_WORKFLOW.md](00_WORKFLOW.md) — the runbook: phases 0–7 and the per-feature loop.
+3. Then **build**, opening the numbered guide for whatever layer you're on.
+
+**The one rule: single source of truth.** Every topic has exactly one home (see
+the map below). When something changes, edit it *there* and link from anywhere
+else — never copy it. The only deliberate duplication is layered: [CLAUDE.md](../CLAUDE.md)
+carries a *terse summary* of the rules so Claude always has them in context,
+while the full detail lives in the owning guide and in `.claude/skills/`.
+
+**Which file does what** (the doc map — find the owner before you write)
+
+| File | Its one job | Open it when… |
+|---|---|---|
+| [../README.md](../README.md) | Project front door: what it is + fork→run journey | You (or a teammate) just cloned the template |
+| [../CLAUDE.md](../CLAUDE.md) | Claude's always-loaded rulebook: 14 non-negotiables, phase order, doc map | You want the rules in one terse place (Claude reads this every session) |
+| [00_WORKFLOW.md](00_WORKFLOW.md) | The runbook — phases 0–7, agents/skills, per-feature loop | You're deciding *what to do next* |
+| [APP_OVERVIEW.md](APP_OVERVIEW.md) | **Your app's** product vision (idea, users, brand, feature order) | Starting a new app — fill this first |
+| [prompt.md](prompt.md) | Copy-paste prompts: Figma design → working screen | You're driving a feature with Claude |
+| [01_GETTING_STARTED.md](01_GETTING_STARTED.md) | First-run setup + all commands/scripts | Configuring name/package/icon/env, or you need a command |
+| [02_ARCHITECTURE.md](02_ARCHITECTURE.md) | Architecture, file-purpose map, the `lib/` tree, SOLID | You want to understand the codebase shape |
+| [03_FEATURE_GUIDE.md](03_FEATURE_GUIDE.md) | Build one feature end-to-end, layer by layer | Implementing a feature |
+| [04_DESIGN_SYSTEM.md](04_DESIGN_SYSTEM.md) | Design tokens, themes, responsive/adaptive | Writing any UI |
+| [05_TESTING.md](05_TESTING.md) | Unit/widget/bloc/integration patterns, edge cases | Writing tests |
+| [06_DEPLOYMENT.md](06_DEPLOYMENT.md) | Build flavors, signing, store submission, CI/CD | Shipping |
+| [07_ROUTING.md](07_ROUTING.md) | GoRouter: names/paths, guards, transitions | Adding a route or navigating |
+| [08_NETWORK.md](08_NETWORK.md) | DioClient, interceptors, `safeApiCall`, `ApiResult`, offline | Calling an API |
+| [09_LOCALIZATION.md](09_LOCALIZATION.md) | `context.loc`, ARB files, `LocaleBloc`, new strings/languages | Adding user-facing text |
+| [10_LOGGING.md](10_LOGGING.md) | `AppLogger`, severity levels, Sentry forwarding | Adding diagnostics |
+| [11_STORAGE.md](11_STORAGE.md) | `AppStorage`, secure storage (tokens/PIN), preferences | Persisting local data |
+| [features/](features/) | One `.md` per feature — the Phase 2 spec output | Specifying or building a feature |
+| `.claude/agents/*` | Specialist personas you summon by `@name` | (Claude's config — see root README) |
+| `.claude/skills/*` | Hardened rules per concern, auto-triggered | (Claude's config — see root README) |
+
+---
+
+## Guide catalog (numbered reference)
+
+| # | Guide | Purpose |
+|---|---|---|
+| 0 | [Workflow](00_WORKFLOW.md) | The runbook — phases 0–7, agents & skills, the per-feature loop |
+| — | [App Overview](APP_OVERVIEW.md) | Your app's product-level source of truth — write the idea here first |
+| — | [Prompts](prompt.md) | Copy-paste prompts for Figma design → working screen |
+| 1 | [Getting Started](01_GETTING_STARTED.md) | Configure app name, package, icon, env; first run; all scripts |
+| 2 | [Architecture](02_ARCHITECTURE.md) | Full architecture walkthrough, file-purpose map, SOLID |
+| 3 | [Feature Guide](03_FEATURE_GUIDE.md) | Build a feature: DI, models, API, BLoC, routing, design system |
+| 4 | [Design System](04_DESIGN_SYSTEM.md) | Tokens, responsive/adaptive, themes, styles, extensions |
+| 5 | [Testing](05_TESTING.md) | Unit, widget, bloc, integration; edge cases; store readiness |
+| 6 | [Deployment](06_DEPLOYMENT.md) | Build flavors, signing, store submission, CI/CD, monitoring |
+| 7 | [Routing](07_ROUTING.md) | GoRouter: route names/paths, guards, transitions, navigation |
+| 8 | [Network](08_NETWORK.md) | DioClient, interceptors, `safeApiCall`, `ApiResult`, offline |
+| 9 | [Localization](09_LOCALIZATION.md) | `context.loc`, ARB files, `LocaleBloc`, strings/languages |
+| 10 | [Logging](10_LOGGING.md) | `AppLogger`, severity levels, Sentry forwarding, where to log |
+| 11 | [Local Storage](11_STORAGE.md) | `AppStorage`, secure storage, preferences, `StorageKeys` |
+
+> Architecture diagram, quick-start commands, and the `lib/` tree are **not**
+> repeated here — they live in their owners: [02_ARCHITECTURE.md](02_ARCHITECTURE.md)
+> and [01_GETTING_STARTED.md](01_GETTING_STARTED.md).
 
 ---
 
@@ -43,96 +95,3 @@ See [01_GETTING_STARTED.md](01_GETTING_STARTED.md) for the full first-run setup
 | **CI/CD** | GitHub Actions for test + deploy pipelines |
 | **Environments** | Dev / Staging / Prod via `.env.*` files |
 | **Feature Scaffold** | Mason brick: `mason make feature` generates the full layer structure |
-
----
-
-## Architecture at a Glance
-
-```
-lib/
-├── main.dart                        # App entry
-├── flavors/                         # Environment configs & entry points
-├── core/
-│   ├── bloc/                        # ThemeBloc, NavigationBloc
-│   ├── database/                    # Drift DB, tables, DAOs
-│   ├── design_management_system/    # Tokens, themes, styles, extensions
-│   ├── di/                          # GetIt + Injectable setup
-│   ├── exceptions/                  # AppException hierarchy
-│   ├── extensions/                  # String, DateTime helpers
-│   ├── localization/                # ARB files, LocaleBloc
-│   ├── logger/                      # AppLogger (Sentry-aware)
-│   ├── network/                     # DioClient, interceptors, error handling
-│   ├── observers/                   # BlocObserver, RouterObserver
-│   ├── router/                      # GoRouter config & guards
-│   ├── services/                    # MemoryManagementService
-│   ├── storage/                     # SecureStorage + Preferences
-│   └── widgets/                     # Shared UI components
-├── features/
-│   ├── auth/                    # Auth feature (reference implementation)
-│   ├── home/                    # Home feature
-│   ├── profile/                 # Profile feature
-│   └── tasks/                   # Tasks feature (with Drift DB)
-└── common_actions/
-    └── infinite_scrolling/          # Reusable infinite-scroll pattern
-```
-
-Each feature follows the same structure:
-
-```
-features/<name>/
-├── domain/         → entities, repository interfaces, use cases
-├── data/           → models (Freezed), datasources, repository implementations
-└── presentation/   → BLoC (events/states), pages, widgets
-```
-
----
-
-## Key Commands
-
-```bash
-# Development
-flutter run -t lib/flavors/main_development.dart
-flutter run -t lib/main_preview.dart          # Responsive preview
-
-# Code generation (after adding @freezed / @injectable / Drift)
-./scripts/codegen.sh
-
-# Full clean rebuild
-./scripts/clean.sh
-
-# Analysis
-flutter analyze --fatal-infos --fatal-warnings
-
-# Testing
-flutter test
-flutter test --coverage
-flutter test integration_test
-
-# Production build
-flutter build appbundle -t lib/flavors/main_production.dart --release \
-  --obfuscate --split-debug-info=build/debug-info
-```
-
----
-
-## Guide Index
-
-| # | Guide | Purpose |
-|---|---|---|
-| 0 | [Workflow](00_WORKFLOW.md) | The runbook — phases 0–7, agents & skills, the per-feature loop |
-| — | [Prompts](prompt.md) | Copy-paste prompts for Figma design → working screen |
-| 1 | [Getting Started](01_GETTING_STARTED.md) | Configure app name, package, icon, env; first run |
-| 2 | [Architecture](02_ARCHITECTURE.md) | Full architecture walkthrough, file-purpose map, SOLID |
-| 3 | [Feature Guide](03_FEATURE_GUIDE.md) | Build a feature: DI, models, API, BLoC, routing, design system |
-| 4 | [Design System](04_DESIGN_SYSTEM.md) | Tokens, responsive/adaptive, themes, styles, extensions |
-| 5 | [Testing](05_TESTING.md) | Unit, widget, bloc, integration; edge cases; store readiness |
-| 6 | [Deployment](06_DEPLOYMENT.md) | Build flavors, signing, store submission, CI/CD, monitoring |
-| 7 | [Routing](07_ROUTING.md) | GoRouter system: route names/paths, guards, transitions, navigation flow |
-| 8 | [Network](08_NETWORK.md) | DioClient, interceptors, `safeApiCall`, `ApiResult`, offline patterns |
-| 9 | [Localization](09_LOCALIZATION.md) | `context.loc`, ARB files, `LocaleBloc`, adding strings/languages, non-UI translation |
-| 10 | [Logging](10_LOGGING.md) | `AppLogger`, severity levels, Sentry forwarding, where to log per layer |
-
-The Claude Code config that drives this workflow lives outside `docs/`:
-`CLAUDE.md` (project rules), `.claude/agents/` (specialists you summon by name),
-and `.claude/skills/` (auto-triggering rule sets). See the root
-[README.md](../README.md) for the layout.

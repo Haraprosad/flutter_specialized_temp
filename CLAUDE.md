@@ -29,7 +29,7 @@ A production Flutter application built on the **flutter_specialized_temp** templ
 2. BLoCs depend on **use cases**, never repositories directly.
 3. DI is **constructor injection**. Never `sl<T>()` inside BLoCs / use cases / repositories / datasources.
 4. Every model `@JsonKey` uses a `JsonParseUtils` converter + `@Default`.
-5. Every API call goes through `safeApiCall` (or `optimizedApiCall` for high-traffic features). Returns `ApiResult<T>`. See `docs/08_NETWORK.md` for the complete network system, interceptor chain, error handling pipeline, and step-by-step integration walkthrough.
+5. Every API call goes through `safeApiCall` (or `optimizedApiCall` for high-traffic features). Returns `ApiResult<T>`. `optimizedApiCall` does **stale-while-revalidate** caching — `staleTime` (default 5 min) serves cached data with no network on re-entry, then serves stale + silently refreshes in the background until `maxStaleAge` (default 1 hr). The cache is in-memory only (not durable across restarts); use Drift / the `MutationQueue` for offline persistence. See `docs/08_NETWORK.md` for the complete network system, interceptor chain, error handling pipeline, SWR caching, and step-by-step integration walkthrough.
 6. Every BLoC handler `switch`es on `ApiResult` exhaustively (Dart 3 sealed-class syntax).
 7. Every UI value uses a design token (`AppSpacing.X`, `context.colors.X`, `context.textTheme.X`). No raw literals.
 8. Every interactive widget is accessible (`tooltip`, `Semantics`, ≥48×48 tap target, scales to 200% text).
@@ -68,6 +68,9 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 
 | You want to know about... | Read... |
 |---|---|
+| **Map of all docs** (which file owns what + how to use them) | `docs/README.md` |
+| This app's product vision (idea, users, brand, feature order) | `docs/APP_OVERVIEW.md` |
+| Copy-paste prompts (Figma design → working screen) | `docs/prompt.md` |
 | Overall workflow (the runbook) | `docs/00_WORKFLOW.md` |
 | Template architecture in detail | `docs/02_ARCHITECTURE.md` |
 | How to build one feature end-to-end | `docs/03_FEATURE_GUIDE.md` |
@@ -78,6 +81,7 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 | Network & API integration (DioClient, interceptors, `safeApiCall`, `ApiResult`, offline patterns) | `docs/08_NETWORK.md` |
 | Localization (`context.loc`, ARB files, `LocaleBloc`, adding strings/languages, non-UI error translation) | `docs/09_LOCALIZATION.md` |
 | Logging (`AppLogger`, severity levels, Sentry forwarding, where to log per layer) | `docs/10_LOGGING.md` |
+| Local storage (tokens/PIN in `SecureStorageManager`, login id/prefs in `PreferencesManager`, via `AppStorage`) | `docs/11_STORAGE.md` |
 | Hardened rules per task | `.claude/skills/<skill>/SKILL.md` |
 | Specialist personas | `.claude/agents/*.md` |
 
