@@ -53,7 +53,7 @@ is `docs/00_WORKFLOW.md`; this table is the terse map.
 | 1 | **Design system customization** (colors, fonts, spacing for THIS app's brand) | Agent: `design-system-architect` + Skill: `design-system-setup` |
 | 2 | Feature requirements gathering (define entities, endpoints, screens for one feature at a time) | Human-led, written into `docs/features/<name>.md` |
 | 3 | **Mock backend** via `json-server` (build the API contract before backend exists) | Agent: `mock-backend-builder` + Skill: `json-server-mocking` |
-| 4 | **TDD** — write tests first (model edge cases → use case → BLoC → widget) | Agent: `feature-developer` + Skill: `tdd-workflow` |
+| 4 | **BDD** — write behavior specs first (model scenarios → use case behaviors → BLoC state flows → widget interactions) | Agent: `feature-developer` + Skill: `bdd-workflow` |
 | 5 | **Implementation** — make the tests pass, layer by layer (domain → data → presentation) | Agent: `feature-developer` + Skill: `flutter-template-core` |
 | 6 | **UI polish & performance** — animations, micro-interactions, profile-mode tuning | Agent: `ui-polish-specialist` + Skill: `ui-polish-performance` |
 | 7 | Swap mock for real backend (only `BASE_URL` and small datasource tweaks should change) | No new agent — minimal change by definition |

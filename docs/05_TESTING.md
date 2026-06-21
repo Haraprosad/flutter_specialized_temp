@@ -1,6 +1,6 @@
 # Guide 5 — Testing
 
-Complete testing strategy for production-ready features. Covers every test type, edge cases, and Play Store / App Store quality requirements.
+Complete testing strategy for production-ready features using Behavior-Driven Development (BDD). Covers every test type, edge cases, and Play Store / App Store quality requirements. All tests use Given/When/Then naming for living documentation.
 
 ---
 
@@ -118,137 +118,157 @@ This is the most critical layer. Backend responses are unpredictable — test ev
 void main() {
   group('OrderModel', () {
     // 1. Happy path — well-formed response
-    test('parses valid JSON correctly', () {
-      final json = {
-        'id': 'ord_123',
-        'customer_name': 'John Doe',
-        'total_amount': 99.99,
-        'status': 'processing',
-        'created_at': '2024-01-15T10:30:00Z',
-        'is_paid': true,
-        'tags': ['urgent', 'fragile'],
-      };
-      final model = OrderModel.fromJson(json);
+    group('Given a valid JSON response', () {
+      test('When parsing, Then all model fields are populated correctly', () {
+        final json = {
+          'id': 'ord_123',
+          'customer_name': 'John Doe',
+          'total_amount': 99.99,
+          'status': 'processing',
+          'created_at': '2024-01-15T10:30:00Z',
+          'is_paid': true,
+          'tags': ['urgent', 'fragile'],
+        };
+        final model = OrderModel.fromJson(json);
 
-      expect(model.id, 'ord_123');
-      expect(model.customerName, 'John Doe');
-      expect(model.totalAmount, 99.99);
-      expect(model.isPaid, true);
-      expect(model.tags, ['urgent', 'fragile']);
+        expect(model.id, 'ord_123');
+        expect(model.customerName, 'John Doe');
+        expect(model.totalAmount, 99.99);
+        expect(model.isPaid, true);
+        expect(model.tags, ['urgent', 'fragile']);
+      });
     });
 
     // 2. Missing fields — defaults kick in
-    test('handles missing fields with defaults', () {
-      final model = OrderModel.fromJson({});
-      expect(model.id, '');
-      expect(model.customerName, '');
-      expect(model.totalAmount, 0.0);
-      expect(model.isPaid, false);
-      expect(model.tags, isEmpty);
-      expect(model.orderStatus, OrderStatus.pending);
+    group('Given missing fields in JSON', () {
+      test('When parsing, Then defaults are applied without crashing', () {
+        final model = OrderModel.fromJson({});
+        expect(model.id, '');
+        expect(model.customerName, '');
+        expect(model.totalAmount, 0.0);
+        expect(model.isPaid, false);
+        expect(model.tags, isEmpty);
+        expect(model.orderStatus, OrderStatus.pending);
+      });
     });
 
     // 3. Null values
-    test('handles null values', () {
-      final json = {
-        'id': null,
-        'customer_name': null,
-        'total_amount': null,
-        'tags': null,
-        'created_at': null,
-      };
-      final model = OrderModel.fromJson(json);
-      expect(model.id, '');
-      expect(model.customerName, '');
-      expect(model.totalAmount, 0.0);
-      expect(model.tags, isEmpty);
-      expect(model.createdAt, isNull);
+    group('Given null values in JSON', () {
+      test('When parsing, Then safe defaults are used', () {
+        final json = {
+          'id': null,
+          'customer_name': null,
+          'total_amount': null,
+          'tags': null,
+          'created_at': null,
+        };
+        final model = OrderModel.fromJson(json);
+        expect(model.id, '');
+        expect(model.customerName, '');
+        expect(model.totalAmount, 0.0);
+        expect(model.tags, isEmpty);
+        expect(model.createdAt, isNull);
+      });
     });
 
     // 4. Wrong types — JsonParseUtils converts safely
-    test('handles wrong types without crashing', () {
-      final json = {
-        'id': 12345,                      // int instead of String
-        'total_amount': '199.50',         // String instead of double
-        'is_paid': 'yes',                 // String instead of bool
-        'discount_percent': '15',         // String instead of int
-        'tags': [1, null, 'food', true],  // Mixed types in list
-      };
-      final model = OrderModel.fromJson(json);
-      expect(model.id, '12345');
-      expect(model.totalAmount, 199.50);
-      expect(model.isPaid, true);
-      expect(model.tags, ['1', 'food', 'true']);
+    group('Given wrong types in JSON', () {
+      test('When parsing, Then JsonParseUtils converts safely without crashing', () {
+        final json = {
+          'id': 12345,                      // int instead of String
+          'total_amount': '199.50',         // String instead of double
+          'is_paid': 'yes',                 // String instead of bool
+          'discount_percent': '15',         // String instead of int
+          'tags': [1, null, 'food', true],  // Mixed types in list
+        };
+        final model = OrderModel.fromJson(json);
+        expect(model.id, '12345');
+        expect(model.totalAmount, 199.50);
+        expect(model.isPaid, true);
+        expect(model.tags, ['1', 'food', 'true']);
+      });
     });
 
     // 5. Extreme values
-    test('handles extreme values', () {
-      final json = {
-        'id': '',                                    // Empty string
-        'total_amount': double.infinity,             // Infinity
-        'discount_percent': -999,                    // Negative
-        'created_at': 'not-a-date',                  // Invalid date string
-      };
-      final model = OrderModel.fromJson(json);
-      expect(model.totalAmount, double.infinity);
-      expect(model.createdAt, isNull); // DateTime.tryParse returns null
+    group('Given extreme values in JSON', () {
+      test('When parsing, Then model handles them gracefully', () {
+        final json = {
+          'id': '',                                    // Empty string
+          'total_amount': double.infinity,             // Infinity
+          'discount_percent': -999,                    // Negative
+          'created_at': 'not-a-date',                  // Invalid date string
+        };
+        final model = OrderModel.fromJson(json);
+        expect(model.totalAmount, double.infinity);
+        expect(model.createdAt, isNull); // DateTime.tryParse returns null
+      });
     });
 
     // 6. Enum with unknown value
-    test('enum falls back to pending for unknown value', () {
-      final json = {'order_status': 'unknown_status'};
-      final model = OrderModel.fromJson(json);
-      expect(model.orderStatus, OrderStatus.pending);
+    group('Given an unknown enum value in JSON', () {
+      test('When parsing, Then fallback enum is used', () {
+        final json = {'order_status': 'unknown_status'};
+        final model = OrderModel.fromJson(json);
+        expect(model.orderStatus, OrderStatus.pending);
+      });
     });
 
     // 7. Round-trip: fromJson → toJson → fromJson
-    test('round-trips through JSON serialization', () {
-      final original = OrderModel(
-        id: '1',
-        customerName: 'Test',
-        totalAmount: 50.0,
-        status: 'pending',
-        isPaid: false,
-        tags: ['a', 'b'],
-      );
-      final json = original.toJson();
-      final restored = OrderModel.fromJson(json);
-      expect(restored, equals(original));
+    group('Given a fully constructed model', () {
+      test('When round-tripping through JSON, Then equality holds', () {
+        final original = OrderModel(
+          id: '1',
+          customerName: 'Test',
+          totalAmount: 50.0,
+          status: 'pending',
+          isPaid: false,
+          tags: ['a', 'b'],
+        );
+        final json = original.toJson();
+        final restored = OrderModel.fromJson(json);
+        expect(restored, equals(original));
+      });
     });
 
     // 8. toEntity() conversion
-    test('converts to domain entity correctly', () {
-      final date = DateTime(2024, 6, 15);
-      final model = OrderModel(
-        id: '42',
-        customerName: 'Alice',
-        totalAmount: 150.0,
-        createdAt: date,
-        orderStatus: OrderStatus.shipped,
-      );
-      final entity = model.toEntity();
-      expect(entity.id, '42');
-      expect(entity.customerName, 'Alice');
-      expect(entity.totalAmount, 150.0);
-      expect(entity.status, 'shipped');
-      expect(entity.createdAt, date);
+    group('Given a model with all fields populated', () {
+      test('When calling toEntity(), Then domain entity maps correctly', () {
+        final date = DateTime(2024, 6, 15);
+        final model = OrderModel(
+          id: '42',
+          customerName: 'Alice',
+          totalAmount: 150.0,
+          createdAt: date,
+          orderStatus: OrderStatus.shipped,
+        );
+        final entity = model.toEntity();
+        expect(entity.id, '42');
+        expect(entity.customerName, 'Alice');
+        expect(entity.totalAmount, 150.0);
+        expect(entity.status, 'shipped');
+        expect(entity.createdAt, date);
+      });
     });
 
     // 9. toEntity() with null date uses fallback
-    test('toEntity() uses now() when date is null', () {
-      final model = OrderModel(id: '1', customerName: 'Test', totalAmount: 0);
-      final entity = model.toEntity();
-      expect(entity.createdAt, isNotNull);
+    group('Given a model with null date', () {
+      test('When calling toEntity(), Then now() is used as fallback', () {
+        final model = OrderModel(id: '1', customerName: 'Test', totalAmount: 0);
+        final entity = model.toEntity();
+        expect(entity.createdAt, isNotNull);
+      });
     });
 
     // 10. Nested objects
-    test('handles nested object via JsonParseUtils.toObject', () {
-      // Test that malformed nested objects don't crash parsing
-      final json = {
-        'metadata': 'not-an-object',  // String instead of Map
-      };
-      final model = OrderModel.fromJson(json);
-      expect(model.metadata, isNull);
+    group('Given a malformed nested object in JSON', () {
+      test('When parsing, Then nested field defaults to null', () {
+        // Test that malformed nested objects don't crash parsing
+        final json = {
+          'metadata': 'not-an-object',  // String instead of Map
+        };
+        final model = OrderModel.fromJson(json);
+        expect(model.metadata, isNull);
+      });
     });
   });
 }
@@ -268,39 +288,45 @@ void main() {
     useCase = GetOrdersUseCase(mockRepo);
   });
 
-  test('returns orders on success', () async {
-    final orders = [OrderEntity(id: '1', customerName: 'A', totalAmount: 10, status: 'pending', createdAt: DateTime.now())];
-    when(() => mockRepo.getOrders()).thenAnswer(
-      (_) async => ApiSuccess(orders),
-    );
+  group('Given a successful repository response', () {
+    test('When calling the use case, Then orders are returned', () async {
+      final orders = [OrderEntity(id: '1', customerName: 'A', totalAmount: 10, status: 'pending', createdAt: DateTime.now())];
+      when(() => mockRepo.getOrders()).thenAnswer(
+        (_) async => ApiSuccess(orders),
+      );
 
-    final result = await useCase();
+      final result = await useCase();
 
-    expect(result, isA<ApiSuccess<List<OrderEntity>>>());
-    final data = (result as ApiSuccess).data;
-    expect(data.length, 1);
+      expect(result, isA<ApiSuccess<List<OrderEntity>>>());
+      final data = (result as ApiSuccess).data;
+      expect(data.length, 1);
+    });
   });
 
-  test('returns failure on error', () async {
-    when(() => mockRepo.getOrders()).thenAnswer(
-      (_) async => ApiFailure(ApiCallFailureModel(
-        code: 500,
-        translatedMessage: 'Server error',
-      )),
-    );
+  group('Given a failed repository response', () {
+    test('When calling the use case, Then failure is returned', () async {
+      when(() => mockRepo.getOrders()).thenAnswer(
+        (_) async => ApiFailure(ApiCallFailureModel(
+          code: 500,
+          translatedMessage: 'Server error',
+        )),
+      );
 
-    final result = await useCase();
+      final result = await useCase();
 
-    expect(result, isA<ApiFailure>());
+      expect(result, isA<ApiFailure>());
+    });
   });
 
-  test('passes page and limit parameters', () async {
-    when(() => mockRepo.getOrders(page: any(named: 'page'), limit: any(named: 'limit')))
-        .thenAnswer((_) async => ApiSuccess([]));
+  group('Given page and limit parameters', () {
+    test('When calling the use case, Then parameters are forwarded to repository', () async {
+      when(() => mockRepo.getOrders(page: any(named: 'page'), limit: any(named: 'limit')))
+          .thenAnswer((_) async => ApiSuccess([]));
 
-    await useCase(page: 2, limit: 10);
+      await useCase(page: 2, limit: 10);
 
-    verify(() => mockRepo.getOrders(page: 2, limit: 10)).called(1);
+      verify(() => mockRepo.getOrders(page: 2, limit: 10)).called(1);
+    });
   });
 }
 ```
@@ -325,9 +351,9 @@ void main() {
 
   tearDown(() => bloc.close());
 
-  group('FetchOrders', () {
+  group('Given FetchOrders event', () {
     blocTest<OrdersBloc, OrdersState>(
-      'emits [Loading, Loaded] on success',
+      'When repository returns data, Then emits [Loading, Loaded]',
       build: () {
         when(() => mockGetOrders()).thenAnswer(
           (_) async => ApiSuccess([OrderEntity(...)]),
@@ -342,7 +368,7 @@ void main() {
     );
 
     blocTest<OrdersBloc, OrdersState>(
-      'emits [Loading, Loaded] with empty list',
+      'When repository returns empty list, Then emits [Loading, Loaded] with empty orders',
       build: () {
         when(() => mockGetOrders()).thenAnswer(
           (_) async => ApiSuccess([]),
@@ -354,7 +380,7 @@ void main() {
     );
 
     blocTest<OrdersBloc, OrdersState>(
-      'emits [Loading, Error] on failure',
+      'When repository fails, Then emits [Loading, Error]',
       build: () {
         when(() => mockGetOrders()).thenAnswer(
           (_) async => ApiFailure(ApiCallFailureModel(
@@ -369,9 +395,9 @@ void main() {
     );
   });
 
-  group('DeleteOrder', () {
+  group('Given DeleteOrder event', () {
     blocTest<OrdersBloc, OrdersState>(
-      'removes order optimistically from loaded state',
+      'When order exists in loaded state, Then order is removed optimistically',
       build: () => bloc,
       seed: () => OrdersLoaded(
         orders: [OrderEntity(id: '1', ...), OrderEntity(id: '2', ...)],
@@ -393,86 +419,96 @@ void main() {
 ```dart
 void main() {
   group('OrdersView', () {
-    testWidgets('shows loading indicator while loading', (tester) async {
-      final mockBloc = MockOrdersBloc();
-      when(() => mockBloc.state).thenReturn(OrdersLoading());
-      whenListen(mockBloc, Stream.fromIterable([OrdersLoading()]));
+    group('Given loading state', () {
+      testWidgets('When rendered, Then loading indicator is shown', (tester) async {
+        final mockBloc = MockOrdersBloc();
+        when(() => mockBloc.state).thenReturn(OrdersLoading());
+        whenListen(mockBloc, Stream.fromIterable([OrdersLoading()]));
 
-      await tester.pumpApp(
-        BlocProvider.value(value: mockBloc, child: const OrdersView()),
-      );
+        await tester.pumpApp(
+          BlocProvider.value(value: mockBloc, child: const OrdersView()),
+        );
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      });
     });
 
-    testWidgets('shows empty message when no orders', (tester) async {
-      final mockBloc = MockOrdersBloc();
-      when(() => mockBloc.state).thenReturn(const OrdersLoaded(orders: []));
-      whenListen(mockBloc, Stream.fromIterable([const OrdersLoaded(orders: [])]));
+    group('Given loaded state with no orders', () {
+      testWidgets('When rendered, Then empty message is shown', (tester) async {
+        final mockBloc = MockOrdersBloc();
+        when(() => mockBloc.state).thenReturn(const OrdersLoaded(orders: []));
+        whenListen(mockBloc, Stream.fromIterable([const OrdersLoaded(orders: [])]));
 
-      await tester.pumpApp(
-        BlocProvider.value(value: mockBloc, child: const OrdersView()),
-      );
+        await tester.pumpApp(
+          BlocProvider.value(value: mockBloc, child: const OrdersView()),
+        );
 
-      expect(find.text('No orders yet'), findsOneWidget);
+        expect(find.text('No orders yet'), findsOneWidget);
+      });
     });
 
-    testWidgets('shows order list when loaded', (tester) async {
-      final mockBloc = MockOrdersBloc();
-      when(() => mockBloc.state).thenReturn(
-        OrdersLoaded(orders: [OrderEntity(id: '1', customerName: 'John', ...)]),
-      );
-      whenListen(mockBloc, Stream.fromIterable([]));
+    group('Given loaded state with orders', () {
+      testWidgets('When rendered, Then order list items are visible', (tester) async {
+        final mockBloc = MockOrdersBloc();
+        when(() => mockBloc.state).thenReturn(
+          OrdersLoaded(orders: [OrderEntity(id: '1', customerName: 'John', ...)]),
+        );
+        whenListen(mockBloc, Stream.fromIterable([]));
 
-      await tester.pumpApp(
-        BlocProvider.value(value: mockBloc, child: const OrdersView()),
-      );
+        await tester.pumpApp(
+          BlocProvider.value(value: mockBloc, child: const OrdersView()),
+        );
 
-      expect(find.text('John'), findsOneWidget);
+        expect(find.text('John'), findsOneWidget);
+      });
     });
 
-    testWidgets('shows error with retry button on error', (tester) async {
-      final mockBloc = MockOrdersBloc();
-      when(() => mockBloc.state).thenReturn(OrdersError('Network error'));
-      whenListen(mockBloc, Stream.fromIterable([]));
+    group('Given error state', () {
+      testWidgets('When rendered, Then error message and retry button are shown', (tester) async {
+        final mockBloc = MockOrdersBloc();
+        when(() => mockBloc.state).thenReturn(OrdersError('Network error'));
+        whenListen(mockBloc, Stream.fromIterable([]));
 
-      await tester.pumpApp(
-        BlocProvider.value(value: mockBloc, child: const OrdersView()),
-      );
+        await tester.pumpApp(
+          BlocProvider.value(value: mockBloc, child: const OrdersView()),
+        );
 
-      expect(find.text('Network error'), findsOneWidget);
-      expect(find.text('Retry'), findsOneWidget);
+        expect(find.text('Network error'), findsOneWidget);
+        expect(find.text('Retry'), findsOneWidget);
+      });
+
+      testWidgets('When retry is tapped, Then FetchOrders event is dispatched', (tester) async {
+        final mockBloc = MockOrdersBloc();
+        when(() => mockBloc.state).thenReturn(OrdersError('Error'));
+        whenListen(mockBloc, Stream.fromIterable([]));
+
+        await tester.pumpApp(
+          BlocProvider.value(value: mockBloc, child: const OrdersView()),
+        );
+
+        await tester.tap(find.text('Retry'));
+        verify(() => mockBloc.add(FetchOrders())).called(1);
+      });
     });
 
-    testWidgets('retry button triggers FetchOrders', (tester) async {
-      final mockBloc = MockOrdersBloc();
-      when(() => mockBloc.state).thenReturn(OrdersError('Error'));
-      whenListen(mockBloc, Stream.fromIterable([]));
+    group('Given loaded state with orders', () {
+      testWidgets('When user pulls to refresh, Then RefreshOrders event is dispatched', (tester) async {
+        final mockBloc = MockOrdersBloc();
+        when(() => mockBloc.state).thenReturn(
+          OrdersLoaded(orders: [OrderEntity(id: '1', customerName: 'A', ...)]),
+        );
+        whenListen(mockBloc, Stream.fromIterable([]));
 
-      await tester.pumpApp(
-        BlocProvider.value(value: mockBloc, child: const OrdersView()),
-      );
+        await tester.pumpApp(
+          BlocProvider.value(value: mockBloc, child: const OrdersView()),
+        );
 
-      await tester.tap(find.text('Retry'));
-      verify(() => mockBloc.add(FetchOrders())).called(1);
-    });
+        // Simulate pull-to-refresh
+        await tester.fling(find.byType(ListView), const Offset(0, 300), 1000);
+        await tester.pumpAndSettle();
 
-    testWidgets('pull to refresh triggers RefreshOrders', (tester) async {
-      final mockBloc = MockOrdersBloc();
-      when(() => mockBloc.state).thenReturn(
-        OrdersLoaded(orders: [OrderEntity(id: '1', customerName: 'A', ...)]),
-      );
-      whenListen(mockBloc, Stream.fromIterable([]));
-
-      await tester.pumpApp(
-        BlocProvider.value(value: mockBloc, child: const OrdersView()),
-      );
-
-      // Simulate pull-to-refresh
-      await tester.fling(find.byType(ListView), const Offset(0, 300), 1000);
-      await tester.pumpAndSettle();
-
-      verify(() => mockBloc.add(RefreshOrders())).called(1);
+        verify(() => mockBloc.add(RefreshOrders())).called(1);
+      });
     });
   });
 }

@@ -60,7 +60,7 @@ Don't write any code yet. Show me the spec so I can confirm/correct it.
 
 ---
 
-## Prompt 3 — Build the feature end-to-end (mock → TDD → all layers → screen)
+## Prompt 3 — Build the feature end-to-end (mock → BDD → all layers → screen)
 
 > The main prompt. Produces a fully working, tested screen.
 
@@ -74,10 +74,11 @@ Spec: docs/features/<feature_name>.md. Follow CLAUDE.md exactly.
    screen renders every state via the existing switches — filled (default),
    empty (?_state=empty), error (?_state=error), loading (?_delay=1500).
 
-2. TESTS FIRST (Phase 4): write the failing suite under
-   test/features/dlt_<feature_name>/ mirroring lib/ — model edge cases, use
-   case(s), bloc (event→state), widget (all four states + retry), and an
-   integration happy path. Confirm RED. Do not write implementation yet.
+2. BEHAVIOR SPECS FIRST (Phase 4): write the behavior specification suite under
+   test/features/dlt_<feature_name>/ mirroring lib/ — model scenarios
+   (Given/When/Then), use case behaviors, bloc state flows, widget interactions
+   (all four states + retry), and an integration happy path. Confirm all specs
+   FAIL. Do not write implementation yet.
 
 3. IMPLEMENT to green (Phase 5), layer by layer:
    - domain/   : entity (Equatable, no Flutter/Dio), repository interface,

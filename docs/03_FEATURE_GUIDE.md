@@ -970,54 +970,64 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('OrderModel edge cases', () {
-    test('handles null fields gracefully', () {
-      final json = {'id': '123'}; // Missing most fields
-      final model = OrderModel.fromJson(json);
-      expect(model.customerName, '');       // Default from JsonParseUtils
-      expect(model.totalAmount, 0.0);       // Default
-      expect(model.createdAt, isNull);      // Nullable
-      expect(model.tags, isEmpty);          // Empty list
+  group('OrderModel behavior scenarios', () {
+    group('Given missing fields in JSON', () {
+      test('When parsing, Then defaults are applied without crashing', () {
+        final json = {'id': '123'}; // Missing most fields
+        final model = OrderModel.fromJson(json);
+        expect(model.customerName, '');       // Default from JsonParseUtils
+        expect(model.totalAmount, 0.0);       // Default
+        expect(model.createdAt, isNull);      // Nullable
+        expect(model.tags, isEmpty);          // Empty list
+      });
     });
 
-    test('handles wrong types', () {
-      final json = {
-        'id': 123,                           // int instead of String
-        'total_amount': '99.99',             // String instead of double
-        'is_paid': 1,                        // int instead of bool
-        'tags': ['food', null, 42, 'drink'], // Mixed types in list
-      };
-      final model = OrderModel.fromJson(json);
-      expect(model.id, '123');              // toStringOrEmpty
-      expect(model.totalAmount, 99.99);     // toDouble
-      expect(model.isPaid, true);           // toBool(1) = true
-      expect(model.tags, ['food', '42', 'drink']); // toStringList filters nulls
+    group('Given wrong types in JSON', () {
+      test('When parsing, Then JsonParseUtils converts safely', () {
+        final json = {
+          'id': 123,                           // int instead of String
+          'total_amount': '99.99',             // String instead of double
+          'is_paid': 1,                        // int instead of bool
+          'tags': ['food', null, 42, 'drink'], // Mixed types in list
+        };
+        final model = OrderModel.fromJson(json);
+        expect(model.id, '123');              // toStringOrEmpty
+        expect(model.totalAmount, 99.99);     // toDouble
+        expect(model.isPaid, true);           // toBool(1) = true
+        expect(model.tags, ['food', '42', 'drink']); // toStringList filters nulls
+      });
     });
 
-    test('handles empty response body', () {
-      final json = <String, dynamic>{};
-      final model = OrderModel.fromJson(json);
-      expect(model.id, '');
-      expect(model.status, 'pending');
+    group('Given an empty JSON response body', () {
+      test('When parsing, Then all defaults are applied', () {
+        final json = <String, dynamic>{};
+        final model = OrderModel.fromJson(json);
+        expect(model.id, '');
+        expect(model.status, 'pending');
+      });
     });
 
-    test('round-trips through JSON', () {
-      final original = OrderModel(id: '1', customerName: 'John', totalAmount: 50.0);
-      final json = original.toJson();
-      final restored = OrderModel.fromJson(json);
-      expect(restored, equals(original));
+    group('Given a fully constructed model', () {
+      test('When round-tripping through JSON, Then equality holds', () {
+        final original = OrderModel(id: '1', customerName: 'John', totalAmount: 50.0);
+        final json = original.toJson();
+        final restored = OrderModel.fromJson(json);
+        expect(restored, equals(original));
+      });
     });
 
-    test('toEntity() converts correctly', () {
-      final model = OrderModel(
-        id: '1',
-        customerName: 'Jane',
-        totalAmount: 100.0,
-        createdAt: DateTime(2024, 1, 15),
-      );
-      final entity = model.toEntity();
-      expect(entity.id, '1');
-      expect(entity.customerName, 'Jane');
+    group('Given a model with all fields populated', () {
+      test('When calling toEntity(), Then domain entity maps correctly', () {
+        final model = OrderModel(
+          id: '1',
+          customerName: 'Jane',
+          totalAmount: 100.0,
+          createdAt: DateTime(2024, 1, 15),
+        );
+        final entity = model.toEntity();
+        expect(entity.id, '1');
+        expect(entity.customerName, 'Jane');
+      });
     });
   });
 }
@@ -1036,22 +1046,26 @@ void main() {
     useCase = GetOrdersUseCase(mockRepo);
   });
 
-  test('returns orders on success', () async {
-    final orders = [OrderEntity(...)];
-    when(() => mockRepo.getOrders()).thenAnswer((_) async => ApiSuccess(orders));
+  group('Given a successful repository response', () {
+    test('When calling the use case, Then orders are returned', () async {
+      final orders = [OrderEntity(...)];
+      when(() => mockRepo.getOrders()).thenAnswer((_) async => ApiSuccess(orders));
 
-    final result = await useCase();
+      final result = await useCase();
 
-    expect(result, isA<ApiSuccess<List<OrderEntity>>>());
-    verify(() => mockRepo.getOrders()).called(1);
+      expect(result, isA<ApiSuccess<List<OrderEntity>>>());
+      verify(() => mockRepo.getOrders()).called(1);
+    });
   });
 
-  test('returns failure on error', () async {
-    when(() => mockRepo.getOrders()).thenAnswer((_) async => ApiFailure(...));
+  group('Given a failed repository response', () {
+    test('When calling the use case, Then failure is returned', () async {
+      when(() => mockRepo.getOrders()).thenAnswer((_) async => ApiFailure(...));
 
-    final result = await useCase();
+      final result = await useCase();
 
-    expect(result, isA<ApiFailure>());
+      expect(result, isA<ApiFailure>());
+    });
   });
 }
 ```
@@ -1069,32 +1083,34 @@ void main() {
     bloc = OrdersBloc(mockGetOrders);
   });
 
-  blocTest<OrdersBloc, OrdersState>(
-    'emits [Loading, Loaded] when FetchOrders succeeds',
-    build: () {
-      when(() => mockGetOrders()).thenAnswer(
-        (_) async => ApiSuccess([OrderEntity(...)]),
-      );
-      return bloc;
-    },
-    act: (bloc) => bloc.add(FetchOrders()),
-    expect: () => [OrdersLoading(), isA<OrdersLoaded>()],
-  );
+  group('Given FetchOrders event', () {
+    blocTest<OrdersBloc, OrdersState>(
+      'When repository succeeds, Then emits [Loading, Loaded]',
+      build: () {
+        when(() => mockGetOrders()).thenAnswer(
+          (_) async => ApiSuccess([OrderEntity(...)]),
+        );
+        return bloc;
+      },
+      act: (bloc) => bloc.add(FetchOrders()),
+      expect: () => [OrdersLoading(), isA<OrdersLoaded>()],
+    );
 
-  blocTest<OrdersBloc, OrdersState>(
-    'emits [Loading, Error] when FetchOrders fails',
-    build: () {
-      when(() => mockGetOrders()).thenAnswer(
-        (_) async => ApiFailure(ApiCallFailureModel(
-          code: 500,
-          translatedMessage: 'Server error',
-        )),
-      );
-      return bloc;
-    },
-    act: (bloc) => bloc.add(FetchOrders()),
-    expect: () => [OrdersLoading(), OrdersError('Server error')],
-  );
+    blocTest<OrdersBloc, OrdersState>(
+      'When repository fails, Then emits [Loading, Error]',
+      build: () {
+        when(() => mockGetOrders()).thenAnswer(
+          (_) async => ApiFailure(ApiCallFailureModel(
+            code: 500,
+            translatedMessage: 'Server error',
+          )),
+        );
+        return bloc;
+      },
+      act: (bloc) => bloc.add(FetchOrders()),
+      expect: () => [OrdersLoading(), OrdersError('Server error')],
+    );
+  });
 }
 ```
 
@@ -1103,39 +1119,45 @@ void main() {
 ```dart
 // test/features/orders/presentation/pages/orders_screen_test.dart
 void main() {
-  testWidgets('shows loading indicator', (tester) async {
-    await tester.pumpApp(
-      BlocProvider.value(
-        value: OrdersBloc(MockGetOrdersUseCase())..add(FetchOrders()),
-        child: const OrdersView(),
-      ),
-    );
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  group('Given loading state', () {
+    testWidgets('When rendered, Then loading indicator is shown', (tester) async {
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: OrdersBloc(MockGetOrdersUseCase())..add(FetchOrders()),
+          child: const OrdersView(),
+        ),
+      );
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
   });
 
-  testWidgets('shows orders when loaded', (tester) async {
-    final mockBloc = MockOrdersBloc();
-    when(() => mockBloc.state).thenReturn(
-      OrdersLoaded(orders: [OrderEntity(id: '1', ...)]),
-    );
-    whenListen(mockBloc, Stream.fromIterable([]));
+  group('Given loaded state with orders', () {
+    testWidgets('When rendered, Then order list items are visible', (tester) async {
+      final mockBloc = MockOrdersBloc();
+      when(() => mockBloc.state).thenReturn(
+        OrdersLoaded(orders: [OrderEntity(id: '1', ...)]),
+      );
+      whenListen(mockBloc, Stream.fromIterable([]));
 
-    await tester.pumpApp(
-      BlocProvider.value(value: mockBloc, child: const OrdersView()),
-    );
-    expect(find.text('John'), findsOneWidget);
+      await tester.pumpApp(
+        BlocProvider.value(value: mockBloc, child: const OrdersView()),
+      );
+      expect(find.text('John'), findsOneWidget);
+    });
   });
 
-  testWidgets('shows error with retry button', (tester) async {
-    final mockBloc = MockOrdersBloc();
-    when(() => mockBloc.state).thenReturn(OrdersError('Something went wrong'));
-    whenListen(mockBloc, Stream.fromIterable([]));
+  group('Given error state', () {
+    testWidgets('When rendered, Then error message and retry button are shown', (tester) async {
+      final mockBloc = MockOrdersBloc();
+      when(() => mockBloc.state).thenReturn(OrdersError('Something went wrong'));
+      whenListen(mockBloc, Stream.fromIterable([]));
 
-    await tester.pumpApp(
-      BlocProvider.value(value: mockBloc, child: const OrdersView()),
-    );
-    expect(find.text('Something went wrong'), findsOneWidget);
-    expect(find.text('Retry'), findsOneWidget);
+      await tester.pumpApp(
+        BlocProvider.value(value: mockBloc, child: const OrdersView()),
+      );
+      expect(find.text('Something went wrong'), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
+    });
   });
 }
 ```

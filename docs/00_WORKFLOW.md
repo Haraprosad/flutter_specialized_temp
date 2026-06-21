@@ -27,7 +27,7 @@ Four things work together:
 |---|---|---|
 | `@design-system-architect` | 1 | `design-system-setup` |
 | `@mock-backend-builder` | 3 | `json-server-mocking` |
-| `@feature-developer` | 4–5 | `tdd-workflow`, `flutter-template-core` |
+| `@feature-developer` | 4–5 | `bdd-workflow`, `flutter-template-core` |
 | `@ui-polish-specialist` | 6 | `ui-polish-performance` |
 
 ---
@@ -141,29 +141,32 @@ table is in [../mock/README.md](../mock/README.md).
 
 ---
 
-## Phase 4 — TDD: write the tests first
+## Phase 4 — BDD: write the behavior specs first
 
-**Goal:** the failing test suite that defines correct behavior. Red is the
-point.
+**Goal:** the behavior specification suite that defines correct system behavior.
+Specs should fail — that is the point.
 
 ```
-Build tests for the Orders feature following TDD, using docs/features/orders.md
-as the spec. Don't write implementation yet — only tests that should fail now.
+Build behavior specs for the Orders feature following BDD, using docs/features/orders.md
+as the spec. Don't write implementation yet — only scenarios that should fail now.
 ```
 
-`@feature-developer` (with the `tdd-workflow` skill) scaffolds, mirroring `lib/`:
+`@feature-developer` (with the `bdd-workflow` skill) scaffolds, mirroring `lib/`:
 
-- `test/features/dlt_orders/data/models/order_model_test.dart` — edge cases
-  (null, wrong types, missing fields, enum fallback, round-trip, `toEntity`)
-- `.../domain/usecases/get_orders_usecase_test.dart` — success + failure
-- `.../presentation/bloc/orders_bloc_test.dart` — every event → state with
-  `bloc_test`
-- `.../presentation/pages/orders_screen_test.dart` — all four async states +
-  retry
-- `integration_test/orders_flow_test.dart` — end-to-end happy path
+- `test/features/dlt_orders/data/models/order_model_test.dart` — behavior
+  scenarios (Given valid/null/wrong-type JSON → When parsing → Then correct
+  defaults, round-trip, `toEntity` mapping)
+- `.../domain/usecases/get_orders_usecase_test.dart` — Given success/failure →
+  When called → Then correct `ApiResult`
+- `.../presentation/bloc/orders_bloc_test.dart` — Given initial state → When
+  event → Then state sequence, with `bloc_test`
+- `.../presentation/pages/orders_screen_test.dart` — Given each async state →
+  When rendered → Then correct UI + retry interaction
+- `integration_test/orders_flow_test.dart` — Given app launched → When user
+  navigates → Then happy path completes
 
 ```bash
-flutter test     # confirm everything is RED
+flutter test     # confirm all specs FAIL
 ```
 
 ---
@@ -231,7 +234,7 @@ trace what crossed a layer boundary and fix it.
 
 ## Loop per feature
 
-For each new feature: spec (2) → mock (3) → TDD (4) → implement (5) → polish (6).
+For each new feature: spec (2) → mock (3) → BDD (4) → implement (5) → polish (6).
 Build one feature fully before starting the next — don't parallelize.
 
 ### Suggested order
@@ -287,9 +290,9 @@ Seed `mock/db.json` so the screen can render every state via the existing
 switches: filled (default), empty (`?_state=empty`), error (`?_state=error`),
 loading (`?_delay=1500`). See [../mock/README.md](../mock/README.md).
 
-### Step 4 — TDD, then implement (Phases 4–5)
+### Step 4 — BDD, then implement (Phases 4–5)
 
-Tests first — even from a visual. Then implement layer by layer with
+Behavior specs first — even from a visual. Then implement layer by layer with
 `@feature-developer`. The screen splits exactly as you described:
 
 ```
@@ -323,7 +326,7 @@ keep it production-grade:
 | Dumping Figma tokens into the design system every screen | Reconcile to existing tokens; add new ones only for new semantic roles (Step 1) |
 | Treating the screenshot as the spec | Derive & confirm `docs/features/<name>.md` first (Step 2) |
 | Only "empty / fail / filled" | Cover **all** states: initial, loading, loaded-empty, loaded-populated, error |
-| Jumping straight to implementation | Keep TDD — tests are the contract for the later real-backend swap |
+| Jumping straight to implementation | Keep BDD — behavior specs are the contract for the later real-backend swap |
 | Hardcoding px/hex to match the picture | Snap to tokens; no raw literals (non-negotiable #7) |
 | Hardcoded visible text | Extract to ARB, use `context.loc.<key>` |
 | "Looks right on my screen" | Verify responsive (`lib/main_preview.dart`) + accessibility (tooltips, 48×48, 200% text) |
@@ -335,9 +338,9 @@ keep it production-grade:
 
 | Pitfall | Fix |
 |---|---|
-| Skipping TDD ("I know what I want") | Tests are the spec and the safety net for the backend swap. |
+| Skipping BDD ("I know what I want") | Behavior specs are the living documentation and the safety net for the backend swap. |
 | Editing the design system mid-feature | Always Phase 1 first; mid-feature changes mean re-reviewing every prior screen. |
-| Writing implementation before all tests exist | Write all failing tests first, then implement. |
+| Writing implementation before all specs exist | Write all behavior specs first, then implement. |
 | Polishing before tests pass | You'll animate around bugs. Make it work, then make it nice. |
 | `sl<T>()` "just this once" | It compounds and breaks the architecture. Constructor injection only. |
 | Mock vs real backend envelope mismatch | Fix only the `DataSource`/model parsing — never the BLoC or UI. |

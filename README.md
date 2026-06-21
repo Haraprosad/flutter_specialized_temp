@@ -31,13 +31,13 @@ CLAUDE.md                       # project memory — loads every conversation
 ├── agents/                     # specialists you summon with @name
 │   ├── design-system-architect.md   # Phase 1
 │   ├── mock-backend-builder.md       # Phase 3
-│   ├── feature-developer.md          # Phases 4–5 (TDD → implement)
+│   ├── feature-developer.md          # Phases 4–5 (BDD → implement)
 │   └── ui-polish-specialist.md       # Phase 6
 └── skills/                     # auto-triggering rule sets
     ├── flutter-template-core/SKILL.md
     ├── design-system-setup/SKILL.md
     ├── json-server-mocking/SKILL.md
-    ├── tdd-workflow/SKILL.md
+    ├── bdd-workflow/SKILL.md
     └── ui-polish-performance/SKILL.md
 ```
 
