@@ -77,6 +77,7 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 | Routing system (full flow guide) | `docs/07_ROUTING.md` |
 | Network & API integration (DioClient, interceptors, `safeApiCall`, `ApiResult`, offline patterns) | `docs/08_NETWORK.md` |
 | Localization (`context.loc`, ARB files, `LocaleBloc`, adding strings/languages, non-UI error translation) | `docs/09_LOCALIZATION.md` |
+| Logging (`AppLogger`, severity levels, Sentry forwarding, where to log per layer) | `docs/10_LOGGING.md` |
 | Hardened rules per task | `.claude/skills/<skill>/SKILL.md` |
 | Specialist personas | `.claude/agents/*.md` |
 
@@ -123,6 +124,7 @@ Before any feature is considered "done":
 - Raw `as` casts on JSON values — use `JsonParseUtils`
 - `try/catch` around `DioException` inside BLoCs (that's the repository's job)
 - Hardcoded English strings in widgets (use `context.loc.<key>`; see `docs/09_LOCALIZATION.md`)
+- Raw `print()` / `debugPrint()` for diagnostics — use `AppLogger` with the right severity (see `docs/10_LOGGING.md`)
 - `ListView(children: [...])` for lists > 10 items (use `ListView.builder` + `itemExtent`)
 
 ---
