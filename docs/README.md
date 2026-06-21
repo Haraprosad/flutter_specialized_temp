@@ -127,6 +127,9 @@ flutter build appbundle -t lib/flavors/main_production.dart --release \
 | 4 | [Design System](04_DESIGN_SYSTEM.md) | Tokens, responsive/adaptive, themes, styles, extensions |
 | 5 | [Testing](05_TESTING.md) | Unit, widget, bloc, integration; edge cases; store readiness |
 | 6 | [Deployment](06_DEPLOYMENT.md) | Build flavors, signing, store submission, CI/CD, monitoring |
+| 7 | [Routing](07_ROUTING.md) | GoRouter system: route names/paths, guards, transitions, navigation flow |
+| 8 | [Network](08_NETWORK.md) | DioClient, interceptors, `safeApiCall`, `ApiResult`, offline patterns |
+| 9 | [Localization](09_LOCALIZATION.md) | `context.loc`, ARB files, `LocaleBloc`, adding strings/languages, non-UI translation |
 
 The Claude Code config that drives this workflow lives outside `docs/`:
 `CLAUDE.md` (project rules), `.claude/agents/` (specialists you summon by name),

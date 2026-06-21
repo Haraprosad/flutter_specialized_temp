@@ -23,7 +23,7 @@ A production Flutter application built on the **flutter_specialized_temp** templ
 
 ---
 
-## The 13 Non-Negotiables (memorize these)
+## The 14 Non-Negotiables (memorize these)
 
 1. Clean Architecture per feature. Domain layer has **zero** Flutter/Dio dependencies (only `equatable`).
 2. BLoCs depend on **use cases**, never repositories directly.
@@ -38,6 +38,7 @@ A production Flutter application built on the **flutter_specialized_temp** templ
 11. Every async screen handles all four states: initial, loading, loaded-empty, loaded-populated, error.
 12. After any annotation change: `./scripts/codegen.sh`. Before any commit: `flutter analyze --fatal-infos --fatal-warnings && flutter test`.
 13. All routing goes through `lib/core/router/`. Use `RouteNames` for navigation (`context.goNamed`/`context.pushNamed`), `RoutePaths` for path constants, `RouteTransitions` for page animations, and `RouteGuards` for protection. Never use `Navigator.push`/`Navigator.pushNamed`, never hardcode path strings, never create a new `GoRouter` instance. See `docs/07_ROUTING.md` for the full routing flow.
+14. Every user-facing string comes from localization. In widgets use `context.loc.<key>` (backed by the ARB files in `lib/core/localization/l10n/`); outside a `BuildContext` use `ErrorMessagesKey` + `LocalizationService`. Switch languages only via `LocalizationActions.setLocale`. Add new keys to **all** ARB files, then run `flutter gen-l10n` (not `./scripts/codegen.sh`). Never hardcode a literal string in a widget, never edit `app_localizations*.dart` by hand. See `docs/09_LOCALIZATION.md` for the full flow.
 
 If any of these is at risk in a generated change, **stop and fix before continuing.**
 
@@ -75,6 +76,7 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 | Release / store submission | `docs/06_DEPLOYMENT.md` |
 | Routing system (full flow guide) | `docs/07_ROUTING.md` |
 | Network & API integration (DioClient, interceptors, `safeApiCall`, `ApiResult`, offline patterns) | `docs/08_NETWORK.md` |
+| Localization (`context.loc`, ARB files, `LocaleBloc`, adding strings/languages, non-UI error translation) | `docs/09_LOCALIZATION.md` |
 | Hardened rules per task | `.claude/skills/<skill>/SKILL.md` |
 | Specialist personas | `.claude/agents/*.md` |
 
@@ -120,7 +122,7 @@ Before any feature is considered "done":
 - Hand-editing generated files (`.g.dart`, `.freezed.dart`, `injection.config.dart`)
 - Raw `as` casts on JSON values — use `JsonParseUtils`
 - `try/catch` around `DioException` inside BLoCs (that's the repository's job)
-- Hardcoded English strings in widgets (use `context.loc.<key>`)
+- Hardcoded English strings in widgets (use `context.loc.<key>`; see `docs/09_LOCALIZATION.md`)
 - `ListView(children: [...])` for lists > 10 items (use `ListView.builder` + `itemExtent`)
 
 ---
