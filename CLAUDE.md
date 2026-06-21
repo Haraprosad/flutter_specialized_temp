@@ -70,7 +70,7 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 |---|---|
 | **Map of all docs** (which file owns what + how to use them) | `docs/README.md` |
 | This app's product vision (idea, users, brand, feature order) | `docs/APP_OVERVIEW.md` |
-| Copy-paste prompts (Figma design → working screen) | `docs/prompt.md` |
+| Copy-paste prompts (Figma design → working screen) | `docs/00_WORKFLOW.md` (Copy-paste prompts section) |
 | Overall workflow (the runbook) | `docs/00_WORKFLOW.md` |
 | Template architecture in detail | `docs/02_ARCHITECTURE.md` |
 | How to build one feature end-to-end | `docs/03_FEATURE_GUIDE.md` |

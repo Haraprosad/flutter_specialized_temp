@@ -53,13 +53,13 @@ Export your Figma design tokens, then have the architect reconcile them into the
 Design Management System **once, before any screen**:
 
 ```
-@design-system-architect    # see docs/prompt.md → Prompt 1
+@design-system-architect    # see docs/00_WORKFLOW.md → Prompt 1
 ```
 
 ### Step 5 — Build screens from screenshots (Phases 2–6)
 
 Per feature: write its spec, mock the API, write behavior specs, then implement.
-The copy-paste prompts live in **[docs/prompt.md](docs/prompt.md)**. The rules
+The copy-paste prompts live in **[docs/00_WORKFLOW.md](docs/00_WORKFLOW.md)**. The rules
 the generated code must obey:
 
 - **Page composition** → `lib/features/<name>/presentation/pages/` (one screen
@@ -101,7 +101,7 @@ runbook that ties it all together; the numbered guides go deep on each topic.
 |---|---|
 | **The full runbook** (phases 0–7, the per-feature loop) | **[docs/00_WORKFLOW.md](docs/00_WORKFLOW.md)** |
 | First-run setup (name, package, icon, env) | [docs/01_GETTING_STARTED.md](docs/01_GETTING_STARTED.md) |
-| Figma → working screen prompts | [docs/prompt.md](docs/prompt.md) |
+| Figma → working screen prompts | [docs/00_WORKFLOW.md](docs/00_WORKFLOW.md#copy-paste-prompts-figma-design-to-working-screen) |
 | Write the app idea | [docs/APP_OVERVIEW.md](docs/APP_OVERVIEW.md) |
 | Browse all reference guides | [docs/README.md](docs/README.md) |
 | The rules Claude follows | [CLAUDE.md](CLAUDE.md) |

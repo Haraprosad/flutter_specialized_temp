@@ -32,7 +32,7 @@ while the full detail lives in the owning guide and in `.claude/skills/`.
 | [../CLAUDE.md](../CLAUDE.md) | Claude's always-loaded rulebook: 14 non-negotiables, phase order, doc map | You want the rules in one terse place (Claude reads this every session) |
 | [00_WORKFLOW.md](00_WORKFLOW.md) | The runbook — phases 0–7, agents/skills, per-feature loop | You're deciding *what to do next* |
 | [APP_OVERVIEW.md](APP_OVERVIEW.md) | **Your app's** product vision (idea, users, brand, feature order) | Starting a new app — fill this first |
-| [prompt.md](prompt.md) | Copy-paste prompts: Figma design → working screen | You're driving a feature with Claude |
+| [00_WORKFLOW.md → Copy-paste prompts](00_WORKFLOW.md#copy-paste-prompts-figma-design-to-working-screen) | Copy-paste prompts: Figma design → working screen | You're driving a feature with Claude |
 | [01_GETTING_STARTED.md](01_GETTING_STARTED.md) | First-run setup + all commands/scripts | Configuring name/package/icon/env, or you need a command |
 | [02_ARCHITECTURE.md](02_ARCHITECTURE.md) | Architecture, file-purpose map, the `lib/` tree, SOLID | You want to understand the codebase shape |
 | [03_FEATURE_GUIDE.md](03_FEATURE_GUIDE.md) | Build one feature end-to-end, layer by layer | Implementing a feature |
@@ -56,7 +56,7 @@ while the full detail lives in the owning guide and in `.claude/skills/`.
 |---|---|---|
 | 0 | [Workflow](00_WORKFLOW.md) | The runbook — phases 0–7, agents & skills, the per-feature loop |
 | — | [App Overview](APP_OVERVIEW.md) | Your app's product-level source of truth — write the idea here first |
-| — | [Prompts](prompt.md) | Copy-paste prompts for Figma design → working screen |
+| — | [Prompts](00_WORKFLOW.md#copy-paste-prompts-figma-design-to-working-screen) | Copy-paste prompts for Figma design → working screen |
 | 1 | [Getting Started](01_GETTING_STARTED.md) | Configure app name, package, icon, env; first run; all scripts |
 | 2 | [Architecture](02_ARCHITECTURE.md) | Full architecture walkthrough, file-purpose map, SOLID |
 | 3 | [Feature Guide](03_FEATURE_GUIDE.md) | Build a feature: DI, models, API, BLoC, routing, design system |
