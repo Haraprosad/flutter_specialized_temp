@@ -1,76 +1,69 @@
-# Claude Code Setup — Read Me First
+# flutter_specialized_temp
 
-This bundle gives your Flutter project an opinionated, disciplined Claude Code workflow tuned for the `flutter_specialized_temp` template.
+A production-ready Flutter starter — Clean Architecture, BLoC, Injectable DI,
+multi-flavor, a unified Design Management System, and full testing infra —
+wired for a disciplined Claude Code workflow.
 
-## What's in here
+## Start here
 
-```
-.
-├── CLAUDE.md                       # Project memory — loads on every conversation
-├── WORKFLOW.md                     # Step-by-step usage guide (read this second)
-├── README.md                       # This file
-└── .claude/
-    ├── agents/                     # Specialist personas (invoke with @name)
-    │   ├── design-system-architect.md
-    │   ├── mock-backend-builder.md
-    │   ├── feature-developer.md
-    │   └── ui-polish-specialist.md
-    └── skills/                     # Auto-triggering rule sets
-        ├── flutter-template-core/SKILL.md
-        ├── design-system-setup/SKILL.md
-        ├── json-server-mocking/SKILL.md
-        ├── tdd-workflow/SKILL.md
-        └── ui-polish-performance/SKILL.md
-```
-
-## Where to put these files
-
-Copy this entire bundle's contents into the **root of your Flutter project**:
-
-```
-<your-flutter-project>/
-├── CLAUDE.md                       ← here
-├── WORKFLOW.md                     ← here
-├── .claude/                        ← here
-├── lib/
-├── pubspec.yaml
-└── ...
-```
-
-After copying, you can delete this README. The other files stay where they are.
+| If you want to… | Go to |
+|---|---|
+| **Build an app with this template** (the runbook) | **[docs/00_WORKFLOW.md](docs/00_WORKFLOW.md)** |
+| Set up & run the template for the first time | [docs/01_GETTING_STARTED.md](docs/01_GETTING_STARTED.md) |
+| Browse all reference guides | [docs/README.md](docs/README.md) |
+| Understand the project rules Claude follows | [CLAUDE.md](CLAUDE.md) |
 
 ## The mental model (one paragraph)
 
-**`CLAUDE.md`** is the always-loaded project rulebook. **Skills** under `.claude/skills/` auto-activate based on what you're working on (talking about models, BLoCs, tests, etc. triggers the right skill). **Agents** under `.claude/agents/` are specialists you summon by name (`@design-system-architect`, `@feature-developer`) for major phases of work. **`WORKFLOW.md`** is your runbook — read it once, then refer back to it when starting a new feature.
+[CLAUDE.md](CLAUDE.md) is the always-loaded project rulebook (the 12
+non-negotiables + phase order). **Skills** under `.claude/skills/` auto-activate
+based on what you're working on (models, BLoCs, tests, tokens…). **Agents**
+under `.claude/agents/` are specialists you summon by name
+(`@design-system-architect`, `@feature-developer`, …) for a phase of work.
+**`docs/`** is static reference: [00_WORKFLOW.md](docs/00_WORKFLOW.md) is the
+runbook that ties it all together; the numbered guides go deep on each topic.
 
-## Why this is split up
+## Claude Code config layout
 
-Your original SKILL.md was excellent but tried to do everything in one file. Claude loads the entire SKILL.md every time it activates — putting design system rules, TDD rules, polish rules, and core architecture into one file means Claude wastes context on irrelevant rules every turn. Splitting by concern means only the relevant rules load. The trade-off is more files, but each is tightly focused and easier to maintain.
+```
+CLAUDE.md                       # project memory — loads every conversation
+.claude/
+├── agents/                     # specialists you summon with @name
+│   ├── design-system-architect.md   # Phase 1
+│   ├── mock-backend-builder.md       # Phase 3
+│   ├── feature-developer.md          # Phases 4–5 (TDD → implement)
+│   └── ui-polish-specialist.md       # Phase 6
+└── skills/                     # auto-triggering rule sets
+    ├── flutter-template-core/SKILL.md
+    ├── design-system-setup/SKILL.md
+    ├── json-server-mocking/SKILL.md
+    ├── tdd-workflow/SKILL.md
+    └── ui-polish-performance/SKILL.md
+```
 
-## What to do next
+## Quick start
 
-1. Copy these files into your project root.
-2. Read `CLAUDE.md` once — confirm the 12 non-negotiables match your intent. Adjust if needed.
-3. Read `WORKFLOW.md` once — understand the phase flow.
-4. Start Phase 0 (template setup from the template's `docs/01_GETTING_STARTED.md`).
-5. Invoke `@design-system-architect` to do Phase 1.
-6. Loop: spec a feature → `@mock-backend-builder` → `@feature-developer` → `@ui-polish-specialist`.
+```bash
+# 1. Env files (fill in BASE_URL — http://localhost:3000/ for the mock)
+cp ".env copy.development" .env.development
+cp ".env copy.staging"     .env.staging
+cp ".env copy.production"  .env.production
 
-## Customizing
+# 2. Install deps + generate code
+flutter pub get
+./scripts/codegen.sh
 
-These files are meant to be edited:
+# 3. Run (development flavor)
+flutter run -t lib/flavors/main_development.dart
+```
 
-- **CLAUDE.md** — add project-specific rules, conventions, links.
-- **Skills** — refine over time as you discover new patterns or pitfalls.
-- **Agents** — extend or split if a single agent gets too broad.
+Then follow **[docs/00_WORKFLOW.md](docs/00_WORKFLOW.md)** to build your first
+feature.
 
-When you change a rule, change it in the **one place** it lives. Don't duplicate rules across files — that's how they drift out of sync.
+## Editing the rules
 
-## Tested with
-
-This setup assumes:
-- Claude Code (CLI) or the Claude Desktop app with the project mounted
-- Flutter 3.x / Dart 3.x
-- The `flutter_specialized_temp` template structure
-
-If you're on a different template, the architectural rules in `CLAUDE.md` and `flutter-template-core/SKILL.md` will need adapting.
+These files are meant to evolve — but change each rule in the **one place** it
+lives, never duplicate it across files:
+- **[CLAUDE.md](CLAUDE.md)** — project-wide rules and phase order.
+- **`.claude/skills/`** — hardened rules per concern.
+- **`.claude/agents/`** — specialist personas.

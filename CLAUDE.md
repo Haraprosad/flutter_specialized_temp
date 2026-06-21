@@ -44,7 +44,8 @@ If any of these is at risk in a generated change, **stop and fix before continui
 
 ## Development phases (in order)
 
-This project follows a strict phase order. Don't skip phases.
+This project follows a strict phase order. Don't skip phases. The full runbook
+is `docs/00_WORKFLOW.md`; this table is the terse map.
 
 | Phase | Goal | Agent / Skill to use |
 |---|---|---|
@@ -52,9 +53,9 @@ This project follows a strict phase order. Don't skip phases.
 | 1 | **Design system customization** (colors, fonts, spacing for THIS app's brand) | Agent: `design-system-architect` + Skill: `design-system-setup` |
 | 2 | Feature requirements gathering (define entities, endpoints, screens for one feature at a time) | Human-led, written into `docs/features/<name>.md` |
 | 3 | **Mock backend** via `json-server` (build the API contract before backend exists) | Agent: `mock-backend-builder` + Skill: `json-server-mocking` |
-| 4 | **TDD** — write tests first (model edge cases → use case → BLoC → widget) | Skill: `tdd-workflow` |
-| 5 | **Implementation** — make the tests pass, layer by layer (domain → data → presentation) | Skill: `flutter-template-core` |
-| 6 | **UI polish & performance** — animations, micro-interactions, profile-mode tuning | Skill: `ui-polish-performance` |
+| 4 | **TDD** — write tests first (model edge cases → use case → BLoC → widget) | Agent: `feature-developer` + Skill: `tdd-workflow` |
+| 5 | **Implementation** — make the tests pass, layer by layer (domain → data → presentation) | Agent: `feature-developer` + Skill: `flutter-template-core` |
+| 6 | **UI polish & performance** — animations, micro-interactions, profile-mode tuning | Agent: `ui-polish-specialist` + Skill: `ui-polish-performance` |
 | 7 | Swap mock for real backend (only `BASE_URL` and small datasource tweaks should change) | No new agent — minimal change by definition |
 
 One feature flows through phases 2 → 6 before the next feature starts. Don't parallelize.
@@ -65,7 +66,7 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 
 | You want to know about... | Read... |
 |---|---|
-| Overall workflow | `WORKFLOW.md` |
+| Overall workflow (the runbook) | `docs/00_WORKFLOW.md` |
 | Template architecture in detail | `docs/02_ARCHITECTURE.md` |
 | How to build one feature end-to-end | `docs/03_FEATURE_GUIDE.md` |
 | Design tokens reference | `docs/04_DESIGN_SYSTEM.md` |
@@ -89,7 +90,7 @@ lib/
 └── flavors/                         # main_*.dart per environment
 
 test/                                # mirrors lib/ structure
-mock_server/                         # json-server config and data (phase 3)
+mock/                                # json-server mock (phase 3); scripts in root package.json
 docs/features/                       # one .md per feature (phase 2 output)
 ```
 

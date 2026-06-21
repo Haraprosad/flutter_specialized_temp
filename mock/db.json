@@ -1,0 +1,84 @@
+{
+  "faqs": [
+    {
+      "id": 1,
+      "question": "How do I reset my password?",
+      "answer": "Open Settings → Security → Reset Password and follow the emailed link.",
+      "category": "account",
+      "order": 1,
+      "is_published": true,
+      "created_at": "2026-01-12T09:30:00Z"
+    },
+    {
+      "id": 2,
+      "question": "Can I use the app offline?",
+      "answer": "Yes. Cached content stays available and syncs when you reconnect.",
+      "category": "general",
+      "order": 2,
+      "is_published": true,
+      "created_at": "2026-01-14T11:05:00Z"
+    },
+    {
+      "id": 3,
+      "question": "How do I change the app language?",
+      "answer": "Go to Settings → Language and pick from the supported locales.",
+      "category": "general",
+      "order": 3,
+      "is_published": true,
+      "created_at": "2026-02-01T15:45:00Z"
+    },
+    {
+      "id": 4,
+      "question": "Where can I see my payment history?",
+      "answer": "Profile → Billing → History lists every transaction with receipts.",
+      "category": "billing",
+      "order": 4,
+      "is_published": true,
+      "created_at": "2026-02-20T08:20:00Z"
+    },
+    {
+      "id": 5,
+      "question": "How do I contact support?",
+      "answer": "Tap the Help icon on any screen or email support@example.com.",
+      "category": "support",
+      "order": 5,
+      "is_published": true,
+      "created_at": "2026-03-03T13:10:00Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Design the onboarding flow",
+      "description": "Three-step welcome carousel with skip option.",
+      "status": "in_progress",
+      "is_done": false,
+      "priority": "high",
+      "due_date": "2026-06-30T00:00:00Z",
+      "tags": ["design", "onboarding"],
+      "created_at": "2026-06-01T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Extract design tokens from Figma",
+      "description": "Colors, typography, spacing, radius into design_system.",
+      "status": "done",
+      "is_done": true,
+      "priority": "high",
+      "due_date": "2026-06-15T00:00:00Z",
+      "tags": ["design-system"],
+      "created_at": "2026-06-02T10:00:00Z"
+    },
+    {
+      "id": 3,
+      "title": "Wire up empty + error states",
+      "description": "Validate every async screen renders all four states.",
+      "status": "pending",
+      "is_done": false,
+      "priority": "medium",
+      "due_date": null,
+      "tags": ["qa", "states"],
+      "created_at": "2026-06-10T10:00:00Z"
+    }
+  ]
+}

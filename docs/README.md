@@ -2,8 +2,10 @@
 
 A **production-ready, battle-proof Flutter starter** built with Clean Architecture, BLoC, Injectable DI, multi-flavor support, a unified Design Management System, and comprehensive testing infrastructure.
 
-> **New to this template?** Follow the guides in order:
+> **New to this template?** Start with the runbook, then use the numbered guides
+> as deep reference:
 >
+> 0. [Workflow](00_WORKFLOW.md) — **the runbook**: phases 0–7, agents & skills, the per-feature loop
 > 1. [Getting Started](01_GETTING_STARTED.md) — Set up your app, run it
 > 2. [Architecture](02_ARCHITECTURE.md) — Understand the codebase
 > 3. [Feature Guide](03_FEATURE_GUIDE.md) — Build a feature end-to-end
@@ -15,19 +17,9 @@ A **production-ready, battle-proof Flutter starter** built with Clean Architectu
 
 ## Quick Start
 
-```bash
-# 1. Copy env templates and fill in BASE_URL / SENTRY_DSN
-cp ".env copy.development" .env.development
-cp ".env copy.staging"     .env.staging
-cp ".env copy.production"  .env.production
-
-# 2. Install dependencies and generate code
-flutter pub get
-./scripts/codegen.sh
-
-# 3. Run in development mode
-flutter run -t lib/flavors/main_development.dart
-```
+See [01_GETTING_STARTED.md](01_GETTING_STARTED.md) for the full first-run setup
+(env files, app name, package, icon, splash). The short version lives in the root
+[README.md](../README.md).
 
 ---
 
@@ -127,9 +119,16 @@ flutter build appbundle -t lib/flavors/main_production.dart --release \
 
 | # | Guide | Purpose |
 |---|---|---|
+| 0 | [Workflow](00_WORKFLOW.md) | The runbook — phases 0–7, agents & skills, the per-feature loop |
+| — | [Prompts](prompt.md) | Copy-paste prompts for Figma design → working screen |
 | 1 | [Getting Started](01_GETTING_STARTED.md) | Configure app name, package, icon, env; first run |
 | 2 | [Architecture](02_ARCHITECTURE.md) | Full architecture walkthrough, file-purpose map, SOLID |
 | 3 | [Feature Guide](03_FEATURE_GUIDE.md) | Build a feature: DI, models, API, BLoC, routing, design system |
 | 4 | [Design System](04_DESIGN_SYSTEM.md) | Tokens, responsive/adaptive, themes, styles, extensions |
 | 5 | [Testing](05_TESTING.md) | Unit, widget, bloc, integration; edge cases; store readiness |
 | 6 | [Deployment](06_DEPLOYMENT.md) | Build flavors, signing, store submission, CI/CD, monitoring |
+
+The Claude Code config that drives this workflow lives outside `docs/`:
+`CLAUDE.md` (project rules), `.claude/agents/` (specialists you summon by name),
+and `.claude/skills/` (auto-triggering rule sets). See the root
+[README.md](../README.md) for the layout.

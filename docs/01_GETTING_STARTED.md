@@ -54,12 +54,11 @@ The following files and folders exist only to help build and maintain the templa
 # Template development artifacts — not needed in your app's repo
 docs/
 CLAUDE.md
-WORKFLOW.md
 .claude/
 mason.yaml
 ```
 
-> **Why?** `docs/` contains the template guide you are reading now. `CLAUDE.md` and `WORKFLOW.md` are AI-assistant memory files. `.claude/` holds agent personas and skill files. `mason.yaml` is the template scaffolding config. None of these belong in a production app repo.
+> **Why?** `docs/` contains the template guides (including the workflow runbook) you are reading now. `CLAUDE.md` is the AI-assistant memory file. `.claude/` holds agent personas and skill files. `mason.yaml` is the template scaffolding config. None of these belong in a production app repo.
 
 ---
 
@@ -91,66 +90,69 @@ Edit each file and fill in:
 
 ## Step 4 — Change App Name
 
-### Android
+Use the [`rename_app`](https://pub.dev/packages/rename_app) package — it updates `AndroidManifest.xml`, `Info.plist`, and other platform files in one command.
 
-Edit `android/app/src/main/AndroidManifest.xml`:
-```xml
-<application android:label="My App Name">
+### 1. Add to dev dependencies
+
+```bash
+dart pub add rename_app --dev
 ```
 
-### iOS
+### 2. Run the rename command
 
-Edit `ios/Runner/Info.plist`:
-```xml
-<key>CFBundleDisplayName</key>
-<string>My App Name</string>
-<key>CFBundleName</key>
-<string>My App Name</string>
+```bash
+# Same name for all platforms (Android, iOS, Web, Windows, Linux)
+dart run rename_app:main all="My App Name"
+
+# Or target individual platforms
+dart run rename_app:main android="My App Name" ios="My App Name"
 ```
 
-### All Platforms (Recommended)
+### What it updates automatically
 
-Use the `flutter_launcher_icons` approach (see Step 6) — it handles naming alongside icons.
+| Platform | File(s) modified |
+|---|---|
+| Android | `android/app/src/main/AndroidManifest.xml` (`android:label`) |
+| iOS | `ios/Runner/Info.plist` (`CFBundleDisplayName`, `CFBundleName`) |
+| Web | `web/manifest.json` |
+| Windows | Windows runner sources |
+| Linux | Linux application metadata |
+
+> **Note:** `MaterialApp(title: …)` in your Dart code is not touched — update that manually if needed.
 
 ---
 
 ## Step 5 — Change Package Name / Bundle ID
 
-### Android
+Use the [`change_app_package_name`](https://pub.dev/packages/change_app_package_name) package — it updates `build.gradle`, `AndroidManifest.xml`, moves `MainActivity` to the correct directory, and updates the iOS `PRODUCT_BUNDLE_IDENTIFIER` in one command.
 
-1. Edit `android/app/build.gradle`:
-   ```groovy
-   android {
-       defaultConfig {
-           applicationId "com.yourcompany.yourapp"
-       }
-   }
-   ```
+### 1. Add to dev dependencies
 
-2. Update the namespace in `android/app/build.gradle`:
-   ```groovy
-   android {
-       namespace "com.yourcompany.yourapp"
-   }
-   ```
-
-3. Update the package in `android/app/src/main/kotlin/` — create the correct directory structure and move `MainActivity.kt`:
-   ```kotlin
-   package com.yourcompany.yourapp
-   import io.flutter.embedding.android.FlutterActivity
-   class MainActivity: FlutterActivity()
-   ```
-
-4. Update `android/app/src/debug/AndroidManifest.xml` and `android/app/src/profile/AndroidManifest.xml` if they reference the old package.
-
-### iOS
-
-Edit `ios/Runner.xcodeproj/project.pbxproj` — search for `PRODUCT_BUNDLE_IDENTIFIER` and change to:
-```
-com.yourcompany.yourapp
+```bash
+flutter pub add -d change_app_package_name
 ```
 
-Also update the bundle ID in Xcode: Runner → Signing & Capabilities → Bundle Identifier.
+### 2. Run the rename command
+
+```bash
+# Both Android and iOS
+dart run change_app_package_name:main com.yourcompany.yourapp
+
+# Android only
+dart run change_app_package_name:main com.yourcompany.yourapp --android
+
+# iOS only
+dart run change_app_package_name:main com.yourcompany.yourapp --ios
+```
+
+### What it updates automatically
+
+| Platform | File(s) modified |
+|---|---|
+| Android | `android/app/build.gradle` (`applicationId`, `namespace`), `AndroidManifest.xml` files, `MainActivity.kt` package declaration, moves file to new directory structure |
+| iOS | `ios/Runner.xcodeproj/project.pbxproj` (`PRODUCT_BUNDLE_IDENTIFIER`) |
+
+> **Note:** If you have a customized `CFBundleIdentifier` set directly in `Info.plist` (not via `$(PRODUCT_BUNDLE_IDENTIFIER)`), update it manually after running the command.
 
 ---
 

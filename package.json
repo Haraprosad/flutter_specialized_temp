@@ -1,0 +1,13 @@
+{
+  "name": "flutter_specialized_temp-mock",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Design-phase mock API (json-server) for the Flutter app. Serves FILLED / EMPTY / ERROR states against the real response contract.",
+  "scripts": {
+    "mock": "node mock/server.js",
+    "mock:reset": "cp mock/db.seed.json mock/db.json && echo 'Mock data reset to seed.'"
+  },
+  "devDependencies": {
+    "json-server": "0.17.4"
+  }
+}

@@ -61,3 +61,6 @@ windows/flutter/generated_plugins.cmake
 /android/app/profile
 /android/app/release
 
+
+# Mock API (json-server) dependencies
+node_modules/
