@@ -116,7 +116,7 @@ import 'package:flutter_specialized_temp/core/localization/bloc/locale_bloc.dart
 import 'package:flutter_specialized_temp/core/localization/l10n/app_localizations.dart';
 import 'package:flutter_specialized_temp/core/network/services/localization_service/localization_service.dart';
 import 'package:flutter_specialized_temp/core/router/app_router.dart';
-import 'package:flutter_specialized_temp/features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart';
+import 'package:flutter_specialized_temp/features/auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:flutter_specialized_temp/flavors/app_initializer.dart';
 import 'package:flutter_specialized_temp/flavors/environment.dart';
 

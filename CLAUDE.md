@@ -82,11 +82,11 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 ```
 lib/
 ├── core/                            # cross-feature: DI, network, storage, router, design system, db
-├── features/dlt_<name>/             # one folder per feature
+├── features/<name>/             # one folder per feature
 │   ├── data/                        # models (Freezed + JsonParseUtils), datasources, repo impls
 │   ├── domain/                      # entities (Equatable), repo interfaces, use cases
 │   └── presentation/                # BLoC, pages, widgets
-├── dlt_common_actions/              # reusable patterns (e.g., infinite scrolling)
+├── common_actions/              # reusable patterns (e.g., infinite scrolling)
 └── flavors/                         # main_*.dart per environment
 
 test/                                # mirrors lib/ structure
@@ -127,4 +127,4 @@ Before any feature is considered "done":
 - No filler comments. Code explains itself; comments explain **why**, not **what**.
 - One concept per file (entity, use case, datasource — each gets its own file).
 - Match the existing template's naming, spacing, import ordering.
-- When in doubt, mirror `lib/features/dlt_auth/` for auth-shaped features or `lib/features/dlt_tasks/` for Drift-backed features.
+- When in doubt, mirror `lib/features/auth/` for auth-shaped features or `lib/features/tasks/` for Drift-backed features.

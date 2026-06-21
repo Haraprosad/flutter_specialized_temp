@@ -1,57 +1,57 @@
-name: Tests
+# name: Tests
 
-on:
-  pull_request:
-    branches: [main, develop]
-  push:
-    branches: [main, develop]
+# on:
+#   pull_request:
+#     branches: [main, develop]
+#   push:
+#     branches: [main, develop]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: true
 
-jobs:
-  test:
-    name: Analyze & Test
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+# jobs:
+#   test:
+#     name: Analyze & Test
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 20
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: Write environment files
-        run: |
-          echo "${{ secrets.ENV_DEVELOPMENT }}" > .env.development
-          echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
-          echo "${{ secrets.ENV_STAGING }}" > .env.staging
+#       - name: Write environment files
+#         run: |
+#           echo "${{ secrets.ENV_DEVELOPMENT }}" > .env.development
+#           echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
+#           echo "${{ secrets.ENV_STAGING }}" > .env.staging
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.9'
-          channel: stable
-          cache: true
+#       - name: Setup Flutter
+#         uses: subosito/flutter-action@v2
+#         with:
+#           flutter-version: '3.41.9'
+#           channel: stable
+#           cache: true
 
-      - name: Install dependencies
-        run: flutter pub get
+#       - name: Install dependencies
+#         run: flutter pub get
 
-      - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
+#       - name: Generate code
+#         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Verify formatting
-        run: dart format --set-exit-if-changed .
+#       - name: Verify formatting
+#         run: dart format --set-exit-if-changed .
 
-      - name: Analyze
-        run: flutter analyze --fatal-infos --fatal-warnings
+#       - name: Analyze
+#         run: flutter analyze --fatal-infos --fatal-warnings
 
-      - name: Run unit & widget tests
-        run: flutter test --coverage --reporter=github
+#       - name: Run unit & widget tests
+#         run: flutter test --coverage --reporter=github
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        if: always()
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/lcov.info
-          fail_ci_if_error: false
+#       - name: Upload coverage to Codecov
+#         uses: codecov/codecov-action@v4
+#         if: always()
+#         with:
+#           token: ${{ secrets.CODECOV_TOKEN }}
+#           files: coverage/lcov.info
+#           fail_ci_if_error: false

@@ -75,7 +75,7 @@ Spec: docs/features/<feature_name>.md. Follow CLAUDE.md exactly.
    empty (?_state=empty), error (?_state=error), loading (?_delay=1500).
 
 2. BEHAVIOR SPECS FIRST (Phase 4): write the behavior specification suite under
-   test/features/dlt_<feature_name>/ mirroring lib/ — model scenarios
+   test/features/<feature_name>/ mirroring lib/ — model scenarios
    (Given/When/Then), use case behaviors, bloc state flows, widget interactions
    (all four states + retry), and an integration happy path. Confirm all specs
    FAIL. Do not write implementation yet.

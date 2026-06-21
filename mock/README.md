@@ -77,7 +77,7 @@ interceptor, e.g. `x-mock-state: empty`, then remove before real-backend swap.
 ## Seeded resources
 
 - `GET /faqs`, `GET /faqs/:id` — matches `NetworkConstants.faqEndpoint`
-- `GET /tasks`, `GET /tasks/:id` — mirrors the `dlt_tasks` feature shape
+- `GET /tasks`, `GET /tasks/:id` — mirrors the `tasks` feature shape
 
 json-server also gives you `POST`/`PUT`/`PATCH`/`DELETE`, filtering
 (`/faqs?category=billing`), pagination (`/faqs?_page=1&_limit=10`), and sorting

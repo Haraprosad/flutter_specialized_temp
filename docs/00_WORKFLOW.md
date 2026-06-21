@@ -153,7 +153,7 @@ as the spec. Don't write implementation yet — only scenarios that should fail 
 
 `@feature-developer` (with the `bdd-workflow` skill) scaffolds, mirroring `lib/`:
 
-- `test/features/dlt_orders/data/models/order_model_test.dart` — behavior
+- `test/features/orders/data/models/order_model_test.dart` — behavior
   scenarios (Given valid/null/wrong-type JSON → When parsing → Then correct
   defaults, round-trip, `toEntity` mapping)
 - `.../domain/usecases/get_orders_usecase_test.dart` — Given success/failure →
@@ -240,12 +240,12 @@ Build one feature fully before starting the next — don't parallelize.
 ### Suggested order
 
 ```
-1. dlt_auth   (in template — customize to your flow)
-2. dlt_home   (landing after login)
+1. auth   (in template — customize to your flow)
+2. home   (landing after login)
 3. <core feature 1>
 4. <core feature 2>
 ...
-N. dlt_profile (settings, logout)
+N. profile (settings, logout)
 ```
 
 ---
@@ -296,7 +296,7 @@ Behavior specs first — even from a visual. Then implement layer by layer with
 `@feature-developer`. The screen splits exactly as you described:
 
 ```
-features/dlt_<name>/
+features/<name>/
 ├── domain/        entities, repository interface, use cases
 ├── data/          model (+ JsonParseUtils), datasource, repository impl
 └── presentation/

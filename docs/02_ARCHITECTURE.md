@@ -219,33 +219,33 @@ UI (Page)
 | `lib/core/widgets/app_drawer/app_drawer.dart` | Side drawer with user info and menu items. |
 | `lib/core/widgets/app_drawer/drawer_menu_item.dart` | Individual drawer menu item widget. |
 
-### Features — Reference: dlt_auth
+### Features — Reference: auth
 
 | File | Purpose |
 |---|---|
-| `features/dlt_auth/domain/entities/user_entity.dart` | Pure Dart entity with `Equatable`. No dependencies. |
-| `features/dlt_auth/domain/repositories/auth_repository.dart` | Abstract interface: `login()`, `register()`, `logout()`, `getCurrentUser()`. |
-| `features/dlt_auth/domain/usecases/login_usecase.dart` | `@injectable`. One method: `call(LoginParams)`. Calls `AuthRepository.login()`. |
-| `features/dlt_auth/domain/usecases/register_usecase.dart` | `@injectable`. `call(RegisterParams)`. |
-| `features/dlt_auth/domain/usecases/logout_usecase.dart` | `@injectable`. `call()`. Clears tokens and state. |
-| `features/dlt_auth/data/models/user_model.dart` | `@freezed` (abstract class). `fromJson` / `toJson` + `toEntity()`. |
-| `features/dlt_auth/data/models/login_request_model.dart` | `@freezed` (abstract class). Request body for login. |
-| `features/dlt_auth/data/models/register_request_model.dart` | `@freezed` (abstract class). Request body for registration. |
-| `features/dlt_auth/data/datasources/auth_remote_datasource.dart` | `@LazySingleton`. Dio calls: `login()`, `register()`, `refreshToken()`. |
-| `features/dlt_auth/data/datasources/auth_local_datasource.dart` | `@LazySingleton`. Token storage via `SecureStorageManager`. |
-| `features/dlt_auth/data/repositories/auth_repository_impl.dart` | `@LazySingleton(as: AuthRepository)`. Orchestrates remote + local data sources. |
-| `features/dlt_auth/presentation/bloc/bloc/auth_bloc.dart` | `@injectable`. Handles login, register, logout, auth status check events. |
-| `features/dlt_auth/presentation/bloc/bloc/auth_event.dart` | Events: `LoginRequested`, `RegisterRequested`, `LogoutRequested`, `AuthStatusChecked`. |
-| `features/dlt_auth/presentation/bloc/bloc/auth_state.dart` | States: `AuthInitial`, `AuthLoading`, `Authenticated`, `Unauthenticated`, `AuthError`. |
-| `features/dlt_auth/presentation/pages/login_screen.dart` | Login form with validation, loading state, error display. |
-| `features/dlt_auth/presentation/pages/register_screen.dart` | Registration form. |
-| `features/dlt_auth/presentation/pages/splash_screen.dart` | Splash — checks auth status and routes accordingly. |
+| `features/auth/domain/entities/user_entity.dart` | Pure Dart entity with `Equatable`. No dependencies. |
+| `features/auth/domain/repositories/auth_repository.dart` | Abstract interface: `login()`, `register()`, `logout()`, `getCurrentUser()`. |
+| `features/auth/domain/usecases/login_usecase.dart` | `@injectable`. One method: `call(LoginParams)`. Calls `AuthRepository.login()`. |
+| `features/auth/domain/usecases/register_usecase.dart` | `@injectable`. `call(RegisterParams)`. |
+| `features/auth/domain/usecases/logout_usecase.dart` | `@injectable`. `call()`. Clears tokens and state. |
+| `features/auth/data/models/user_model.dart` | `@freezed` (abstract class). `fromJson` / `toJson` + `toEntity()`. |
+| `features/auth/data/models/login_request_model.dart` | `@freezed` (abstract class). Request body for login. |
+| `features/auth/data/models/register_request_model.dart` | `@freezed` (abstract class). Request body for registration. |
+| `features/auth/data/datasources/auth_remote_datasource.dart` | `@LazySingleton`. Dio calls: `login()`, `register()`, `refreshToken()`. |
+| `features/auth/data/datasources/auth_local_datasource.dart` | `@LazySingleton`. Token storage via `SecureStorageManager`. |
+| `features/auth/data/repositories/auth_repository_impl.dart` | `@LazySingleton(as: AuthRepository)`. Orchestrates remote + local data sources. |
+| `features/auth/presentation/bloc/bloc/auth_bloc.dart` | `@injectable`. Handles login, register, logout, auth status check events. |
+| `features/auth/presentation/bloc/bloc/auth_event.dart` | Events: `LoginRequested`, `RegisterRequested`, `LogoutRequested`, `AuthStatusChecked`. |
+| `features/auth/presentation/bloc/bloc/auth_state.dart` | States: `AuthInitial`, `AuthLoading`, `Authenticated`, `Unauthenticated`, `AuthError`. |
+| `features/auth/presentation/pages/login_screen.dart` | Login form with validation, loading state, error display. |
+| `features/auth/presentation/pages/register_screen.dart` | Registration form. |
+| `features/auth/presentation/pages/splash_screen.dart` | Splash — checks auth status and routes accordingly. |
 
-### Shared Patterns — dlt_common_actions
+### Shared Patterns — common_actions
 
 | File | Purpose |
 |---|---|
-| `dlt_common_actions/infinite_scrolling/` | Complete reusable infinite-scroll pattern. Copy and adapt for any paginated list. |
+| `common_actions/infinite_scrolling/` | Complete reusable infinite-scroll pattern. Copy and adapt for any paginated list. |
 
 ---
 

@@ -22,11 +22,11 @@ test/
 │   ├── network/            # Network layer tests (interceptors, base_bloc)
 │   └── storage/            # Storage tests
 ├── features/
-│   ├── dlt_auth/
+│   ├── auth/
 │   │   ├── data/           # Repository impl + model tests
 │   │   ├── domain/         # Use case tests
 │   │   └── presentation/   # BLoC tests
-│   └── dlt_tasks/
+│   └── tasks/
 │       ├── data/           # Model, repository, entity tests
 │       ├── domain/         # Use case tests
 │       └── presentation/   # BLoC tests

@@ -68,11 +68,11 @@ lib/
 │   ├── storage/                     # SecureStorage + Preferences
 │   └── widgets/                     # Shared UI components
 ├── features/
-│   ├── dlt_auth/                    # Auth feature (reference implementation)
-│   ├── dlt_home/                    # Home feature
-│   ├── dlt_profile/                 # Profile feature
-│   └── dlt_tasks/                   # Tasks feature (with Drift DB)
-└── dlt_common_actions/
+│   ├── auth/                    # Auth feature (reference implementation)
+│   ├── home/                    # Home feature
+│   ├── profile/                 # Profile feature
+│   └── tasks/                   # Tasks feature (with Drift DB)
+└── common_actions/
     └── infinite_scrolling/          # Reusable infinite-scroll pattern
 ```
 

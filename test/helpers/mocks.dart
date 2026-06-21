@@ -1,11 +1,11 @@
-import 'package:flutter_specialized_temp/features/dlt_auth/data/datasources/auth_local_datasource.dart';
-import 'package:flutter_specialized_temp/features/dlt_auth/data/datasources/auth_remote_datasource.dart';
-import 'package:flutter_specialized_temp/features/dlt_auth/domain/repositories/auth_repository.dart';
-import 'package:flutter_specialized_temp/features/dlt_auth/domain/usecases/login_usecase.dart';
-import 'package:flutter_specialized_temp/features/dlt_auth/domain/usecases/logout_usecase.dart';
-import 'package:flutter_specialized_temp/features/dlt_auth/domain/usecases/register_usecase.dart';
-import 'package:flutter_specialized_temp/features/dlt_tasks/data/datasources/task_local_datasources.dart';
-import 'package:flutter_specialized_temp/features/dlt_tasks/domain/repositories/task_repository.dart';
+import 'package:flutter_specialized_temp/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_specialized_temp/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_specialized_temp/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_specialized_temp/features/auth/domain/usecases/login_usecase.dart';
+import 'package:flutter_specialized_temp/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:flutter_specialized_temp/features/auth/domain/usecases/register_usecase.dart';
+import 'package:flutter_specialized_temp/features/tasks/data/datasources/task_local_datasources.dart';
+import 'package:flutter_specialized_temp/features/tasks/domain/repositories/task_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
