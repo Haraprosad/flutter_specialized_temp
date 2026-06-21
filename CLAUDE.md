@@ -23,7 +23,7 @@ A production Flutter application built on the **flutter_specialized_temp** templ
 
 ---
 
-## The 12 Non-Negotiables (memorize these)
+## The 13 Non-Negotiables (memorize these)
 
 1. Clean Architecture per feature. Domain layer has **zero** Flutter/Dio dependencies (only `equatable`).
 2. BLoCs depend on **use cases**, never repositories directly.
@@ -37,6 +37,7 @@ A production Flutter application built on the **flutter_specialized_temp** templ
 10. Every release build: `--obfuscate --split-debug-info=build/debug-info`. Symbols archived per release.
 11. Every async screen handles all four states: initial, loading, loaded-empty, loaded-populated, error.
 12. After any annotation change: `./scripts/codegen.sh`. Before any commit: `flutter analyze --fatal-infos --fatal-warnings && flutter test`.
+13. All routing goes through `lib/core/router/`. Use `RouteNames` for navigation (`context.goNamed`/`context.pushNamed`), `RoutePaths` for path constants, `RouteTransitions` for page animations, and `RouteGuards` for protection. Never use `Navigator.push`/`Navigator.pushNamed`, never hardcode path strings, never create a new `GoRouter` instance. See `docs/07_ROUTING.md` for the full routing flow.
 
 If any of these is at risk in a generated change, **stop and fix before continuing.**
 
@@ -72,6 +73,7 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 | Design tokens reference | `docs/04_DESIGN_SYSTEM.md` |
 | Testing patterns | `docs/05_TESTING.md` |
 | Release / store submission | `docs/06_DEPLOYMENT.md` |
+| Routing system (full flow guide) | `docs/07_ROUTING.md` |
 | Hardened rules per task | `.claude/skills/<skill>/SKILL.md` |
 | Specialist personas | `.claude/agents/*.md` |
 
