@@ -29,7 +29,7 @@ A production Flutter application built on the **flutter_specialized_temp** templ
 2. BLoCs depend on **use cases**, never repositories directly.
 3. DI is **constructor injection**. Never `sl<T>()` inside BLoCs / use cases / repositories / datasources.
 4. Every model `@JsonKey` uses a `JsonParseUtils` converter + `@Default`.
-5. Every API call goes through `safeApiCall` (or `optimizedApiCall` for high-traffic features). Returns `ApiResult<T>`.
+5. Every API call goes through `safeApiCall` (or `optimizedApiCall` for high-traffic features). Returns `ApiResult<T>`. See `docs/08_NETWORK.md` for the complete network system, interceptor chain, error handling pipeline, and step-by-step integration walkthrough.
 6. Every BLoC handler `switch`es on `ApiResult` exhaustively (Dart 3 sealed-class syntax).
 7. Every UI value uses a design token (`AppSpacing.X`, `context.colors.X`, `context.textTheme.X`). No raw literals.
 8. Every interactive widget is accessible (`tooltip`, `Semantics`, ≥48×48 tap target, scales to 200% text).
@@ -74,6 +74,7 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 | Testing patterns | `docs/05_TESTING.md` |
 | Release / store submission | `docs/06_DEPLOYMENT.md` |
 | Routing system (full flow guide) | `docs/07_ROUTING.md` |
+| Network & API integration (DioClient, interceptors, `safeApiCall`, `ApiResult`, offline patterns) | `docs/08_NETWORK.md` |
 | Hardened rules per task | `.claude/skills/<skill>/SKILL.md` |
 | Specialist personas | `.claude/agents/*.md` |
 
