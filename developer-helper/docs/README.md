@@ -5,7 +5,7 @@ This folder is the **deep reference** for the template. Each guide owns exactly
 a layer, there's exactly one file to open.
 
 > **First time here?** Read the root [README.md](../README.md) (the
-> fork → running-app journey), then [00_WORKFLOW.md](00_WORKFLOW.md) (the
+> fork → running-app journey), then [HOW_TO_USE.md](../HOW_TO_USE.md) (the
 > runbook). Come back to this hub when you need a specific topic.
 
 ---
@@ -15,24 +15,24 @@ a layer, there's exactly one file to open.
 **Reading order (first time)**
 
 1. [../README.md](../README.md) — what this template is + the newbie journey.
-2. [00_WORKFLOW.md](00_WORKFLOW.md) — the runbook: phases 0–7 and the per-feature loop.
+2. [HOW_TO_USE.md](../HOW_TO_USE.md) — the runbook: the two-command flow (SETUP + BUILD).
 3. Then **build**, opening the numbered guide for whatever layer you're on.
 
 **The one rule: single source of truth.** Every topic has exactly one home (see
 the map below). When something changes, edit it *there* and link from anywhere
-else — never copy it. The only deliberate duplication is layered: [CLAUDE.md](../CLAUDE.md)
+else — never copy it. The only deliberate duplication is layered: [PROJECT_RULES.md](../PROJECT_RULES.md)
 carries a *terse summary* of the rules so Claude always has them in context,
-while the full detail lives in the owning guide and in `.claude/skills/`.
+while the full detail lives in the owning guide and in `skills-and-agents/skills/`.
 
 **Which file does what** (the doc map — find the owner before you write)
 
 | File | Its one job | Open it when… |
 |---|---|---|
 | [../README.md](../README.md) | Project front door: what it is + fork→run journey | You (or a teammate) just cloned the template |
-| [../CLAUDE.md](../CLAUDE.md) | Claude's always-loaded rulebook: 14 non-negotiables, phase order, doc map | You want the rules in one terse place (Claude reads this every session) |
-| [00_WORKFLOW.md](00_WORKFLOW.md) | The runbook — phases 0–7, agents/skills, per-feature loop | You're deciding *what to do next* |
+| [../PROJECT_RULES.md](../PROJECT_RULES.md) | Claude's always-loaded rulebook: 14 non-negotiables, phase order, doc map | You want the rules in one terse place (Claude reads this every session) |
+| [HOW_TO_USE.md](../HOW_TO_USE.md) | The runbook — the two-command flow: SETUP.md then BUILD.md per phase | You're deciding *what to do next* |
 | [APP_OVERVIEW.md](APP_OVERVIEW.md) | **Your app's** product vision (idea, users, brand, feature order) | Starting a new app — fill this first |
-| [00_WORKFLOW.md → Copy-paste prompts](00_WORKFLOW.md#copy-paste-prompts-figma-design-to-working-screen) | Copy-paste prompts: Figma design → working screen | You're driving a feature with Claude |
+| [SETUP.md](../SETUP.md) | Copy-paste prompts: Figma design → working screen | You're driving a feature with Claude |
 | [01_GETTING_STARTED.md](01_GETTING_STARTED.md) | First-run setup + all commands/scripts | Configuring name/package/icon/env, or you need a command |
 | [02_ARCHITECTURE.md](02_ARCHITECTURE.md) | Architecture, file-purpose map, the `lib/` tree, SOLID | You want to understand the codebase shape |
 | [03_FEATURE_GUIDE.md](03_FEATURE_GUIDE.md) | Build one feature end-to-end, layer by layer | Implementing a feature |
@@ -45,8 +45,8 @@ while the full detail lives in the owning guide and in `.claude/skills/`.
 | [10_LOGGING.md](10_LOGGING.md) | `AppLogger`, severity levels, Sentry forwarding | Adding diagnostics |
 | [11_STORAGE.md](11_STORAGE.md) | `AppStorage`, secure storage (tokens/PIN), preferences | Persisting local data |
 | [features/](features/) | One `.md` per feature — the Phase 2 spec output | Specifying or building a feature |
-| `.claude/agents/*` | Specialist personas you summon by `@name` | (Claude's config — see root README) |
-| `.claude/skills/*` | Hardened rules per concern, auto-triggered | (Claude's config — see root README) |
+| `skills-and-agents/agents/*` | Specialist personas you summon by `@name` | (Claude's config — see root README) |
+| `skills-and-agents/skills/*` | Hardened rules per concern, auto-triggered | (Claude's config — see root README) |
 
 ---
 
@@ -54,9 +54,9 @@ while the full detail lives in the owning guide and in `.claude/skills/`.
 
 | # | Guide | Purpose |
 |---|---|---|
-| 0 | [Workflow](00_WORKFLOW.md) | The runbook — phases 0–7, agents & skills, the per-feature loop |
+| 0 | [How to use](../HOW_TO_USE.md) | The runbook — SETUP.md + BUILD.md two-command flow |
 | — | [App Overview](APP_OVERVIEW.md) | Your app's product-level source of truth — write the idea here first |
-| — | [Prompts](00_WORKFLOW.md#copy-paste-prompts-figma-design-to-working-screen) | Copy-paste prompts for Figma design → working screen |
+| — | [Setup steps](../SETUP.md) | Copy-paste prompts for Figma design → working screen |
 | 1 | [Getting Started](01_GETTING_STARTED.md) | Configure app name, package, icon, env; first run; all scripts |
 | 2 | [Architecture](02_ARCHITECTURE.md) | Full architecture walkthrough, file-purpose map, SOLID |
 | 3 | [Feature Guide](03_FEATURE_GUIDE.md) | Build a feature: DI, models, API, BLoC, routing, design system |

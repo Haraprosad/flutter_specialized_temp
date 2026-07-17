@@ -122,7 +122,7 @@ flutter gen-l10n
 Text(context.loc.orders_title);
 ```
 
-> Never edit `app_localizations*.dart` by hand — they are generated and listed under the "Forbidden shortcuts" in `CLAUDE.md`.
+> Never edit `app_localizations*.dart` by hand — they are generated and listed under the "Forbidden shortcuts" in `PROJECT_RULES.md`.
 
 ---
 

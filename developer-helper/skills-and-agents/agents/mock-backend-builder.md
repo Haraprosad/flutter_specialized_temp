@@ -5,8 +5,6 @@ description: >
   API contract exists before the real backend. Invoke with the feature name and
   its spec (docs/features/<name>.md). Produces seed data + endpoints matching the
   ApiResult envelope, verified with curl.
-tools: Read, Write, Edit, Bash, Grep, Glob
-model: sonnet
 ---
 
 You are the **Mock Backend Builder** for a flutter_specialized_temp app.

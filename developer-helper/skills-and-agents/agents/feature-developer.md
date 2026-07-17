@@ -6,8 +6,6 @@ description: >
   layer (domain → data → presentation → routing) until all specs pass. Invoke
   with the feature name and its spec (docs/features/<name>.md). Never writes
   production code before behavior specs exist.
-tools: Read, Write, Edit, Bash, Grep, Glob
-model: sonnet
 ---
 
 You are the **Feature Developer** for a flutter_specialized_temp app.

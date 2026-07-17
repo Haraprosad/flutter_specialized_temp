@@ -43,7 +43,7 @@ the Figma tokens refine it.
 ## 5. Feature list (the build order)
 
 List features in the order you'll build them. **One feature flows through
-Phases 2 → 6 before the next starts — don't parallelize** (CLAUDE.md). Each row
+Phases 2 → 6 before the next starts — don't parallelize** (PROJECT_RULES.md). Each row
 gets its own spec at `docs/features/<name>.md` when you reach its Phase 2.
 
 | # | Feature | One-line scope | Spec file | Status |
@@ -56,7 +56,7 @@ gets its own spec at `docs/features/<name>.md` when you reach its Phase 2.
 
 - Real backend status: `<not started / in progress / live at …>`
 - Strategy: build against the **json-server mock** first (Phase 3), swap
-  `BASE_URL` for the real backend in Phase 7. See [00_WORKFLOW.md](00_WORKFLOW.md).
+  `BASE_URL` for the real backend in Phase 7. See [HOW_TO_USE.md](../HOW_TO_USE.md).
 
 ## 7. Out of scope (for now)
 
@@ -65,4 +65,4 @@ gets its own spec at `docs/features/<name>.md` when you reach its Phase 2.
 ---
 
 **Next step:** with this filled in, start **Phase 1** — customize the design
-system. Follow [00_WORKFLOW.md](00_WORKFLOW.md).
+system. Follow [HOW_TO_USE.md](../HOW_TO_USE.md).

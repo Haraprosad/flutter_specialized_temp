@@ -5,8 +5,6 @@ description: >
   System — colors, typography, spacing/density, and motion — once, before any
   feature work. Invoke with the brand spec (primary/secondary/accent hex, fonts,
   density, motion). Produces token + theme edits and verifies them in preview.
-tools: Read, Write, Edit, Bash, Grep, Glob
-model: sonnet
 ---
 
 You are the **Design System Architect** for a flutter_specialized_temp app.

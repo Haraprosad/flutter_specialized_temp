@@ -1,6 +1,8 @@
-# Project Memory — Flutter App on flutter_specialized_temp
+# PROJECT_RULES — Flutter App on flutter_specialized_temp
 
-> This file is Claude's persistent memory for this project. It loads on every conversation. Keep it tight and high-signal. Detailed rules live in `.claude/skills/`.
+> The always-loaded rulebook for any AI agent (or human) working on this project.
+> Every agent session must read this file first, regardless of IDE/tool. Keep it
+> tight and high-signal. Detailed rules live in `skills-and-agents/skills/`.
 
 ---
 
@@ -46,21 +48,23 @@ If any of these is at risk in a generated change, **stop and fix before continui
 
 ## Development phases (in order)
 
-This project follows a strict phase order. Don't skip phases. The full runbook
-is `docs/00_WORKFLOW.md`; this table is the terse map.
+This project follows a strict phase order. Don't skip phases. Setup is driven
+by `SETUP.md`, phase execution by `BUILD.md` (which contains the full
+agent/skill routing table and phase definitions). This is the terse map:
 
-| Phase | Goal | Agent / Skill to use |
+| Stage / Phase | Goal | Agent + Skill (details: BUILD.md routing table) |
 |---|---|---|
-| 0 | Template setup (app name, package, env, icon, splash) | Reference: `docs/01_GETTING_STARTED.md` |
-| 1 | **Design system customization** (colors, fonts, spacing for THIS app's brand) | Agent: `design-system-architect` + Skill: `design-system-setup` |
-| 2 | Feature requirements gathering (define entities, endpoints, screens for one feature at a time) | Human-led, written into `docs/features/<name>.md` |
-| 3 | **Mock backend** via `json-server` (build the API contract before backend exists) | Agent: `mock-backend-builder` + Skill: `json-server-mocking` |
-| 4 | **BDD** — write behavior specs first (model scenarios → use case behaviors → BLoC state flows → widget interactions) | Agent: `feature-developer` + Skill: `bdd-workflow` |
-| 5 | **Implementation** — make the tests pass, layer by layer (domain → data → presentation) | Agent: `feature-developer` + Skill: `flutter-template-core` |
-| 6 | **UI polish & performance** — animations, micro-interactions, profile-mode tuning | Agent: `ui-polish-specialist` + Skill: `ui-polish-performance` |
-| 7 | Swap mock for real backend (only `BASE_URL` and small datasource tweaks should change) | No new agent — minimal change by definition |
+| Stage A (SETUP.md, once) | Figma → tokens, screenshots, user stories, SCREEN_INDEX, PROJECT.md, TASKS.md | `design-system-architect` + `design-system-setup` for tokens; rest per SETUP.md steps |
+| Phase 0 | Foundation verify (template identity, tokens compile) | — |
+| Phase 1 | Full routing skeleton + dummy pages, whole app navigable | Skill: `design-system-setup` |
+| Phase 2 | Mock backend for ALL resources | `mock-backend-builder` + `json-server-mocking` |
+| Phases 3…N | One feature per phase: spec → mandatory specs → implement | `feature-developer` + `bdd-workflow`, `flutter-template-core` |
+| Phase FINAL−1 | Polish (motion, empty/error, perf) | `ui-polish-specialist` + `ui-polish-performance` |
+| Phase FINAL | Hardening: deferred tests, a11y, 60fps, mock→real swap, release | both agents + `bdd-workflow`, `ui-polish-performance` |
 
-One feature flows through phases 2 → 6 before the next feature starts. Don't parallelize.
+One feature per phase, fully done before the next starts. Don't parallelize.
+Mandatory test tier runs every phase; heavy tier is deferred to Phase FINAL
+(definitions in BUILD.md "Testing tiers").
 
 ---
 
@@ -70,8 +74,9 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 |---|---|
 | **Map of all docs** (which file owns what + how to use them) | `docs/README.md` |
 | This app's product vision (idea, users, brand, feature order) | `docs/APP_OVERVIEW.md` |
-| Copy-paste prompts (Figma design → working screen) | `docs/00_WORKFLOW.md` (Copy-paste prompts section) |
-| Overall workflow (the runbook) | `docs/00_WORKFLOW.md` |
+| How to use the whole system (the two commands) | `HOW_TO_USE.md` |
+| Initialization steps (Figma → tokens/stories/PROJECT.md/TASKS.md) | `SETUP.md` |
+| Phase execution + agent/skill routing | `BUILD.md` |
 | Template architecture in detail | `docs/02_ARCHITECTURE.md` |
 | How to build one feature end-to-end | `docs/03_FEATURE_GUIDE.md` |
 | Design tokens reference | `docs/04_DESIGN_SYSTEM.md` |
@@ -82,8 +87,8 @@ One feature flows through phases 2 → 6 before the next feature starts. Don't p
 | Localization (`context.loc`, ARB files, `LocaleBloc`, adding strings/languages, non-UI error translation) | `docs/09_LOCALIZATION.md` |
 | Logging (`AppLogger`, severity levels, Sentry forwarding, where to log per layer) | `docs/10_LOGGING.md` |
 | Local storage (tokens/PIN in `SecureStorageManager`, login id/prefs in `PreferencesManager`, via `AppStorage`) | `docs/11_STORAGE.md` |
-| Hardened rules per task | `.claude/skills/<skill>/SKILL.md` |
-| Specialist personas | `.claude/agents/*.md` |
+| Hardened rules per task | `skills-and-agents/skills/<skill>/SKILL.md` |
+| Specialist personas | `skills-and-agents/agents/*.md` |
 
 ---
 

@@ -54,8 +54,8 @@ secrets — never the rules that drive the workflow.**
 
 | Path | Decision | Why |
 |---|---|---|
-| `CLAUDE.md` | **Commit** | The project's brain — the 14 non-negotiables load on every Claude session. Without it, every teammate (and Claude) loses the rules. |
-| `.claude/agents/`, `.claude/skills/` | **Commit** | They *enforce* the architecture. Operational config, not authoring scratch. |
+| `PROJECT_RULES.md` | **Commit** | The project's brain — the 14 non-negotiables load on every Claude session. Without it, every teammate (and Claude) loses the rules. |
+| `skills-and-agents/agents/`, `skills-and-agents/skills/` | **Commit** | They *enforce* the architecture. Operational config, not authoring scratch. |
 | `.github/` | **Commit** | CI workflows. Always version-controlled. |
 | `docs/` | **Commit** | Your team's reference and per-feature specs. Gitignoring it means a fresh clone has no docs at all. |
 | `.claude/settings.local.json` | **Ignore** | Personal local overrides — already in `.gitignore`. |
@@ -64,7 +64,7 @@ secrets — never the rules that drive the workflow.**
 | `mason.yaml`, `bricks/` | **Delete (optional)** | Pure template-scaffolding. If you won't use Mason, *remove* them — don't gitignore them. |
 
 > **Why this matters:** this template is built around a disciplined Claude Code
-> workflow. `CLAUDE.md` + `.claude/` are what enforce the 14 non-negotiables on
+> workflow. `PROJECT_RULES.md` + `skills-and-agents/` are what enforce the 14 non-negotiables on
 > every change. Ignoring them throws away the main reason to use the template.
 
 ---

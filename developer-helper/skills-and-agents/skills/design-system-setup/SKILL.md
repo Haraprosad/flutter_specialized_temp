@@ -85,8 +85,7 @@ overwrite or append.
 This prevents token drift and duplication. When building a screen from a
 screenshot, **snap values to tokens** — never hardcode a raw px/hex to match the
 picture (that violates the no-raw-literals rule). A value you can't express in a
-token is the signal to add one here, deliberately. See `docs/00_WORKFLOW.md`
-→ "Design-to-code".
+token is the signal to add one here, deliberately. See `SETUP.md` Step 3.
 
 ## Responsive & adaptive
 

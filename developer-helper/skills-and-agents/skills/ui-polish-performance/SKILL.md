@@ -60,4 +60,4 @@ Open DevTools → Performance, scroll the new screens. Target sustained 60fps:
 frame build < 8 ms, raster < 8 ms. No jank on entrance animations.
 
 See `docs/04_DESIGN_SYSTEM.md` (motion/tokens) and the quality gates in
-`CLAUDE.md`.
+`PROJECT_RULES.md`.
